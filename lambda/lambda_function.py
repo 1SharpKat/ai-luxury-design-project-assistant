@@ -2,9 +2,16 @@ import json
 import boto3
 import uuid
 from datetime import datetime, timezone
+from decimal import Decimal
 
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table("LuxuryDesignProjectNotes")
+
+
+def json_default(value):
+    if isinstance(value, Decimal):
+        return float(value)
+    raise TypeError
 
 
 def classify_category(notes):
@@ -88,64 +95,96 @@ def create_next_steps(notes):
     return steps
 
 
-def lambda_handler(event, context):
-    try:
-        body = json.loads(event.get("body", "{}"))
+def create_project_note(event):
+    body = json.loads(event.get("body", "{}"))
 
-        client_name = body.get("clientName", "Private Client")
-        project_name = body.get("projectName", "Unnamed Project")
-        note_type = body.get("noteType", "manual_project_notes")
-        source = body.get("source", "manual entry")
-        project_notes = body.get("projectNotes", "")
+    client_name = body.get("clientName", "Private Client")
+    project_name = body.get("projectName", "Unnamed Project")
+    note_type = body.get("noteType", "manual_project_notes")
+    source = body.get("source", "manual entry")
+    project_notes = body.get("projectNotes", "")
 
-        if not project_notes:
-            return {
-                "statusCode": 400,
-                "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({"error": "projectNotes is required"})
-            }
-
-        record_id = str(uuid.uuid4())
-        created_at = datetime.now(timezone.utc).isoformat()
-
-        category = classify_category(project_notes)
-        priority = assign_priority(project_notes)
-        next_steps = create_next_steps(project_notes)
-
-        summary = (
-            f"The notes for {project_name} include project details related to "
-            f"{category.lower()}. The priority level is {priority.lower()}."
-        )
-
-        draft_message = (
-            f"Hi, I wanted to share a quick summary from the {project_name} notes. "
-            f"The main items captured include: {project_notes[:250]} "
-            "I will confirm the next steps and follow up with any needed details."
-        )
-
-        item = {
-            "recordId": record_id,
-            "clientName": client_name,
-            "projectName": project_name,
-            "noteType": note_type,
-            "source": source,
-            "projectNotes": project_notes,
-            "category": category,
-            "priority": priority,
-            "keyPhrases": [],
-            "sentiment": "Not analyzed yet",
-            "summary": summary,
-            "nextSteps": next_steps,
-            "draftMessage": draft_message,
-            "createdAt": created_at
+    if not project_notes:
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": "projectNotes is required"})
         }
 
-        table.put_item(Item=item)
+    record_id = str(uuid.uuid4())
+    created_at = datetime.now(timezone.utc).isoformat()
+
+    category = classify_category(project_notes)
+    priority = assign_priority(project_notes)
+    next_steps = create_next_steps(project_notes)
+
+    summary = (
+        f"The notes for {project_name} include project details related to "
+        f"{category.lower()}. The priority level is {priority.lower()}."
+    )
+
+    draft_message = (
+        f"Hi, I wanted to share a quick summary from the {project_name} notes. "
+        f"The main items captured include: {project_notes[:250]} "
+        "I will confirm the next steps and follow up with any needed details."
+    )
+
+    item = {
+        "recordId": record_id,
+        "clientName": client_name,
+        "projectName": project_name,
+        "noteType": note_type,
+        "source": source,
+        "projectNotes": project_notes,
+        "category": category,
+        "priority": priority,
+        "keyPhrases": [],
+        "sentiment": "Not analyzed yet",
+        "summary": summary,
+        "nextSteps": next_steps,
+        "draftMessage": draft_message,
+        "createdAt": created_at
+    }
+
+    table.put_item(Item=item)
+
+    return {
+        "statusCode": 201,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(item)
+    }
+
+
+def get_project_notes():
+    response = table.scan()
+    items = response.get("Items", [])
+
+    items.sort(key=lambda item: item.get("createdAt", ""), reverse=True)
+
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps({
+            "count": len(items),
+            "items": items
+        }, default=json_default)
+    }
+
+
+def lambda_handler(event, context):
+    try:
+        method = event.get("requestContext", {}).get("http", {}).get("method")
+
+        if method == "POST":
+            return create_project_note(event)
+
+        if method == "GET":
+            return get_project_notes()
 
         return {
-            "statusCode": 201,
+            "statusCode": 405,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps(item)
+            "body": json.dumps({"error": "Method not allowed"})
         }
 
     except Exception as error:
@@ -154,4 +193,3 @@ def lambda_handler(event, context):
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps({"error": str(error)})
         }
-        
