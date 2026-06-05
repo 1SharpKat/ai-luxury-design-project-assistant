@@ -171,6 +171,39 @@ def get_project_notes():
     }
 
 
+def get_project_note_by_id(event):
+    path_parameters = event.get("pathParameters") or {}
+    record_id = path_parameters.get("recordId")
+
+    if not record_id:
+        return {
+            "statusCode": 400,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": "recordId is required"})
+        }
+
+    response = table.get_item(
+        Key={
+            "recordId": record_id
+        }
+    )
+
+    item = response.get("Item")
+
+    if not item:
+        return {
+            "statusCode": 404,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": "Project note not found"})
+        }
+
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(item, default=json_default)
+    }
+
+
 def lambda_handler(event, context):
     try:
         method = event.get("requestContext", {}).get("http", {}).get("method")
@@ -179,6 +212,11 @@ def lambda_handler(event, context):
             return create_project_note(event)
 
         if method == "GET":
+            path = event.get("requestContext", {}).get("http", {}).get("path", "")
+
+            if path.startswith("/project-notes/"):
+                return get_project_note_by_id(event)
+
             return get_project_notes()
 
         return {
