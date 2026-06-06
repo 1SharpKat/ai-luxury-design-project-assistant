@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 import os
+import re
 import uuid
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -16,11 +17,13 @@ LOGGER.setLevel(logging.INFO)
 
 AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
 TABLE_NAME = os.environ.get("TABLE_NAME", "LuxuryDesignProjectNotes")
+BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "").strip()
 
 
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 table = dynamodb.Table(TABLE_NAME)
 comprehend = boto3.client("comprehend", region_name=AWS_REGION)
+bedrock_runtime = boto3.client("bedrock-runtime", region_name=AWS_REGION)
 
 
 RESPONSE_HEADERS = {
@@ -172,7 +175,7 @@ def assign_priority(notes: str) -> str:
 
 
 def create_next_steps(notes: str) -> list[str]:
-    """Create preliminary action items from project-note keywords."""
+    """Create fallback action items from project-note keywords."""
     text = notes.lower()
     steps: list[str] = []
 
@@ -257,21 +260,153 @@ def analyze_notes_with_comprehend(project_notes: str) -> dict[str, Any]:
         }
 
 
-def create_summary(project_name: str, category: str, priority: str) -> str:
-    """Create the current rule-based project summary."""
+def create_fallback_summary(project_name: str, category: str, priority: str) -> str:
+    """Create a rule-based summary when Bedrock is unavailable."""
     return (
         f"The notes for {project_name} include project details related to "
         f"{category.lower()}. The priority level is {priority.lower()}."
     )
 
 
-def create_draft_message(project_name: str, project_notes: str) -> str:
-    """Create the current rule-based follow-up message."""
+def create_fallback_draft_message(project_name: str, project_notes: str) -> str:
+    """Create a rule-based follow-up message when Bedrock is unavailable."""
     return (
         f"Hi, I wanted to share a quick summary from the {project_name} notes. "
         f"The main items captured include: {project_notes[:250]} "
         "I will confirm the next steps and follow up with any needed details."
     )
+
+
+def extract_json_object(text: str) -> dict[str, Any]:
+    """Extract a JSON object from plain text or a fenced JSON response."""
+    cleaned = text.strip()
+    cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s*```$", "", cleaned)
+
+    try:
+        parsed = json.loads(cleaned)
+    except json.JSONDecodeError:
+        start = cleaned.find("{")
+        end = cleaned.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("Bedrock response did not contain a JSON object")
+        parsed = json.loads(cleaned[start : end + 1])
+
+    if not isinstance(parsed, dict):
+        raise ValueError("Bedrock response JSON must be an object")
+
+    return parsed
+
+
+def generate_project_content_with_bedrock(
+    project_name: str,
+    project_notes: str,
+    category: str,
+    priority: str,
+    fallback_next_steps: list[str],
+) -> dict[str, Any]:
+    """Generate a summary, next steps, and draft message with Amazon Bedrock."""
+    fallback = {
+        "summary": create_fallback_summary(project_name, category, priority),
+        "nextSteps": fallback_next_steps,
+        "draftMessage": create_fallback_draft_message(project_name, project_notes),
+        "generationStatus": "BEDROCK_UNAVAILABLE",
+    }
+
+    if not BEDROCK_MODEL_ID:
+        LOGGER.warning("BEDROCK_MODEL_ID environment variable is not configured")
+        fallback["generationStatus"] = "BEDROCK_NOT_CONFIGURED"
+        return fallback
+
+    prompt = f"""
+You are a project coordination assistant for a luxury design, lighting,
+automation, and A/V integration company.
+
+Analyze the project notes below. Return only one valid JSON object with exactly
+these fields:
+- summary: a concise professional summary string
+- nextSteps: an array of specific, actionable strings
+- draftMessage: a polished follow-up message string for the most relevant
+  recipient, such as the client, builder, electrician, or vendor
+
+Do not use markdown code fences. Do not add commentary outside the JSON.
+Do not invent dates, approvals, specifications, or commitments that are not in
+the notes. Human review is required before the message is sent.
+
+Project name: {project_name}
+Current category: {category}
+Current priority: {priority}
+Project notes:
+{project_notes}
+""".strip()
+
+    try:
+        response = bedrock_runtime.converse(
+            modelId=BEDROCK_MODEL_ID,
+            system=[
+                {
+                    "text": (
+                        "Produce accurate, professional project-coordination "
+                        "content. Return valid JSON only."
+                    )
+                }
+            ],
+            messages=[
+                {
+                    "role": "user",
+                    "content": [{"text": prompt}],
+                }
+            ],
+            inferenceConfig={
+                "maxTokens": 1200,
+                "temperature": 0.2,
+            },
+        )
+
+        content_blocks = (
+            response.get("output", {})
+            .get("message", {})
+            .get("content", [])
+        )
+        response_text = "".join(
+            block.get("text", "")
+            for block in content_blocks
+            if isinstance(block, dict)
+        ).strip()
+
+        parsed = extract_json_object(response_text)
+        summary = str(parsed.get("summary", "")).strip()
+        draft_message = str(parsed.get("draftMessage", "")).strip()
+        next_steps_raw = parsed.get("nextSteps", [])
+        next_steps = [
+            str(step).strip()
+            for step in next_steps_raw
+            if str(step).strip()
+        ] if isinstance(next_steps_raw, list) else []
+
+        if not summary or not draft_message or not next_steps:
+            raise ValueError("Bedrock response was missing required content")
+
+        return {
+            "summary": summary,
+            "nextSteps": next_steps,
+            "draftMessage": draft_message,
+            "generationStatus": "COMPLETED",
+        }
+
+    except ClientError as error:
+        error_details = error.response.get("Error", {})
+        LOGGER.warning(
+            "Amazon Bedrock unavailable. Code: %s. Message: %s",
+            error_details.get("Code", "UNKNOWN"),
+            error_details.get("Message", str(error)),
+        )
+        return fallback
+
+    except Exception:
+        LOGGER.exception("Unexpected Amazon Bedrock generation error")
+        fallback["generationStatus"] = "BEDROCK_ERROR"
+        return fallback
 
 
 def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
@@ -297,8 +432,15 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
 
     category = classify_category(project_notes)
     priority = assign_priority(project_notes)
-    next_steps = create_next_steps(project_notes)
+    fallback_next_steps = create_next_steps(project_notes)
     comprehend_analysis = analyze_notes_with_comprehend(project_notes)
+    bedrock_generation = generate_project_content_with_bedrock(
+        project_name=project_name,
+        project_notes=project_notes,
+        category=category,
+        priority=priority,
+        fallback_next_steps=fallback_next_steps,
+    )
 
     item = {
         "recordId": record_id,
@@ -313,9 +455,10 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         "sentiment": comprehend_analysis["sentiment"],
         "sentimentScores": comprehend_analysis["sentimentScores"],
         "analysisStatus": comprehend_analysis["analysisStatus"],
-        "summary": create_summary(project_name, category, priority),
-        "nextSteps": next_steps,
-        "draftMessage": create_draft_message(project_name, project_notes),
+        "summary": bedrock_generation["summary"],
+        "nextSteps": bedrock_generation["nextSteps"],
+        "draftMessage": bedrock_generation["draftMessage"],
+        "generationStatus": bedrock_generation["generationStatus"],
         "createdAt": created_at,
     }
 
@@ -324,7 +467,12 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         ConditionExpression="attribute_not_exists(recordId)",
     )
 
-    LOGGER.info("Created project note record %s", record_id)
+    LOGGER.info(
+        "Created project note record %s. Comprehend: %s. Bedrock: %s",
+        record_id,
+        item["analysisStatus"],
+        item["generationStatus"],
+    )
     return create_response(201, item)
 
 
@@ -366,11 +514,7 @@ def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
 
 def get_http_method(event: dict[str, Any]) -> str:
     """Read the HTTP method from API Gateway."""
-    method = (
-        event.get("requestContext", {})
-        .get("http", {})
-        .get("method")
-    )
+    method = event.get("requestContext", {}).get("http", {}).get("method")
 
     if method:
         return method.upper()
@@ -380,11 +524,7 @@ def get_http_method(event: dict[str, Any]) -> str:
 
 def get_request_path(event: dict[str, Any]) -> str:
     """Read the request path from API Gateway."""
-    path = (
-        event.get("requestContext", {})
-        .get("http", {})
-        .get("path")
-    )
+    path = event.get("requestContext", {}).get("http", {}).get("path")
 
     if path:
         return path
