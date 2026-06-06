@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+<meta
+name="description"
+content=" AI-assisted project coordination for luxury design, lighting, automation, and A/V integration teams. "
+
+>
+
+  <title>AI Luxury Design Project Assistant</title>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          AI
+        </div>
+
+
+    <div>
+      <p class="eyebrow">
+        Project Intelligence
+      </p>
+
+      <h1>
+        AI Luxury Design Project Assistant
+      </h1>
+    </div>
+  </div>
+
+  <p class="header-description">
+    Turn project notes and walkthrough transcripts into organized
+    summaries, action items, and professional follow-up communication.
+  </p>
+</div>
+
+
+  </header>
+
+  <main class="page-shell">
+    <section
+      class="panel form-panel"
+      aria-labelledby="project-note-heading"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">
+            New Project Note
+          </p>
+
+```
+      <h2 id="project-note-heading">
+        Submit project information
+      </h2>
+    </div>
+
+    <span class="status-badge">
+      AI Enabled
+    </span>
+  </div>
+
+  <form id="project-note-form">
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="client-name">
+          Client name
+        </label>
+
+        <input
+          id="client-name"
+          name="clientName"
+          type="text"
+          placeholder="Private Client"
+          autocomplete="organization"
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="project-name">
+          Project name
+          <span aria-hidden="true">*</span>
+        </label>
+
+        <input
+          id="project-name"
+          name="projectName"
+          type="text"
+          placeholder="Deer Valley Residence"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="note-type">
+          Note type
+        </label>
+
+        <select
+          id="note-type"
+          name="noteType"
+        >
+          <option value="site_walkthrough_transcript">
+            Site walkthrough transcript
+          </option>
+
+          <option value="client_meeting_notes">
+            Client meeting notes
+          </option>
+
+          <option value="builder_coordination">
+            Builder coordination
+          </option>
+
+          <option value="vendor_update">
+            Vendor update
+          </option>
+
+          <option value="design_review">
+            Design review
+          </option>
+
+          <option value="manual_project_notes">
+            General project notes
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="source">
+          Source
+        </label>
+
+        <select
+          id="source"
+          name="source"
+        >
+          <option value="Plaud transcript">
+            Plaud transcript
+          </option>
+
+          <option value="manual entry">
+            Manual entry
+          </option>
+
+          <option value="email notes">
+            Email notes
+          </option>
+
+          <option value="client meeting">
+            Client meeting
+          </option>
+
+          <option value="site walkthrough">
+            Site walkthrough
+          </option>
+
+          <option value="builder communication">
+            Builder communication
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-field full-width">
+      <div class="label-row">
+        <label for="project-notes">
+          Project notes
+          <span aria-hidden="true">*</span>
+        </label>
+
+        <span id="character-count">
+          0 characters
+        </span>
+      </div>
+
+      <textarea
+        id="project-notes"
+        name="projectNotes"
+        rows="10"
+        maxlength="10000"
+        placeholder="Paste project notes, a meeting summary, or a walkthrough transcript here."
+        required
+      ></textarea>
+
+      <p class="field-help">
+        Include client preferences, deadlines, technical requirements,
+        builder questions, and follow-up items.
+      </p>
+    </div>
+
+    <div class="form-actions">
+      <button
+        id="submit-button"
+        class="primary-button"
+        type="submit"
+      >
+        <span class="button-label">
+          Analyze Project Notes
+        </span>
+
+        <span
+          id="button-spinner"
+          class="button-spinner"
+          aria-hidden="true"
+        ></span>
+      </button>
+
+      <button
+        id="clear-button"
+        class="secondary-button"
+        type="button"
+      >
+        Clear Form
+      </button>
+    </div>
+
+    <div
+      id="form-message"
+      class="form-message"
+      role="status"
+      aria-live="polite"
+    ></div>
+  </form>
+</section>
+
+<section
+  id="results-section"
+  class="panel results-panel is-hidden"
+  aria-labelledby="results-heading"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">
+        AI Analysis
+      </p>
+
+      <h2 id="results-heading">
+        Project results
+      </h2>
+    </div>
+
+    <span
+      id="generation-status"
+      class="status-badge"
+    >
+      Completed
+    </span>
+  </div>
+
+  <div class="result-summary-grid">
+    <article class="summary-card">
+      <span class="summary-label">
+        Project
+      </span>
+
+      <strong id="result-project-name">
+        Project name
+      </strong>
+    </article>
+
+    <article class="summary-card">
+      <span class="summary-label">
+        Category
+      </span>
+
+      <strong id="result-category">
+        Not assigned
+      </strong>
+    </article>
+
+    <article class="summary-card">
+      <span class="summary-label">
+        Priority
+      </span>
+
+      <strong id="result-priority">
+        Not assigned
+      </strong>
+    </article>
+
+    <article class="summary-card">
+      <span class="summary-label">
+        Sentiment
+      </span>
+
+      <strong id="result-sentiment">
+        Not analyzed
+      </strong>
+    </article>
+  </div>
+
+  <div class="result-content-grid">
+    <article class="result-card result-card-wide">
+      <div class="result-card-heading">
+        <h3>
+          Project Summary
+        </h3>
+
+        <button
+          class="copy-button"
+          type="button"
+          data-copy-target="result-summary"
+        >
+          Copy
+        </button>
+      </div>
+
+      <p id="result-summary">
+        The AI-generated summary will appear here.
+      </p>
+    </article>
+
+    <article class="result-card">
+      <div class="result-card-heading">
+        <h3>
+          Key Phrases
+        </h3>
+      </div>
+
+      <div
+        id="result-key-phrases"
+        class="tag-list"
+      ></div>
+    </article>
+
+    <article class="result-card">
+      <div class="result-card-heading">
+        <h3>
+          Next Steps
+        </h3>
+
+        <button
+          class="copy-button"
+          type="button"
+          data-copy-target="result-next-steps"
+        >
+          Copy
+        </button>
+      </div>
+
+      <ol id="result-next-steps">
+      </ol>
+    </article>
+
+    <article class="result-card result-card-wide">
+      <div class="result-card-heading">
+        <h3>
+          Draft Follow-Up Message
+        </h3>
+
+        <button
+          class="copy-button"
+          type="button"
+          data-copy-target="result-draft-message"
+        >
+          Copy
+        </button>
+      </div>
+
+      <pre id="result-draft-message">The AI-generated draft message will appear here.</pre>
+    </article>
+  </div>
+
+  <details class="record-details">
+    <summary>
+      View record details
+    </summary>
+
+    <dl>
+      <div>
+        <dt>
+          Record ID
+        </dt>
+
+        <dd id="result-record-id">
+          Not available
+        </dd>
+      </div>
+
+      <div>
+        <dt>
+          Created
+        </dt>
+
+        <dd id="result-created-at">
+          Not available
+        </dd>
+      </div>
+
+      <div>
+        <dt>
+          Comprehend status
+        </dt>
+
+        <dd id="result-analysis-status">
+          Not available
+        </dd>
+      </div>
+
+      <div>
+        <dt>
+          Bedrock status
+        </dt>
+
+        <dd id="result-generation-status">
+          Not available
+        </dd>
+      </div>
+    </dl>
+  </details>
+</section>
+
+<section
+  class="panel records-panel"
+  aria-labelledby="saved-records-heading"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">
+        Project History
+      </p>
+
+      <h2 id="saved-records-heading">
+        Saved project notes
+      </h2>
+    </div>
+
+    <button
+      id="refresh-records-button"
+      class="secondary-button"
+      type="button"
+    >
+      Refresh
+    </button>
+  </div>
+
+  <div
+    id="records-loading"
+    class="records-message"
+  >
+    Saved records will appear here after the API is connected.
+  </div>
+
+  <div
+    id="records-list"
+    class="records-list"
+  ></div>
+</section>
+```
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      AI-generated content requires human review before it is used for
+      project, client, builder, vendor, electrical, or construction decisions.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
