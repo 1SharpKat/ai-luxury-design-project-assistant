@@ -1,78 +1,180 @@
+import base64
 import json
-import boto3
+import logging
+import os
 import uuid
 from datetime import datetime, timezone
 from decimal import Decimal
+from typing import Any
 
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("LuxuryDesignProjectNotes")
+import boto3
+from botocore.exceptions import ClientError
 
 
-def json_default(value):
+LOGGER = logging.getLogger()
+LOGGER.setLevel(logging.INFO)
+
+AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
+TABLE_NAME = os.environ.get("TABLE_NAME", "LuxuryDesignProjectNotes")
+
+
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+table = dynamodb.Table(TABLE_NAME)
+comprehend = boto3.client("comprehend", region_name=AWS_REGION)
+
+
+RESPONSE_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+}
+
+
+def json_default(value: Any) -> Any:
+    """Convert DynamoDB Decimal values into JSON-compatible numbers."""
     if isinstance(value, Decimal):
+        if value % 1 == 0:
+            return int(value)
         return float(value)
-    raise TypeError
+
+    raise TypeError(
+        f"Object of type {type(value).__name__} is not JSON serializable"
+    )
 
 
-def classify_category(notes):
+def convert_floats_to_decimal(value: Any) -> Any:
+    """Recursively convert floats to Decimal for DynamoDB storage."""
+    if isinstance(value, float):
+        return Decimal(str(value))
+
+    if isinstance(value, dict):
+        return {
+            key: convert_floats_to_decimal(item)
+            for key, item in value.items()
+        }
+
+    if isinstance(value, list):
+        return [convert_floats_to_decimal(item) for item in value]
+
+    return value
+
+
+def create_response(status_code: int, body: dict[str, Any]) -> dict[str, Any]:
+    """Create a consistent API Gateway response."""
+    return {
+        "statusCode": status_code,
+        "headers": RESPONSE_HEADERS,
+        "body": json.dumps(body, default=json_default),
+    }
+
+
+def parse_request_body(event: dict[str, Any]) -> dict[str, Any]:
+    """Read and decode the JSON request body from API Gateway."""
+    body = event.get("body")
+
+    if body is None:
+        return {}
+
+    if event.get("isBase64Encoded"):
+        body = base64.b64decode(body).decode("utf-8")
+
+    if isinstance(body, dict):
+        return body
+
+    if not isinstance(body, str):
+        raise ValueError("Request body must be a JSON object or JSON string")
+
+    if not body.strip():
+        return {}
+
+    parsed_body = json.loads(body)
+
+    if not isinstance(parsed_body, dict):
+        raise ValueError("Request body must contain a JSON object")
+
+    return parsed_body
+
+
+def classify_category(notes: str) -> str:
+    """Assign project categories using keyword matching."""
     text = notes.lower()
-    categories = []
+    categories: list[str] = []
 
-    if any(word in text for word in ["lighting", "keypad", "dimmer", "fixture", "architectural lighting"]):
-        categories.append("Lighting Design")
+    category_keywords = {
+        "Lighting Design": [
+            "lighting",
+            "keypad",
+            "dimmer",
+            "fixture",
+            "architectural lighting",
+        ],
+        "A/V Integration": [
+            "speaker",
+            "audio",
+            "video",
+            "tv",
+            "television",
+            "theater",
+            "rack",
+        ],
+        "Shades": ["shade", "shades", "window treatment"],
+        "Networking": ["network", "wifi", "wi-fi", "router", "access point"],
+        "Security": ["camera", "surveillance", "security", "alarm"],
+        "Builder / Vendor Coordination": [
+            "builder",
+            "electrician",
+            "vendor",
+            "deadline",
+            "walkthrough",
+        ],
+    }
 
-    if any(word in text for word in ["speaker", "audio", "video", "tv", "theater", "rack"]):
-        categories.append("A/V Integration")
-
-    if any(word in text for word in ["shade", "shades", "window treatment"]):
-        categories.append("Shades")
-
-    if any(word in text for word in ["network", "wifi", "router", "access point"]):
-        categories.append("Networking")
-
-    if any(word in text for word in ["camera", "surveillance", "security", "alarm"]):
-        categories.append("Security")
-
-    if any(word in text for word in ["builder", "electrician", "vendor", "deadline", "walkthrough"]):
-        categories.append("Builder / Vendor Coordination")
+    for category, keywords in category_keywords.items():
+        if any(keyword in text for keyword in keywords):
+            categories.append(category)
 
     return " / ".join(categories) if categories else "General Project Notes"
 
 
-def assign_priority(notes):
+def assign_priority(notes: str) -> str:
+    """Assign Low, Medium, or High priority."""
     text = notes.lower()
 
-    high_words = [
+    high_priority_words = [
         "urgent",
+        "asap",
         "today",
         "tomorrow",
         "before friday",
         "deadline",
         "walkthrough",
         "builder needs",
-        "electrician needs"
+        "electrician needs",
     ]
 
-    medium_words = [
+    medium_priority_words = [
         "follow up",
+        "follow-up",
         "confirm",
         "review",
         "needs",
-        "requested"
+        "requested",
     ]
 
-    if any(word in text for word in high_words):
+    if any(word in text for word in high_priority_words):
         return "High"
 
-    if any(word in text for word in medium_words):
+    if any(word in text for word in medium_priority_words):
         return "Medium"
 
     return "Low"
 
 
-def create_next_steps(notes):
+def create_next_steps(notes: str) -> list[str]:
+    """Create preliminary action items from project-note keywords."""
     text = notes.lower()
-    steps = []
+    steps: list[str] = []
 
     if "keypad" in text:
         steps.append("Confirm keypad locations")
@@ -84,10 +186,16 @@ def create_next_steps(notes):
         steps.append("Coordinate details with builder")
 
     if "electric" in text:
-        steps.append("Prepare information for electrical walkthrough")
+        steps.append("Prepare information for the electrical walkthrough")
 
     if "client" in text:
         steps.append("Update client preference notes")
+
+    if "speaker" in text or "audio" in text:
+        steps.append("Confirm audio and speaker requirements")
+
+    if "lighting" in text:
+        steps.append("Update lighting design requirements")
 
     if not steps:
         steps.append("Review notes and assign follow-up tasks")
@@ -95,21 +203,94 @@ def create_next_steps(notes):
     return steps
 
 
-def create_project_note(event):
-    body = json.loads(event.get("body", "{}"))
+def analyze_notes_with_comprehend(project_notes: str) -> dict[str, Any]:
+    """Use Amazon Comprehend for key phrases and sentiment."""
+    try:
+        key_phrase_response = comprehend.detect_key_phrases(
+            Text=project_notes,
+            LanguageCode="en",
+        )
 
-    client_name = body.get("clientName", "Private Client")
-    project_name = body.get("projectName", "Unnamed Project")
-    note_type = body.get("noteType", "manual_project_notes")
-    source = body.get("source", "manual entry")
-    project_notes = body.get("projectNotes", "")
+        sentiment_response = comprehend.detect_sentiment(
+            Text=project_notes,
+            LanguageCode="en",
+        )
+
+        key_phrases = [
+            phrase["Text"]
+            for phrase in key_phrase_response.get("KeyPhrases", [])
+            if phrase.get("Text")
+        ][:10]
+
+        sentiment_scores = convert_floats_to_decimal(
+            sentiment_response.get("SentimentScore", {})
+        )
+
+        return {
+            "keyPhrases": key_phrases,
+            "sentiment": sentiment_response.get("Sentiment", "UNKNOWN"),
+            "sentimentScores": sentiment_scores,
+            "analysisStatus": "COMPLETED",
+        }
+
+    except ClientError as error:
+        error_details = error.response.get("Error", {})
+        LOGGER.warning(
+            "Amazon Comprehend unavailable. Code: %s. Message: %s",
+            error_details.get("Code", "UNKNOWN"),
+            error_details.get("Message", str(error)),
+        )
+        return {
+            "keyPhrases": [],
+            "sentiment": "UNKNOWN",
+            "sentimentScores": {},
+            "analysisStatus": "COMPREHEND_UNAVAILABLE",
+        }
+
+    except Exception:
+        LOGGER.exception("Unexpected Amazon Comprehend error")
+        return {
+            "keyPhrases": [],
+            "sentiment": "UNKNOWN",
+            "sentimentScores": {},
+            "analysisStatus": "COMPREHEND_ERROR",
+        }
+
+
+def create_summary(project_name: str, category: str, priority: str) -> str:
+    """Create the current rule-based project summary."""
+    return (
+        f"The notes for {project_name} include project details related to "
+        f"{category.lower()}. The priority level is {priority.lower()}."
+    )
+
+
+def create_draft_message(project_name: str, project_notes: str) -> str:
+    """Create the current rule-based follow-up message."""
+    return (
+        f"Hi, I wanted to share a quick summary from the {project_name} notes. "
+        f"The main items captured include: {project_notes[:250]} "
+        "I will confirm the next steps and follow up with any needed details."
+    )
+
+
+def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
+    """Handle POST /project-notes."""
+    try:
+        body = parse_request_body(event)
+    except json.JSONDecodeError:
+        return create_response(400, {"error": "Request body must contain valid JSON"})
+    except ValueError as error:
+        return create_response(400, {"error": str(error)})
+
+    client_name = str(body.get("clientName", "Private Client")).strip()
+    project_name = str(body.get("projectName", "Unnamed Project")).strip()
+    note_type = str(body.get("noteType", "manual_project_notes")).strip()
+    source = str(body.get("source", "manual entry")).strip()
+    project_notes = str(body.get("projectNotes", "")).strip()
 
     if not project_notes:
-        return {
-            "statusCode": 400,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "projectNotes is required"})
-        }
+        return create_response(400, {"error": "projectNotes is required"})
 
     record_id = str(uuid.uuid4())
     created_at = datetime.now(timezone.utc).isoformat()
@@ -117,17 +298,7 @@ def create_project_note(event):
     category = classify_category(project_notes)
     priority = assign_priority(project_notes)
     next_steps = create_next_steps(project_notes)
-
-    summary = (
-        f"The notes for {project_name} include project details related to "
-        f"{category.lower()}. The priority level is {priority.lower()}."
-    )
-
-    draft_message = (
-        f"Hi, I wanted to share a quick summary from the {project_name} notes. "
-        f"The main items captured include: {project_notes[:250]} "
-        "I will confirm the next steps and follow up with any needed details."
-    )
+    comprehend_analysis = analyze_notes_with_comprehend(project_notes)
 
     item = {
         "recordId": record_id,
@@ -138,96 +309,142 @@ def create_project_note(event):
         "projectNotes": project_notes,
         "category": category,
         "priority": priority,
-        "keyPhrases": [],
-        "sentiment": "Not analyzed yet",
-        "summary": summary,
+        "keyPhrases": comprehend_analysis["keyPhrases"],
+        "sentiment": comprehend_analysis["sentiment"],
+        "sentimentScores": comprehend_analysis["sentimentScores"],
+        "analysisStatus": comprehend_analysis["analysisStatus"],
+        "summary": create_summary(project_name, category, priority),
         "nextSteps": next_steps,
-        "draftMessage": draft_message,
-        "createdAt": created_at
+        "draftMessage": create_draft_message(project_name, project_notes),
+        "createdAt": created_at,
     }
 
-    table.put_item(Item=item)
+    table.put_item(
+        Item=item,
+        ConditionExpression="attribute_not_exists(recordId)",
+    )
 
-    return {
-        "statusCode": 201,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(item)
-    }
+    LOGGER.info("Created project note record %s", record_id)
+    return create_response(201, item)
 
 
-def get_project_notes():
-    response = table.scan()
-    items = response.get("Items", [])
+def get_project_notes() -> dict[str, Any]:
+    """Handle GET /project-notes."""
+    items: list[dict[str, Any]] = []
+    scan_arguments: dict[str, Any] = {}
+
+    while True:
+        response = table.scan(**scan_arguments)
+        items.extend(response.get("Items", []))
+
+        last_evaluated_key = response.get("LastEvaluatedKey")
+        if not last_evaluated_key:
+            break
+
+        scan_arguments["ExclusiveStartKey"] = last_evaluated_key
 
     items.sort(key=lambda item: item.get("createdAt", ""), reverse=True)
-
-    return {
-        "statusCode": 200,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({
-            "count": len(items),
-            "items": items
-        }, default=json_default)
-    }
+    return create_response(200, {"count": len(items), "items": items})
 
 
-def get_project_note_by_id(event):
+def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
+    """Handle GET /project-notes/{recordId}."""
     path_parameters = event.get("pathParameters") or {}
     record_id = path_parameters.get("recordId")
 
     if not record_id:
-        return {
-            "statusCode": 400,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "recordId is required"})
-        }
+        return create_response(400, {"error": "recordId is required"})
 
-    response = table.get_item(
-        Key={
-            "recordId": record_id
-        }
-    )
-
+    response = table.get_item(Key={"recordId": record_id})
     item = response.get("Item")
 
     if not item:
-        return {
-            "statusCode": 404,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "Project note not found"})
-        }
+        return create_response(404, {"error": "Project note not found"})
 
-    return {
-        "statusCode": 200,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps(item, default=json_default)
-    }
+    return create_response(200, item)
 
 
-def lambda_handler(event, context):
+def get_http_method(event: dict[str, Any]) -> str:
+    """Read the HTTP method from API Gateway."""
+    method = (
+        event.get("requestContext", {})
+        .get("http", {})
+        .get("method")
+    )
+
+    if method:
+        return method.upper()
+
+    return str(event.get("httpMethod", "")).upper()
+
+
+def get_request_path(event: dict[str, Any]) -> str:
+    """Read the request path from API Gateway."""
+    path = (
+        event.get("requestContext", {})
+        .get("http", {})
+        .get("path")
+    )
+
+    if path:
+        return path
+
+    return str(event.get("path", ""))
+
+
+def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+    """Main Lambda entry point."""
+    request_id = getattr(context, "aws_request_id", "unknown")
+
     try:
-        method = event.get("requestContext", {}).get("http", {}).get("method")
+        method = get_http_method(event)
+        path = get_request_path(event)
 
-        if method == "POST":
+        LOGGER.info(
+            "Request %s. Method: %s. Path: %s",
+            request_id,
+            method,
+            path,
+        )
+
+        if method == "OPTIONS":
+            return create_response(200, {"message": "CORS preflight successful"})
+
+        if method == "POST" and path == "/project-notes":
             return create_project_note(event)
 
-        if method == "GET":
-            path = event.get("requestContext", {}).get("http", {}).get("path", "")
-
-            if path.startswith("/project-notes/"):
-                return get_project_note_by_id(event)
-
+        if method == "GET" and path == "/project-notes":
             return get_project_notes()
 
-        return {
-            "statusCode": 405,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": "Method not allowed"})
-        }
+        if method == "GET" and path.startswith("/project-notes/"):
+            return get_project_note_by_id(event)
 
-    except Exception as error:
-        return {
-            "statusCode": 500,
-            "headers": {"Content-Type": "application/json"},
-            "body": json.dumps({"error": str(error)})
-        }
+        return create_response(404, {"error": "Route not found"})
+
+    except ClientError as error:
+        LOGGER.exception("AWS service error for request %s", request_id)
+        error_code = error.response.get("Error", {}).get(
+            "Code",
+            "AWS_SERVICE_ERROR",
+        )
+
+        if error_code == "ConditionalCheckFailedException":
+            return create_response(409, {"error": "A record with this ID already exists"})
+
+        return create_response(
+            500,
+            {
+                "error": "AWS service request failed",
+                "requestId": request_id,
+            },
+        )
+
+    except Exception:
+        LOGGER.exception("Unexpected error for request %s", request_id)
+        return create_response(
+            500,
+            {
+                "error": "Internal server error",
+                "requestId": request_id,
+            },
+        )
