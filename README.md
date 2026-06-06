@@ -6,9 +6,9 @@ A serverless AWS application for organizing luxury design project notes, walkthr
 
 The AI Luxury Design Project Assistant is designed for luxury design, lighting, automation, and A/V integration teams that need a more reliable way to organize project information.
 
-Important project details may come from client meetings, site walkthroughs, builder conversations, lighting reviews, vendor updates, email notes, or exported transcripts from tools such as Plaud. This application accepts raw project notes, analyzes the content, generates structured project information, saves the completed record, and makes saved records available through API endpoints.
+Important project details may come from client meetings, site walkthroughs, builder conversations, lighting reviews, vendor updates, email notes, or exported Plaud transcripts. This application accepts raw project notes, analyzes the content, generates structured project information, stores the completed record, and displays saved records through a browser-based frontend.
 
-The current version is a working AI-enhanced backend built with AWS serverless services.
+The current version is a working end-to-end MVP built with AWS serverless services and a responsive HTML, CSS, and JavaScript interface.
 
 ## Project Goals
 
@@ -21,38 +21,49 @@ The application is intended to help project teams:
 * Improve builder, vendor, and client communication
 * Maintain structured project records
 * Create a more consistent project coordination workflow
+* Provide a browser interface for project-note submission and review
 
 ## Current Build Status
 
-The backend MVP is working.
+The application now has a working end-to-end MVP.
 
-The application can:
+The current version includes:
 
-* Create project note records
-* Analyze notes with Amazon Comprehend
-* Generate project content with Anthropic Claude through Amazon Bedrock
-* Save completed records in Amazon DynamoDB
-* Retrieve all saved project notes
-* Retrieve one project note by `recordId`
-* Return structured JSON responses through Amazon API Gateway
+* A serverless AWS backend
+* Three working API routes
+* DynamoDB project-note storage
+* Amazon Comprehend sentiment and key-phrase analysis
+* Amazon Bedrock summaries, action items, and draft messages
+* A responsive browser-based frontend
+* A project-note submission form
+* AI-generated result displays
+* A saved project history section
+* Individual record retrieval
+* Copy buttons for generated summaries, action items, and messages
+* Browser-to-API integration through API Gateway CORS
+* CloudWatch logging
+* IAM permissions
+* Error handling and AI-service fallbacks
+* GitHub source control and documentation
+
+The frontend currently runs through a local development server in GitHub Codespaces. AWS Amplify deployment is the next hosting milestone.
 
 ## Current Architecture
 
 ```text
-User or Project Coordinator
-            ↓
+User
+  ↓
+HTML / CSS / JavaScript Frontend
+  ↓
 Amazon API Gateway
-            ↓
+  ↓
 AWS Lambda
-        ↙       ↘
-Amazon         Amazon
-Comprehend     Bedrock
-        ↘       ↙
-     Structured Project Record
-            ↓
-     Amazon DynamoDB
-            ↓
-     JSON API Response
+  ├── Amazon Comprehend
+  └── Amazon Bedrock
+  ↓
+Amazon DynamoDB
+  ↓
+Structured Results Returned to Frontend
 ```
 
 ## AWS Services Used
@@ -67,47 +78,38 @@ Comprehend     Bedrock
 | AWS IAM            | Controls permissions between Lambda and AWS services                   |
 | Amazon CloudWatch  | Stores Lambda execution logs for monitoring and troubleshooting        |
 
-## AI Services
+## Frontend Technologies
 
-### Amazon Comprehend
+The frontend is built with:
 
-Amazon Comprehend analyzes the submitted project notes and returns:
+* HTML
+* CSS
+* JavaScript
 
-* Key phrases
-* Overall sentiment
-* Sentiment confidence scores
-* Analysis status
+The interface allows users to:
 
-Example fields:
+* Enter a client name
+* Enter a project name
+* Select a note type
+* Select the source of the notes
+* Paste project notes or transcript text
+* Submit notes for AI analysis
+* View the generated summary
+* View key phrases and sentiment
+* View generated next steps
+* View a draft follow-up message
+* Copy generated content
+* Load previously saved project notes
+* Retrieve and display individual project records
 
-```json
-{
-  "keyPhrases": [
-    "warm architectural lighting",
-    "hidden speakers",
-    "keypad locations",
-    "equipment locations"
-  ],
-  "sentiment": "NEUTRAL",
-  "analysisStatus": "COMPLETED"
-}
-```
-
-### Amazon Bedrock
-
-Amazon Bedrock uses an Anthropic Claude model to generate:
-
-* A concise professional summary
-* Specific next steps
-* A polished draft message for the most relevant recipient
-
-The model ID is stored in the Lambda environment variable:
+The frontend files are stored in:
 
 ```text
-BEDROCK_MODEL_ID
+frontend/
+├── index.html
+├── styles.css
+└── app.js
 ```
-
-The actual model identifier is not hard-coded into the repository.
 
 ## Current API Routes
 
@@ -128,13 +130,18 @@ POST /project-notes
 This route:
 
 1. Accepts project note data
-2. Assigns a project category
-3. Assigns a priority level
-4. Calls Amazon Comprehend
-5. Calls Amazon Bedrock
-6. Creates a structured project record
-7. Saves the record in DynamoDB
-8. Returns the completed record
+2. Validates the request
+3. Assigns a project category
+4. Assigns a priority level
+5. Calls Amazon Comprehend
+6. Extracts key phrases
+7. Detects sentiment
+8. Calls Amazon Bedrock
+9. Generates a professional summary
+10. Generates specific next steps
+11. Generates a polished follow-up message
+12. Saves the completed record in DynamoDB
+13. Returns the completed record as JSON
 
 ### Retrieve All Project Notes
 
@@ -161,6 +168,46 @@ This route returns one saved project note using its unique `recordId`.
 | DynamoDB Table         | `LuxuryDesignProjectNotes`        |
 | DynamoDB Partition Key | `recordId`                        |
 | AWS Region             | `us-west-2`                       |
+
+## Amazon Comprehend Integration
+
+Amazon Comprehend analyzes submitted project notes and returns:
+
+* Key phrases
+* Overall sentiment
+* Sentiment confidence scores
+* Analysis status
+
+Example:
+
+```json
+{
+  "keyPhrases": [
+    "warm architectural lighting",
+    "hidden speakers",
+    "keypad locations",
+    "equipment locations"
+  ],
+  "sentiment": "NEUTRAL",
+  "analysisStatus": "COMPLETED"
+}
+```
+
+## Amazon Bedrock Integration
+
+Amazon Bedrock uses an Anthropic Claude model to generate:
+
+* A concise professional summary
+* Specific next steps
+* A polished follow-up message for the most relevant recipient
+
+The model identifier is stored in the Lambda environment variable:
+
+```text
+BEDROCK_MODEL_ID
+```
+
+The actual model identifier is not hard-coded into the repository.
 
 ## Example POST Request
 
@@ -251,12 +298,62 @@ curl -X GET "https://your-api-id.execute-api.us-west-2.amazonaws.com/project-not
 curl -X GET "https://your-api-id.execute-api.us-west-2.amazonaws.com/project-notes/{recordId}"
 ```
 
+## Browser Integration
+
+The frontend connects to API Gateway using JavaScript `fetch()` requests.
+
+Browser access required CORS configuration in Amazon API Gateway.
+
+The current development CORS settings allow:
+
+```text
+Origins: *
+Methods: GET, POST, OPTIONS
+Headers: Content-Type
+Credentials: Off
+```
+
+The wildcard origin is suitable for development. It should be replaced with the hosted frontend domain before production use.
+
+## Local Frontend Testing
+
+From the repository root:
+
+```bash
+cd frontend
+python3 -m http.server 8000
+```
+
+Then open port `8000` through the GitHub Codespaces Ports tab.
+
+The frontend automatically loads saved project notes through:
+
+```text
+GET /project-notes
+```
+
+The form submits project notes through:
+
+```text
+POST /project-notes
+```
+
+Individual records are retrieved through:
+
+```text
+GET /project-notes/{recordId}
+```
+
 ## Project Structure
 
 ```text
 ai-luxury-design-project-assistant/
 ├── README.md
 ├── .gitignore
+├── frontend/
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
 ├── lambda/
 │   └── lambda_function.py
 ├── sample-data/
@@ -271,36 +368,41 @@ ai-luxury-design-project-assistant/
     ├── dynamodb-saved-item.png
     ├── cloudshell-api-test.png
     ├── get-project-notes-api-test.png
-    ├── get-project-note-by-id-api-test.png
     ├── comprehend-analysis-success.png
     ├── bedrock-direct-test-success.png
     ├── bedrock-lambda-test-success.png
-    └── bedrock-api-test-success.png
+    ├── bedrock-api-test-success.png
+    ├── frontend-form.png
+    ├── frontend-saved-project-notes.png
+    └── frontend-ai-results.png
 ```
+
+## DynamoDB Data Model
 
 ## DynamoDB Data Model
 
 Each DynamoDB item represents one submitted project note.
 
-| Field              | Description                               |
-| ------------------ | ----------------------------------------- |
-| `recordId`         | Unique ID for the project note            |
-| `clientName`       | Client name or privacy-safe client label  |
-| `projectName`      | Project or residence name                 |
-| `noteType`         | Type of note or transcript                |
-| `source`           | Origin of the submitted notes             |
-| `projectNotes`     | Original project note text                |
-| `category`         | Rule-based project category               |
-| `priority`         | Rule-based priority level                 |
-| `keyPhrases`       | Key phrases returned by Amazon Comprehend |
-| `sentiment`        | Sentiment returned by Amazon Comprehend   |
-| `sentimentScores`  | Sentiment confidence scores               |
-| `analysisStatus`   | Comprehend processing status              |
-| `summary`          | Bedrock-generated project summary         |
-| `nextSteps`        | Bedrock-generated action items            |
-| `draftMessage`     | Bedrock-generated follow-up message       |
-| `generationStatus` | Bedrock processing status                 |
-| `createdAt`        | UTC creation timestamp                    |
+| Field              | Description                                |
+| ------------------ | ------------------------------------------ |
+| `recordId`         | Unique identifier for the project note     |
+| `clientName`       | Client name or privacy-safe client label   |
+| `projectName`      | Project or residence name                  |
+| `noteType`         | Type of note or transcript                 |
+| `source`           | Source of the submitted notes              |
+| `projectNotes`     | Original project note text                 |
+| `category`         | Rule-based project category                |
+| `priority`         | Rule-based priority level                  |
+| `keyPhrases`       | Key phrases returned by Amazon Comprehend  |
+| `sentiment`        | Sentiment returned by Amazon Comprehend    |
+| `sentimentScores`  | Sentiment confidence scores                |
+| `analysisStatus`   | Amazon Comprehend processing status        |
+| `summary`          | Amazon Bedrock-generated project summary   |
+| `nextSteps`        | Amazon Bedrock-generated action items      |
+| `draftMessage`     | Amazon Bedrock-generated follow-up message |
+| `generationStatus` | Amazon Bedrock processing status           |
+| `createdAt`        | UTC creation timestamp                     |
+
 
 ## Category Logic
 
@@ -401,6 +503,12 @@ The `screenshots/` folder contains evidence of the working build.
 * Successful Bedrock Lambda test
 * Successful full Bedrock API test
 
+### Frontend Integration
+
+* Frontend project-note form
+* Saved project-note history
+* AI-generated browser results
+
 ## Security and Privacy
 
 The project currently uses anonymized sample information.
@@ -409,7 +517,7 @@ Recommended production improvements include:
 
 * Add authentication and authorization
 * Protect the public API endpoint
-* Restrict CORS to approved frontend domains
+* Restrict CORS to the hosted frontend domain
 * Use least-privilege IAM resource policies
 * Avoid storing unnecessary client-sensitive information
 * Encrypt sensitive data
@@ -419,36 +527,35 @@ Recommended production improvements include:
 
 Generated content should be reviewed by a human before it is sent to a client, builder, vendor, or project partner.
 
-## Planned Next Steps
-
-* Build a frontend form for submitting project notes
-* Display saved projects and AI-generated results
-* Add CORS configuration for the frontend domain
-* Add API authentication
-* Add client and project search
-* Add filtering by category and priority
-* Add project note editing
-* Add delete or archive functionality
-* Support image uploads such as plans, site photos, and markups
-* Add S3 storage for uploaded files
-* Add multimodal analysis for plans and project images
-* Add optional design-image generation or markup workflows
-* Add exportable project summaries
-* Add user review and approval before messages are sent
-* Add automated tests and deployment infrastructure
-
 ## Current Limitations
 
 The current version:
 
-* Uses a public HTTP API during development
-* Does not yet include a frontend
-* Does not yet include authentication
-* Accepts text project notes only
-* Does not yet process raw audio directly
-* Does not yet process floor plans or site images through the API
+* Runs the frontend through a local development server
+* Is not yet hosted on a permanent public domain
+* Does not include user authentication
+* Uses a public API endpoint during development
+* Allows all browser origins through development CORS settings
+* Accepts text input only
+* Does not yet accept raw audio
+* Does not yet accept plans, photos, or design-image uploads
 * Does not automatically send generated messages
-* Requires human review of all generated content
+* Requires human review of AI-generated content
+
+## Planned Next Steps
+
+* Deploy the frontend with AWS Amplify Hosting
+* Add the live frontend URL to the repository
+* Restrict CORS to the hosted Amplify domain
+* Add Amazon Cognito authentication
+* Add Amazon S3 file storage
+* Add floor-plan, design-image, and site-photo uploads
+* Add multimodal document and image analysis
+* Add project search and filtering
+* Add editing and archive functionality
+* Improve loading, error, and empty states
+* Complete final project testing
+* Prepare the final demonstration and submission materials
 
 ## Long-Term Vision
 
@@ -457,7 +564,7 @@ The long-term goal is to create a professional AI-assisted project coordination 
 The completed platform may support:
 
 * Project note and transcript analysis
-* Floor plan and image review
+* Floor-plan and image review
 * Client preference tracking
 * Technical coordination
 * Builder and vendor communication
@@ -472,3 +579,4 @@ The completed platform may support:
 This application is intended to support project professionals, not replace them.
 
 AI-generated summaries, action items, recommendations, and messages should be reviewed for accuracy before being used. Technical, electrical, construction, and design decisions should remain under the supervision of qualified professionals.
+
