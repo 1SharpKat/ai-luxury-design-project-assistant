@@ -639,3 +639,607 @@
     0 0 0 1px rgba(70, 150, 235, .20),
     0 0 22px rgba(33, 126, 226, .32) !important;
 }
+
+/* Final stacked hero with two-column buttons */
+.compact-hero {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  grid-template-areas:
+    "brand"
+    "message"
+    "actions" !important;
+  justify-items: center;
+  row-gap: 14px;
+  padding: 24px 32px;
+  background: #000 !important;
+  background-image: none !important;
+  text-align: center;
+}
+
+.compact-hero .hero-brand-block {
+  grid-area: brand;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  justify-self: center;
+}
+
+.compact-hero .hero-brand-logo {
+  width: min(100%, 560px);
+  max-height: 135px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.compact-hero .hero-message-block {
+  grid-area: message;
+  max-width: 760px;
+  padding: 0;
+  text-align: center;
+}
+
+.compact-hero .hero-message-block .eyebrow {
+  margin-bottom: 8px;
+}
+
+.compact-hero .hero-message-block h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3.25rem);
+  line-height: 1.04;
+}
+
+.compact-hero .hero-actions {
+  grid-area: actions;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(220px, 320px));
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  grid-area: auto !important;
+  justify-self: stretch !important;
+  width: 100% !important;
+  min-height: 30px !important;
+  height: 30px !important;
+}
+
+@media (max-width: 680px) {
+  .compact-hero .hero-actions {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+  }
+}
+
+/* Keep the stacked hero close to 18% of the viewport height */
+.compact-hero {
+  min-height: 18vh !important;
+  max-height: 220px;
+  padding: 14px 28px !important;
+  row-gap: 8px !important;
+}
+
+.compact-hero .hero-brand-logo {
+  max-height: 82px !important;
+  width: min(100%, 460px) !important;
+}
+
+.compact-hero .hero-message-block .eyebrow {
+  margin-bottom: 4px !important;
+}
+
+.compact-hero .hero-message-block h1 {
+  font-size: clamp(1.45rem, 2.2vw, 2.35rem) !important;
+  line-height: 1.02 !important;
+}
+
+.compact-hero .hero-actions {
+  margin-top: 2px !important;
+  gap: 14px !important;
+}
+
+/* Professional balanced two-column hero */
+.compact-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "left-column right-column" !important;
+  column-gap: 42px;
+  align-items: center;
+  min-height: 18vh !important;
+  max-height: 230px;
+  padding: 18px 32px !important;
+  background: #000 !important;
+  background-image: none !important;
+  text-align: left;
+}
+
+/* Let the existing hero children participate in the two-column layout */
+.compact-hero .hero-brand-block,
+.compact-hero .hero-message-block,
+.compact-hero .hero-actions {
+  display: contents !important;
+}
+
+/* Left column: logo */
+.compact-hero .hero-brand-logo {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  width: min(100%, 500px) !important;
+  max-height: 90px !important;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Left column: eyebrow */
+.compact-hero .hero-message-block .eyebrow {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
+  margin: 0 !important;
+  text-align: center;
+}
+
+/* Right column: main headline */
+.compact-hero .hero-message-block h1 {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: center;
+  max-width: 620px;
+  margin: 0 !important;
+  font-size: clamp(1.75rem, 2.5vw, 2.9rem) !important;
+  line-height: 1.04 !important;
+  text-align: left;
+}
+
+/* Left column button */
+.compact-hero .hero-actions .primary-link {
+  grid-column: 1;
+  grid-row: 3;
+  justify-self: center !important;
+  width: min(100%, 320px) !important;
+}
+
+/* Right column button */
+.compact-hero .hero-actions .secondary-link {
+  grid-column: 2;
+  grid-row: 3;
+  justify-self: center !important;
+  width: min(100%, 320px) !important;
+}
+
+/* Keep both buttons visually matched */
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 4px 14px !important;
+  border-radius: 7px !important;
+  background: #05080d !important;
+  border: 1px solid rgba(108, 182, 255, .38) !important;
+  color: #eef6ff !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+}
+
+.compact-hero .hero-actions .primary-link:hover,
+.compact-hero .hero-actions .secondary-link:hover {
+  background: #07111d !important;
+  border-color: rgba(104, 181, 255, .78) !important;
+  box-shadow:
+    0 0 0 1px rgba(70, 150, 235, .20),
+    0 0 22px rgba(33, 126, 226, .32) !important;
+}
+
+@media (max-width: 900px) {
+  .compact-hero {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "left-column"
+      "right-column" !important;
+    max-height: none;
+    row-gap: 14px;
+    text-align: center;
+  }
+
+  .compact-hero .hero-brand-logo,
+  .compact-hero .hero-message-block .eyebrow,
+  .compact-hero .hero-message-block h1,
+  .compact-hero .hero-actions .primary-link,
+  .compact-hero .hero-actions .secondary-link {
+    grid-column: 1;
+    grid-row: auto;
+    text-align: center;
+  }
+}
+
+/* Keep New Project Note opposite Quick Result */
+.dashboard-shell {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-areas: "form results" !important;
+  gap: 24px !important;
+  align-items: stretch !important;
+}
+
+.dashboard-shell .form-panel {
+  grid-area: form !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-shell .results-panel {
+  grid-area: results !important;
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-shell .results-panel.is-hidden {
+  display: flex !important;
+}
+
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  align-self: stretch;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "form"
+      "results" !important;
+  }
+}
+
+/* Keep New Project Note opposite Quick Result */
+.dashboard-shell {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-areas: "form results" !important;
+  gap: 24px !important;
+  align-items: stretch !important;
+}
+
+.dashboard-shell .form-panel {
+  grid-area: form !important;
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-shell .results-panel {
+  grid-area: results !important;
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Keep the placeholder Quick Result visible before submission */
+.dashboard-shell .results-panel.is-hidden {
+  display: flex !important;
+}
+
+/* Make both main cards begin and end at matching heights */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  align-self: stretch;
+  height: 100%;
+}
+
+/* Stack only on tablets and phones */
+@media (max-width: 900px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "form"
+      "results" !important;
+  }
+}
+
+/* Final hero: logo/headline row with buttons below */
+.compact-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "logo headline"
+    "create open" !important;
+  column-gap: 48px !important;
+  row-gap: 14px !important;
+  align-items: center !important;
+  justify-items: center !important;
+  min-height: 18vh !important;
+  max-height: 260px !important;
+  padding: 22px 44px !important;
+  background: #000 !important;
+  background-image: none !important;
+  overflow: hidden !important;
+}
+
+.compact-hero .hero-logo-cell {
+  grid-area: logo !important;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.compact-hero .hero-headline-cell {
+  grid-area: headline !important;
+  width: 100%;
+  max-width: 620px;
+  text-align: left;
+}
+
+.compact-hero .hero-brand-logo {
+  width: min(100%, 460px) !important;
+  max-height: 96px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+.compact-hero .eyebrow {
+  margin: 0 0 6px !important;
+  font-size: .68rem !important;
+  letter-spacing: .28em !important;
+}
+
+.compact-hero h1 {
+  margin: 0 !important;
+  max-width: 620px !important;
+  font-size: clamp(1.7rem, 2.45vw, 2.85rem) !important;
+  line-height: 1.04 !important;
+  text-align: left !important;
+}
+
+.compact-hero .hero-button-left {
+  grid-area: create !important;
+}
+
+.compact-hero .hero-button-right {
+  grid-area: open !important;
+}
+
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  justify-self: center !important;
+  width: min(100%, 320px) !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 4px 14px !important;
+  border: 1px solid rgba(108, 182, 255, .38) !important;
+  border-radius: 7px !important;
+  background: #05080d !important;
+  color: #eef6ff !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background: #07111d !important;
+  border-color: rgba(104, 181, 255, .78) !important;
+  box-shadow:
+    0 0 0 1px rgba(70, 150, 235, .20),
+    0 0 22px rgba(33, 126, 226, .32) !important;
+}
+
+@media (max-width: 900px) {
+  .compact-hero {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "logo"
+      "headline"
+      "create"
+      "open" !important;
+    max-height: none !important;
+  }
+
+  .compact-hero .hero-headline-cell,
+  .compact-hero h1 {
+    text-align: center !important;
+  }
+}
+
+/* Make the logo more prominent than the title */
+.compact-hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) !important;
+  column-gap: 42px !important;
+}
+
+.compact-hero .hero-brand-logo {
+  width: min(100%, 540px) !important;
+  max-height: 118px !important;
+}
+
+.compact-hero .hero-headline-cell {
+  max-width: 500px !important;
+}
+
+.compact-hero .hero-headline-cell .eyebrow {
+  font-size: .64rem !important;
+  letter-spacing: .24em !important;
+}
+
+.compact-hero .hero-headline-cell h1 {
+  max-width: 500px !important;
+  font-size: clamp(1.45rem, 2vw, 2.25rem) !important;
+  line-height: 1.04 !important;
+}
+
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  width: min(100%, 300px) !important;
+}
+
+/* Responsive hero stacking for split screen and mobile */
+@media (max-width: 1100px) {
+  .compact-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    column-gap: 28px !important;
+    padding: 20px 28px !important;
+  }
+
+  .compact-hero .hero-brand-logo {
+    width: min(100%, 460px) !important;
+    max-height: 96px !important;
+  }
+
+  .compact-hero .hero-headline-cell h1 {
+    font-size: clamp(1.35rem, 2.4vw, 2rem) !important;
+    line-height: 1.05 !important;
+  }
+
+  .compact-hero .hero-button-left,
+  .compact-hero .hero-button-right {
+    width: min(100%, 280px) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .compact-hero {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "logo"
+      "headline"
+      "create"
+      "open" !important;
+    row-gap: 10px !important;
+    min-height: auto !important;
+    max-height: none !important;
+    padding: 18px 22px !important;
+    text-align: center !important;
+  }
+
+  .compact-hero .hero-logo-cell {
+    grid-area: logo !important;
+  }
+
+  .compact-hero .hero-headline-cell {
+    grid-area: headline !important;
+    max-width: 560px !important;
+    text-align: center !important;
+  }
+
+  .compact-hero .hero-brand-logo {
+    width: min(100%, 420px) !important;
+    max-height: 82px !important;
+  }
+
+  .compact-hero .eyebrow {
+    margin: 4px 0 5px !important;
+    font-size: .6rem !important;
+    letter-spacing: .22em !important;
+    text-align: center !important;
+  }
+
+  .compact-hero h1,
+  .compact-hero .hero-headline-cell h1 {
+    max-width: 560px !important;
+    font-size: clamp(1.35rem, 5vw, 2rem) !important;
+    line-height: 1.05 !important;
+    text-align: center !important;
+  }
+
+  .compact-hero .hero-button-left,
+  .compact-hero .hero-button-right {
+    width: min(100%, 340px) !important;
+    justify-self: center !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .compact-hero {
+    padding: 16px 16px !important;
+    row-gap: 9px !important;
+    border-radius: 16px;
+  }
+
+  .compact-hero .hero-brand-logo {
+    width: min(100%, 340px) !important;
+    max-height: 68px !important;
+  }
+
+  .compact-hero .eyebrow {
+    font-size: .52rem !important;
+    letter-spacing: .18em !important;
+  }
+
+  .compact-hero h1,
+  .compact-hero .hero-headline-cell h1 {
+    font-size: clamp(1.2rem, 6.4vw, 1.65rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .compact-hero .hero-button-left,
+  .compact-hero .hero-button-right {
+    width: 100% !important;
+    max-width: 320px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+  }
+}
+
+/* Give the desktop headline more horizontal room */
+@media (min-width: 1101px) {
+  .compact-hero {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr) !important;
+    column-gap: 56px !important;
+  }
+
+  .compact-hero .hero-headline-cell {
+    width: 100% !important;
+    max-width: 680px !important;
+  }
+
+  .compact-hero .hero-headline-cell h1 {
+    width: 100% !important;
+    max-width: 680px !important;
+    font-size: clamp(1.55rem, 2.15vw, 2.35rem) !important;
+    line-height: 1.08 !important;
+    text-wrap: balance;
+  }
+}
+
+/* Balance the desktop headline against the logo */
+@media (min-width: 1101px) {
+  .compact-hero {
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr) !important;
+    column-gap: 48px !important;
+  }
+
+  .compact-hero .hero-brand-logo {
+    width: min(100%, 520px) !important;
+    max-height: 112px !important;
+  }
+
+  .compact-hero .hero-headline-cell {
+    width: 100% !important;
+    max-width: 640px !important;
+    justify-self: start !important;
+  }
+
+  .compact-hero .hero-headline-cell h1 {
+    width: 100% !important;
+    max-width: 640px !important;
+    font-size: clamp(1.8rem, 2.35vw, 2.7rem) !important;
+    line-height: 1.06 !important;
+    text-wrap: balance;
+  }
+
+  .compact-hero .hero-headline-cell .eyebrow {
+    margin-bottom: 8px !important;
+  }
+}
