@@ -1,0 +1,238 @@
+/* Dedicated dashboard, projects, and report pages */
+.dashboard-shell {
+  grid-template-columns: minmax(360px, .95fr) minmax(460px, 1.05fr);
+  grid-template-areas: "form results";
+  align-items: start;
+}
+
+.compact-hero {
+  grid-template-areas: "brand message actions";
+}
+
+.compact-hero .hero-metrics {
+  display: none;
+}
+
+.quick-result-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.quick-summary-card,
+.quick-actions-card {
+  margin-bottom: 12px;
+}
+
+.report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.subpage-shell {
+  width: calc(100% - (var(--page-gap) * 2));
+  max-width: 1440px;
+  margin: 28px auto;
+}
+
+.subpage-panel,
+.report-panel {
+  min-height: 65vh;
+}
+
+.project-folder-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.project-folder-card {
+  overflow: hidden;
+  border: 1px solid var(--up-border);
+  border-radius: 14px;
+  background: rgba(4, 17, 31, .76);
+}
+
+.project-folder-card > summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.project-folder-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.folder-mark {
+  display: grid;
+  width: 40px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(108, 182, 255, .25);
+  border-radius: 8px;
+  color: #6cb6ff;
+  background: rgba(26, 106, 184, .13);
+}
+
+.folder-copy strong,
+.folder-copy small {
+  display: block;
+}
+
+.folder-copy small {
+  margin-top: 4px;
+  color: var(--up-muted);
+  font-size: .74rem;
+}
+
+.folder-arrow {
+  color: var(--up-muted);
+  font-size: 1.5rem;
+  transition: transform .2s ease;
+}
+
+.project-folder-card[open] .folder-arrow {
+  transform: rotate(90deg);
+}
+
+.project-note-list {
+  display: grid;
+  gap: 1px;
+  padding: 0 14px 14px;
+}
+
+.project-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 14px;
+  border: 1px solid rgba(145, 174, 207, .18);
+  border-radius: 9px;
+  color: inherit;
+  background: rgba(7, 25, 43, .68);
+}
+
+.project-note-row strong,
+.project-note-row small {
+  display: block;
+}
+
+.project-note-row strong {
+  text-transform: capitalize;
+}
+
+.project-note-row small {
+  margin-top: 3px;
+  color: var(--up-muted);
+  font-size: .72rem;
+}
+
+.note-priority {
+  color: #b9d8f2;
+  font-size: .72rem;
+  white-space: nowrap;
+}
+
+.report-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.report-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.report-wide {
+  grid-column: 1 / -1;
+}
+
+.report-grid h2 {
+  margin: 6px 0 12px;
+  font-size: 1.25rem;
+}
+
+.original-notes {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 950px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+    grid-template-areas: "form" "results";
+  }
+
+  .report-summary-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .report-heading {
+    display: grid;
+  }
+}
+
+@media (max-width: 680px) {
+  .quick-result-meta,
+  .report-summary-strip,
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-wide {
+    grid-column: auto;
+  }
+
+  .project-note-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media print {
+  body::before,
+  .site-header,
+  .report-toolbar {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  .report-panel,
+  .result-card,
+  .summary-card {
+    color: #111;
+    background: #fff;
+    box-shadow: none;
+  }
+}

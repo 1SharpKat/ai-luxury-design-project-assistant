@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | LuxNote AI</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="upgrade.css">
+  <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="glass-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="index.html">LuxNote AI</a>
+      <div class="nav-links">
+        <a href="index.html#new-note">New Note</a>
+        <a href="projects.html" aria-current="page">Projects</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="subpage-shell">
+    <section class="glass-panel subpage-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Project Library</p>
+          <h1>Saved project notes</h1>
+          <p class="section-description">Open a project folder to review its notes and reports.</p>
+        </div>
+        <button id="refresh-projects" class="secondary-button" type="button">Refresh</button>
+      </div>
+      <div id="projects-status" class="records-message">Loading projects.</div>
+      <div id="project-folders" class="project-folder-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><strong>LuxNote AI</strong><span>Luxury Design Project Assistant</span></div>
+  </footer>
+  <script src="projects.js"></script>
+</body>
+</html>
