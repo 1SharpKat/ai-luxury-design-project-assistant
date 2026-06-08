@@ -3,45 +3,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
 
 <meta
-  name="description"
-  content="AI-assisted project coordination for luxury design, lighting, automation, and A/V integration teams."
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
-  <title>AI Luxury Design Project Assistant</title>
+<meta
+name="description"
+content="LuxNote AI organizes luxury design project notes, walkthrough transcripts, action items, and professional follow-up communication."
+
+>
+
+  <title>LuxNote AI | Luxury Design Project Assistant</title>
 
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <div
+    class="ambient-light ambient-light-one"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="ambient-light ambient-light-two"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="page-noise"
+    aria-hidden="true"
+  ></div>
+
   <header class="site-header">
-    <div class="header-content">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          AI
-        </div>
+    <nav
+      class="glass-nav"
+      aria-label="Primary navigation"
+    >
+      <a
+        class="nav-wordmark"
+        href="#top"
+      >
+        LuxNote AI
+      </a>
 
 
-    <div>
-      <p class="eyebrow">
-        Project Intelligence
-      </p>
+  <div class="nav-links">
+    <a href="#new-note">
+      New Note
+    </a>
 
-      <h1>
-        AI Luxury Design Project Assistant
-      </h1>
-    </div>
+    <a href="#results-section">
+      Analysis
+    </a>
+
+    <a href="#saved-records">
+      Projects
+    </a>
   </div>
+</nav>
 
-  <p class="header-description">
-    Turn project notes and walkthrough transcripts into organized
-    summaries, action items, and professional follow-up communication.
-  </p>
+<div
+  id="top"
+  class="hero-shell"
+>
+  <section class="hero-glass-card">
+    <img
+      class="hero-brand-logo"
+      src="assets/luxnote-logo.png"
+      alt="LuxNote AI, Luxury Design Project Assistant"
+    >
+
+    <p class="eyebrow">
+      Intelligent Project Coordination
+    </p>
+
+    <h1>
+      Refined project intelligence for complex design work.
+    </h1>
+
+    <p class="hero-description">
+      Transform meeting notes, walkthrough transcripts, design decisions,
+      builder requests, and client preferences into clear summaries,
+      next steps, and professional communication.
+    </p>
+
+    <div class="hero-actions">
+      <a
+        class="primary-link"
+        href="#new-note"
+      >
+        Create Project Note
+      </a>
+
+      <a
+        class="secondary-link"
+        href="#saved-records"
+      >
+        View Project History
+      </a>
+    </div>
+
+    <div
+      class="hero-metrics"
+      aria-label="Application capabilities"
+    >
+      <article class="metric-card">
+        <span>
+          Analyze
+        </span>
+
+        <strong>
+          Project Notes
+        </strong>
+      </article>
+
+      <article class="metric-card">
+        <span>
+          Generate
+        </span>
+
+        <strong>
+          Next Steps
+        </strong>
+      </article>
+
+      <article class="metric-card">
+        <span>
+          Organize
+        </span>
+
+        <strong>
+          Project History
+        </strong>
+      </article>
+    </div>
+  </section>
 </div>
 
 
@@ -49,7 +148,8 @@
 
   <main class="page-shell">
     <section
-      class="panel form-panel"
+      id="new-note"
+      class="glass-panel form-panel"
       aria-labelledby="project-note-heading"
     >
       <div class="section-heading">
@@ -60,12 +160,17 @@
 
 
       <h2 id="project-note-heading">
-        Submit project information
+        Capture project intelligence
       </h2>
+
+      <p class="section-description">
+        Submit notes, transcripts, client preferences, deadlines, and
+        coordination requirements for AI-assisted analysis.
+      </p>
     </div>
 
     <span class="status-badge">
-      AI Enabled
+      Comprehend + Bedrock
     </span>
   </div>
 
@@ -188,13 +293,13 @@
         name="projectNotes"
         rows="10"
         maxlength="10000"
-        placeholder="Paste project notes, a meeting summary, or a walkthrough transcript here."
+        placeholder="Paste project notes, meeting details, or a walkthrough transcript here."
         required
       ></textarea>
 
       <p class="field-help">
         Include client preferences, deadlines, technical requirements,
-        builder questions, and follow-up items.
+        builder questions, vendor updates, and follow-up items.
       </p>
     </div>
 
@@ -235,7 +340,7 @@
 
 <section
   id="results-section"
-  class="panel results-panel is-hidden"
+  class="glass-panel results-panel is-hidden"
   aria-labelledby="results-heading"
 >
   <div class="section-heading">
@@ -245,8 +350,13 @@
       </p>
 
       <h2 id="results-heading">
-        Project results
+        Project intelligence
       </h2>
+
+      <p class="section-description">
+        Review the structured analysis before using it for project
+        communication or decision-making.
+      </p>
     </div>
 
     <span
@@ -258,7 +368,7 @@
   </div>
 
   <div class="result-summary-grid">
-    <article class="summary-card">
+    <article class="summary-card hover-card">
       <span class="summary-label">
         Project
       </span>
@@ -268,7 +378,7 @@
       </strong>
     </article>
 
-    <article class="summary-card">
+    <article class="summary-card hover-card">
       <span class="summary-label">
         Category
       </span>
@@ -278,7 +388,7 @@
       </strong>
     </article>
 
-    <article class="summary-card">
+    <article class="summary-card hover-card">
       <span class="summary-label">
         Priority
       </span>
@@ -288,7 +398,7 @@
       </strong>
     </article>
 
-    <article class="summary-card">
+    <article class="summary-card hover-card">
       <span class="summary-label">
         Sentiment
       </span>
@@ -300,11 +410,17 @@
   </div>
 
   <div class="result-content-grid">
-    <article class="result-card result-card-wide">
+    <article class="result-card result-card-wide hover-card">
       <div class="result-card-heading">
-        <h3>
-          Project Summary
-        </h3>
+        <div>
+          <span class="card-kicker">
+            Overview
+          </span>
+
+          <h3>
+            Project Summary
+          </h3>
+        </div>
 
         <button
           class="copy-button"
@@ -320,11 +436,17 @@
       </p>
     </article>
 
-    <article class="result-card">
+    <article class="result-card hover-card">
       <div class="result-card-heading">
-        <h3>
-          Key Phrases
-        </h3>
+        <div>
+          <span class="card-kicker">
+            Analysis
+          </span>
+
+          <h3>
+            Key Phrases
+          </h3>
+        </div>
       </div>
 
       <div
@@ -333,11 +455,17 @@
       ></div>
     </article>
 
-    <article class="result-card">
+    <article class="result-card hover-card">
       <div class="result-card-heading">
-        <h3>
-          Next Steps
-        </h3>
+        <div>
+          <span class="card-kicker">
+            Action
+          </span>
+
+          <h3>
+            Next Steps
+          </h3>
+        </div>
 
         <button
           class="copy-button"
@@ -348,15 +476,20 @@
         </button>
       </div>
 
-      <ol id="result-next-steps">
-      </ol>
+      <ol id="result-next-steps"></ol>
     </article>
 
-    <article class="result-card result-card-wide">
+    <article class="result-card result-card-wide hover-card">
       <div class="result-card-heading">
-        <h3>
-          Draft Follow-Up Message
-        </h3>
+        <div>
+          <span class="card-kicker">
+            Communication
+          </span>
+
+          <h3>
+            Draft Follow-Up Message
+          </h3>
+        </div>
 
         <button
           class="copy-button"
@@ -373,7 +506,7 @@
 
   <details class="record-details">
     <summary>
-      View record details
+      View technical record details
     </summary>
 
     <dl>
@@ -421,7 +554,8 @@
 </section>
 
 <section
-  class="panel records-panel"
+  id="saved-records"
+  class="glass-panel records-panel"
   aria-labelledby="saved-records-heading"
 >
   <div class="section-heading">
@@ -433,6 +567,11 @@
       <h2 id="saved-records-heading">
         Saved project notes
       </h2>
+
+      <p class="section-description">
+        Review previously analyzed notes and reopen complete project
+        records.
+      </p>
     </div>
 
     <button
@@ -440,7 +579,7 @@
       class="secondary-button"
       type="button"
     >
-      Refresh
+      Refresh Records
     </button>
   </div>
 
@@ -457,16 +596,30 @@
   ></div>
 </section>
 
-</main>
+
+  </main>
 
   <footer class="site-footer">
-    <p>
-      AI-generated content requires human review before it is used for
-      project, client, builder, vendor, electrical, or construction decisions.
-    </p>
+    <div class="footer-brand">
+      <strong>
+        LuxNote AI
+      </strong>
+
+
+  <span>
+    Luxury Design Project Assistant
+  </span>
+</div>
+
+<p>
+  AI-generated content requires human review before it is used for
+  client, builder, vendor, electrical, construction, or design decisions.
+</p>
+
+
   </footer>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
