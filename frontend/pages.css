@@ -335,3 +335,307 @@
     box-shadow: none;
   }
 }
+/* Refine hero proportions */
+.compact-hero {
+  grid-template-columns: minmax(420px, .9fr) minmax(520px, 1.1fr);
+  column-gap: 34px;
+}
+
+.compact-hero .hero-brand-block {
+  padding-right: 24px;
+}
+
+.compact-hero .hero-brand-logo {
+  max-width: 560px;
+  max-height: 150px;
+}
+
+.compact-hero .hero-message-block h1 {
+  max-width: 650px;
+  font-size: clamp(2.1rem, 2.7vw, 3.25rem);
+}
+
+.compact-hero .hero-actions {
+  max-width: 560px;
+}
+
+/* Balance hero buttons inside the right column */
+.compact-hero .hero-actions {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 650px;
+  padding-left: 0;
+  margin-top: 22px;
+}
+
+.compact-hero .hero-actions a {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+  .compact-hero .hero-actions {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+}
+
+/* Final balanced two-column hero */
+.compact-hero {
+  background: #000 !important;
+  background-image: none !important;
+  grid-template-columns: minmax(420px, 1fr) minmax(520px, 1fr);
+  grid-template-areas:
+    "brand message"
+    "brand-button message-button";
+  column-gap: 48px;
+  row-gap: 18px;
+  align-items: center;
+  min-height: 240px;
+}
+
+.compact-hero .hero-brand-block {
+  grid-area: brand;
+  background: transparent !important;
+  border-right: 0 !important;
+  margin: 0;
+  padding: 0;
+  align-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compact-hero .hero-brand-logo {
+  width: 100%;
+  max-width: 560px;
+  max-height: 150px;
+  object-fit: contain;
+  object-position: center;
+  background: transparent !important;
+}
+
+.compact-hero .hero-message-block {
+  grid-area: message;
+  align-self: end;
+  max-width: 640px;
+  padding: 0;
+}
+
+.compact-hero .hero-message-block h1 {
+  max-width: 640px;
+  font-size: clamp(2rem, 2.7vw, 3.2rem);
+  line-height: 1.02;
+}
+
+.compact-hero .hero-actions {
+  display: contents !important;
+}
+
+.compact-hero .hero-actions .primary-link {
+  grid-area: brand-button;
+  justify-self: center;
+  width: min(100%, 360px);
+  min-height: 48px;
+}
+
+.compact-hero .hero-actions .secondary-link {
+  grid-area: message-button;
+  justify-self: start;
+  width: min(100%, 360px);
+  min-height: 48px;
+}
+
+@media (max-width: 900px) {
+  .compact-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "brand"
+      "brand-button"
+      "message"
+      "message-button";
+    row-gap: 16px;
+  }
+
+  .compact-hero .hero-message-block {
+    align-self: auto;
+  }
+
+  .compact-hero .hero-actions .primary-link,
+  .compact-hero .hero-actions .secondary-link {
+    justify-self: stretch;
+    width: 100%;
+  }
+}
+
+/* Slim hero buttons and remove top-left lighting effect */
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  min-height: 36px;
+  padding: 6px 16px;
+  border-radius: 9px;
+  font-size: .78rem;
+  line-height: 1;
+}
+
+.compact-hero .hero-actions .primary-link {
+  width: min(100%, 320px);
+}
+
+.compact-hero .hero-actions .secondary-link {
+  width: min(100%, 320px);
+}
+
+/* Remove the decorative light that crosses the logo */
+.ambient-light-one {
+  display: none !important;
+}
+
+.compact-hero::before,
+.compact-hero::after,
+.hero-brand-block::before,
+.hero-brand-block::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep the Quick Result panel visible before analysis */
+.results-panel.is-hidden {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.results-panel.is-hidden #generation-status,
+.results-panel.is-hidden .quick-result-meta,
+.results-panel.is-hidden .quick-summary-card,
+.results-panel.is-hidden .quick-actions-card,
+.results-panel.is-hidden .report-actions {
+  opacity: .5;
+}
+
+.results-panel.is-hidden .quick-summary-card,
+.results-panel.is-hidden .quick-actions-card {
+  display: block;
+}
+
+/* Match hover glow on both hero buttons */
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.compact-hero .hero-actions .primary-link::before,
+.compact-hero .hero-actions .secondary-link::before {
+  content: "";
+  position: absolute;
+  inset: -45%;
+  background: radial-gradient(
+    circle,
+    rgba(69, 155, 255, .32),
+    transparent 58%
+  );
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+
+.compact-hero .hero-actions .primary-link:hover,
+.compact-hero .hero-actions .secondary-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(104, 181, 255, .72);
+  box-shadow:
+    0 0 0 1px rgba(70, 150, 235, .18),
+    0 0 20px rgba(33, 126, 226, .26);
+}
+
+.compact-hero .hero-actions .primary-link:hover::before,
+.compact-hero .hero-actions .secondary-link:hover::before {
+  opacity: 1;
+}
+
+/* Make Create Project Note glow black on hover */
+.compact-hero .hero-actions .primary-link:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(12, 14, 18, .98),
+    rgba(0, 0, 0, 1)
+  ) !important;
+  border-color: rgba(180, 195, 215, .45);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, .08),
+    0 0 22px rgba(0, 0, 0, .85),
+    inset 0 0 18px rgba(255, 255, 255, .04);
+}
+
+.compact-hero .hero-actions .primary-link::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, .10),
+    rgba(0, 0, 0, .38) 42%,
+    transparent 68%
+  );
+}
+
+/* Make both hero buttons thinner */
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  min-height: 30px !important;
+  height: 30px;
+  padding: 4px 14px !important;
+  border-radius: 7px;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  line-height: 1;
+}
+
+.compact-hero .hero-actions {
+  row-gap: 10px;
+}
+
+/* Final matching hero button style */
+.compact-hero .hero-actions .primary-link,
+.compact-hero .hero-actions .secondary-link {
+  min-height: 30px !important;
+  height: 30px !important;
+  padding: 4px 14px !important;
+  border: 1px solid rgba(108, 182, 255, .38) !important;
+  border-radius: 7px !important;
+  background: #05080d !important;
+  color: #eef6ff !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  box-shadow: none;
+}
+
+.compact-hero .hero-actions .primary-link::before,
+.compact-hero .hero-actions .secondary-link::before {
+  background: radial-gradient(
+    circle,
+    rgba(69, 155, 255, .34),
+    transparent 58%
+  ) !important;
+}
+
+.compact-hero .hero-actions .primary-link:hover,
+.compact-hero .hero-actions .secondary-link:hover {
+  background: #07111d !important;
+  border-color: rgba(104, 181, 255, .78) !important;
+  box-shadow:
+    0 0 0 1px rgba(70, 150, 235, .20),
+    0 0 22px rgba(33, 126, 226, .32) !important;
+}
