@@ -1,21 +1,69 @@
 /* Dedicated dashboard, projects, and report pages */
 .dashboard-shell {
-  grid-template-columns: minmax(360px, .95fr) minmax(460px, 1.05fr);
+  grid-template-columns: minmax(380px, .98fr) minmax(460px, 1.02fr);
   grid-template-areas: "form results";
   align-items: start;
+  max-width: 1440px;
 }
 
 .compact-hero {
+  grid-template-columns:
+    minmax(430px, 1.45fr)
+    minmax(320px, 1fr)
+    minmax(175px, .45fr);
   grid-template-areas: "brand message actions";
+  min-height: 178px;
+  padding: 22px 30px;
 }
 
 .compact-hero .hero-metrics {
   display: none;
 }
 
+.compact-hero .hero-brand-block {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.compact-hero .hero-brand-logo {
+  width: 100%;
+  max-width: 540px;
+  max-height: 132px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.compact-hero .hero-message-block h1 {
+  max-width: 520px;
+  font-size: clamp(1.8rem, 2.25vw, 2.7rem);
+  line-height: 1.02;
+}
+
+.compact-hero .hero-actions {
+  gap: 10px;
+}
+
+.dashboard-shell .glass-panel {
+  min-height: 100%;
+}
+
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  padding: 28px;
+}
+
+.dashboard-shell .section-heading {
+  margin-bottom: 20px;
+}
+
+.dashboard-shell textarea {
+  min-height: 280px;
+}
+
 .quick-result-meta {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.4fr .6fr;
   gap: 12px;
   margin-bottom: 14px;
 }
@@ -25,11 +73,24 @@
   margin-bottom: 12px;
 }
 
+.quick-summary-card {
+  min-height: 170px;
+}
+
+.quick-actions-card {
+  min-height: 190px;
+}
+
 .report-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 16px;
+}
+
+.report-actions .primary-link,
+.report-actions .secondary-link {
+  flex: 1 1 180px;
 }
 
 .is-hidden {
@@ -107,7 +168,7 @@
 
 .project-note-list {
   display: grid;
-  gap: 1px;
+  gap: 8px;
   padding: 0 14px 14px;
 }
 
@@ -116,11 +177,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 13px 14px;
+  padding: 14px 16px;
   border: 1px solid rgba(145, 174, 207, .18);
   border-radius: 9px;
   color: inherit;
   background: rgba(7, 25, 43, .68);
+}
+
+.project-note-row:hover {
+  border-color: rgba(108, 182, 255, .34);
+  background: rgba(10, 32, 54, .8);
 }
 
 .project-note-row strong,
@@ -184,6 +250,19 @@
   white-space: pre-wrap;
 }
 
+@media (max-width: 1180px) {
+  .compact-hero {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "brand message"
+      "actions actions";
+  }
+
+  .compact-hero .hero-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 950px) {
   .dashboard-shell {
     grid-template-columns: 1fr;
@@ -200,6 +279,21 @@
 }
 
 @media (max-width: 680px) {
+  .compact-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas: "brand" "message" "actions";
+    padding: 18px;
+  }
+
+  .compact-hero .hero-brand-logo {
+    max-width: 420px;
+    max-height: 110px;
+  }
+
+  .compact-hero .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
   .quick-result-meta,
   .report-summary-strip,
   .report-grid {
@@ -213,6 +307,11 @@
   .project-note-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .dashboard-shell .form-panel,
+  .dashboard-shell .results-panel {
+    padding: 20px;
   }
 }
 
