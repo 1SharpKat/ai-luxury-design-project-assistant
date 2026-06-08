@@ -40,6 +40,20 @@ function renderTags(items) {
   });
 }
 
+function renderCoverPhoto(record) {
+  const coverCard = document.getElementById("report-cover-card");
+  const coverImage = document.getElementById("report-cover-image");
+
+  if (!record.coverPhotoUrl) {
+    coverCard.classList.add("is-hidden");
+    return;
+  }
+
+  coverImage.src = record.coverPhotoUrl;
+  coverImage.alt = `${record.projectName || "Project"} cover photo`;
+  coverCard.classList.remove("is-hidden");
+}
+
 function render(record) {
   document.getElementById("report-project-name").textContent = record.projectName || "Unnamed Project";
   document.getElementById("report-client").textContent = record.clientName || "Private Client";
@@ -52,6 +66,7 @@ function render(record) {
   document.getElementById("report-notes").textContent = record.projectNotes || "Original notes unavailable.";
   renderList("report-next-steps", record.nextSteps, "No next steps returned.");
   renderTags(record.keyPhrases);
+  renderCoverPhoto(record);
 
   status.style.display = "none";
   content.classList.remove("is-hidden");
