@@ -18,7 +18,7 @@ body::before {
   z-index: -4;
   background-image:
     linear-gradient(rgba(2, 9, 19, 0.38), rgba(2, 9, 19, 0.66)),
-    url("assets/blueprint-wallpaper.svg");
+    url("assets/lighting-blueprint-wallpaper.png");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
