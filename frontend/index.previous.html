@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LuxNote AI organizes luxury design project notes, walkthrough transcripts, action items, and professional follow-up communication.">
+  <title>LuxNote AI | Luxury Design Project Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="upgrade.css">
+</head>
+<body>
+  <div class="ambient-light ambient-light-one" aria-hidden="true"></div>
+  <div class="ambient-light ambient-light-two" aria-hidden="true"></div>
+  <div class="page-noise" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="glass-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="#top">LuxNote AI</a>
+      <div class="nav-links">
+        <a href="#new-note">New Note</a>
+        <a href="#results-section">Analysis</a>
+        <a href="#saved-records">Projects</a>
+        <a href="#dashboard-stats">Reports</a>
+      </div>
+    </nav>
+
+    <div id="top" class="hero-shell">
+      <section class="hero-glass-card" aria-labelledby="hero-heading">
+        <div class="hero-brand-block">
+          <img class="hero-brand-logo" src="assets/luxnote-logo.png" alt="LuxNote AI, Luxury Design Project Assistant">
+        </div>
+        <div class="hero-message-block">
+          <p class="eyebrow">Intelligent Project Coordination</p>
+          <h1 id="hero-heading">Refined project intelligence for complex design work.</h1>
+          <p class="hero-description">Transform project notes and transcripts into summaries, next steps, and professional communication.</p>
+        </div>
+        <div class="hero-actions">
+          <a class="primary-link" href="#new-note">Create Project Note</a>
+          <a class="secondary-link" href="#saved-records">View Project History</a>
+        </div>
+        <div class="hero-metrics" aria-label="Application capabilities">
+          <article class="metric-card"><span>Analyze</span><strong>Project Notes</strong></article>
+          <article class="metric-card"><span>Generate</span><strong>Next Steps</strong></article>
+          <article class="metric-card"><span>Organize</span><strong>Project History</strong></article>
+          <article class="metric-card"><span>Report</span><strong>Weekly Report</strong></article>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section id="new-note" class="glass-panel form-panel" aria-labelledby="project-note-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">New Project Note</p>
+          <h2 id="project-note-heading">Capture project intelligence</h2>
+          <p class="section-description">Submit notes, transcripts, client preferences, deadlines, and coordination requirements for AI-assisted analysis.</p>
+        </div>
+        <span class="status-badge">AI-Powered</span>
+      </div>
+
+      <form id="project-note-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="client-name">Client name</label>
+            <input id="client-name" name="clientName" type="text" placeholder="Private Client" autocomplete="organization">
+          </div>
+          <div class="form-field">
+            <label for="project-name">Project name <span aria-hidden="true">*</span></label>
+            <input id="project-name" name="projectName" type="text" placeholder="Deer Valley Residence" required>
+          </div>
+          <div class="form-field">
+            <label for="note-type">Project type</label>
+            <select id="note-type" name="noteType">
+              <option value="site_walkthrough_transcript">Site walkthrough transcript</option>
+              <option value="client_meeting_notes">Client meeting notes</option>
+              <option value="builder_coordination">Builder coordination</option>
+              <option value="vendor_update">Vendor update</option>
+              <option value="design_review">Design review</option>
+              <option value="manual_project_notes">General project notes</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="source">Source</label>
+            <select id="source" name="source">
+              <option value="Plaud transcript">Plaud transcript</option>
+              <option value="manual entry">Manual entry</option>
+              <option value="email notes">Email notes</option>
+              <option value="client meeting">Client meeting</option>
+              <option value="site walkthrough">Site walkthrough</option>
+              <option value="builder communication">Builder communication</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field full-width">
+          <div class="label-row">
+            <label for="project-notes">Project notes <span aria-hidden="true">*</span></label>
+            <span id="character-count">0 characters</span>
+          </div>
+          <textarea id="project-notes" name="projectNotes" rows="10" maxlength="10000" placeholder="Paste meeting notes, transcripts, or walkthrough details here." required></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button id="submit-button" class="primary-button" type="submit">
+            <span class="button-label">Analyze Project Notes</span>
+            <span id="button-spinner" class="button-spinner" aria-hidden="true"></span>
+          </button>
+          <button id="clear-button" class="secondary-button" type="button">Clear Form</button>
+        </div>
+        <div id="form-message" class="form-message" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section id="results-section" class="glass-panel results-panel is-hidden" aria-labelledby="results-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">AI Analysis</p>
+          <h2 id="results-heading">Project intelligence</h2>
+          <p class="section-description">Structured analysis and key insights for professional project coordination.</p>
+        </div>
+        <span id="generation-status" class="status-badge">Completed</span>
+      </div>
+
+      <div class="result-summary-grid">
+        <article class="summary-card hover-card"><span class="summary-label">Project</span><strong id="result-project-name">Project name</strong></article>
+        <article class="summary-card hover-card"><span class="summary-label">Category</span><strong id="result-category">Not assigned</strong></article>
+        <article class="summary-card hover-card"><span class="summary-label">Priority</span><strong id="result-priority">Not assigned</strong></article>
+        <article class="summary-card hover-card"><span class="summary-label">Sentiment</span><strong id="result-sentiment">Not analyzed</strong></article>
+      </div>
+
+      <div class="result-content-grid">
+        <article class="result-card hover-card">
+          <div class="result-card-heading"><div><span class="card-kicker">Overview</span><h3>Project Summary</h3></div><button class="copy-button" type="button" data-copy-target="result-summary">Copy</button></div>
+          <p id="result-summary">The AI-generated summary will appear here.</p>
+        </article>
+        <article class="result-card hover-card">
+          <div class="result-card-heading"><div><span class="card-kicker">Analysis</span><h3>Key Phrases</h3></div></div>
+          <div id="result-key-phrases" class="tag-list"></div>
+        </article>
+        <article class="result-card hover-card">
+          <div class="result-card-heading"><div><span class="card-kicker">Action</span><h3>Next Steps</h3></div><button class="copy-button" type="button" data-copy-target="result-next-steps">Copy</button></div>
+          <ol id="result-next-steps"></ol>
+        </article>
+        <article class="result-card hover-card">
+          <div class="result-card-heading"><div><span class="card-kicker">Communication</span><h3>Draft Follow-Up Message</h3></div><button class="copy-button" type="button" data-copy-target="result-draft-message">Copy</button></div>
+          <pre id="result-draft-message">The AI-generated draft message will appear here.</pre>
+        </article>
+      </div>
+
+      <details class="record-details">
+        <summary>View technical record details</summary>
+        <dl>
+          <div><dt>Record ID</dt><dd id="result-record-id">Not available</dd></div>
+          <div><dt>Created</dt><dd id="result-created-at">Not available</dd></div>
+          <div><dt>Comprehend status</dt><dd id="result-analysis-status">Not available</dd></div>
+          <div><dt>Bedrock status</dt><dd id="result-generation-status">Not available</dd></div>
+        </dl>
+      </details>
+    </section>
+
+    <section id="saved-records" class="glass-panel records-panel" aria-labelledby="saved-records-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Projects</p>
+          <h2 id="saved-records-heading">Saved project notes</h2>
+          <p class="section-description">Your analyzed project records.</p>
+        </div>
+        <button id="refresh-records-button" class="secondary-button" type="button">Refresh</button>
+      </div>
+      <div id="records-loading" class="records-message">Saved records will appear here after the API is connected.</div>
+      <div id="records-list" class="records-list"></div>
+    </section>
+
+    <section id="dashboard-stats" class="dashboard-stats" aria-label="Project dashboard statistics">
+      <article class="stat-card"><div class="stat-icon">▦</div><div class="stat-copy"><span>Active Projects</span><strong>12</strong><small>+2 this week</small></div></article>
+      <article class="stat-card"><div class="stat-icon">▤</div><div class="stat-copy"><span>Notes This Week</span><strong>28</strong><small>+35% vs last week</small></div></article>
+      <article class="stat-card"><div class="stat-icon">↗</div><div class="stat-copy"><span>Reports Generated</span><strong>6</strong><small>+2 this week</small></div></article>
+      <article class="stat-card"><div class="stat-icon">✓</div><div class="stat-copy"><span>Actions Outstanding</span><strong>15</strong><small>High priority</small></div></article>
+      <article class="stat-card"><div class="stat-icon">◷</div><div class="stat-copy"><span>Avg. Response Time</span><strong>2.4 hrs</strong><small>-18% vs last week</small></div></article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><strong>LuxNote AI</strong><span>Luxury Design Project Assistant</span></div>
+    <p>AI-generated content requires human review before it is used for client, builder, vendor, electrical, construction, or design decisions.</p>
+  </footer>
+  <script src="app.js"></script>
+  <script src="upgrade.js"></script>
+</body>
+</html>
