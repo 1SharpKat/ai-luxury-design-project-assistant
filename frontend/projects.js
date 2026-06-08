@@ -28,6 +28,10 @@ function groupByProject(records) {
   }, {});
 }
 
+function getProjectCoverUrl(notes) {
+  return notes.find((note) => note.coverPhotoUrl)?.coverPhotoUrl || "";
+}
+
 function createNoteRow(record) {
   const row = document.createElement("a");
   row.className = "project-note-row";
@@ -58,9 +62,14 @@ function renderProjects(records) {
     const folder = document.createElement("details");
     folder.className = "project-folder-card";
 
+    const coverUrl = getProjectCoverUrl(notes);
+    const coverMarkup = coverUrl
+      ? `<img src="${coverUrl}" alt="${projectName} cover photo">`
+      : "▰";
+
     const summary = document.createElement("summary");
     summary.innerHTML = `
-      <span class="folder-mark">▰</span>
+      <span class="project-cover-thumb ${coverUrl ? "" : "no-cover"}">${coverMarkup}</span>
       <span class="folder-copy">
         <strong>${projectName}</strong>
         <small>${notes[0].clientName || "Private Client"} · ${notes.length} saved ${notes.length === 1 ? "note" : "notes"} · Updated ${formatDate(notes[0].createdAt)}</small>
