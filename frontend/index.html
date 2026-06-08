@@ -20,7 +20,6 @@
         <a href="#new-note">New Note</a>
         <a href="#results-section">Analysis</a>
         <a href="#saved-records">Projects</a>
-        <a href="#dashboard-stats">Reports</a>
       </div>
     </nav>
 
@@ -32,17 +31,10 @@
         <div class="hero-message-block">
           <p class="eyebrow">Intelligent Project Coordination</p>
           <h1 id="hero-heading">Refined project intelligence for complex design work.</h1>
-          <p class="hero-description">Transform project notes and transcripts into summaries, next steps, and professional communication.</p>
         </div>
         <div class="hero-actions">
           <a class="primary-link" href="#new-note">Create Project Note</a>
-          <a class="secondary-link" href="#saved-records">View Project History</a>
-        </div>
-        <div class="hero-metrics" aria-label="Application capabilities">
-          <article class="metric-card"><span>Analyze</span><strong>Project Notes</strong></article>
-          <article class="metric-card"><span>Generate</span><strong>Next Steps</strong></article>
-          <article class="metric-card"><span>Organize</span><strong>Project History</strong></article>
-          <article class="metric-card"><span>Report</span><strong>Weekly Report</strong></article>
+          <a class="secondary-link" href="#saved-records">Open Project Folder</a>
         </div>
       </section>
     </div>
@@ -117,68 +109,71 @@
         <div>
           <p class="eyebrow">AI Analysis</p>
           <h2 id="results-heading">Project intelligence</h2>
-          <p class="section-description">Structured analysis and key insights for professional project coordination.</p>
+          <p class="section-description">A concise summary, clear actions, and a ready-to-use follow-up.</p>
         </div>
         <span id="generation-status" class="status-badge">Completed</span>
       </div>
 
-      <div class="result-summary-grid">
+      <div class="result-summary-grid compact-summary-grid">
         <article class="summary-card hover-card"><span class="summary-label">Project</span><strong id="result-project-name">Project name</strong></article>
         <article class="summary-card hover-card"><span class="summary-label">Category</span><strong id="result-category">Not assigned</strong></article>
         <article class="summary-card hover-card"><span class="summary-label">Priority</span><strong id="result-priority">Not assigned</strong></article>
-        <article class="summary-card hover-card"><span class="summary-label">Sentiment</span><strong id="result-sentiment">Not analyzed</strong></article>
       </div>
+      <span id="result-sentiment" class="visually-hidden">Not analyzed</span>
 
-      <div class="result-content-grid">
-        <article class="result-card hover-card">
+      <div class="result-content-grid simplified-results">
+        <article class="result-card result-card-wide hover-card">
           <div class="result-card-heading"><div><span class="card-kicker">Overview</span><h3>Project Summary</h3></div><button class="copy-button" type="button" data-copy-target="result-summary">Copy</button></div>
           <p id="result-summary">The AI-generated summary will appear here.</p>
-        </article>
-        <article class="result-card hover-card">
-          <div class="result-card-heading"><div><span class="card-kicker">Analysis</span><h3>Key Phrases</h3></div></div>
-          <div id="result-key-phrases" class="tag-list"></div>
         </article>
         <article class="result-card hover-card">
           <div class="result-card-heading"><div><span class="card-kicker">Action</span><h3>Next Steps</h3></div><button class="copy-button" type="button" data-copy-target="result-next-steps">Copy</button></div>
           <ol id="result-next-steps"></ol>
         </article>
         <article class="result-card hover-card">
-          <div class="result-card-heading"><div><span class="card-kicker">Communication</span><h3>Draft Follow-Up Message</h3></div><button class="copy-button" type="button" data-copy-target="result-draft-message">Copy</button></div>
+          <div class="result-card-heading"><div><span class="card-kicker">Communication</span><h3>Draft Follow-Up</h3></div><button class="copy-button" type="button" data-copy-target="result-draft-message">Copy</button></div>
           <pre id="result-draft-message">The AI-generated draft message will appear here.</pre>
         </article>
       </div>
 
-      <details class="record-details">
-        <summary>View technical record details</summary>
-        <dl>
-          <div><dt>Record ID</dt><dd id="result-record-id">Not available</dd></div>
-          <div><dt>Created</dt><dd id="result-created-at">Not available</dd></div>
-          <div><dt>Comprehend status</dt><dd id="result-analysis-status">Not available</dd></div>
-          <div><dt>Bedrock status</dt><dd id="result-generation-status">Not available</dd></div>
-        </dl>
+      <details class="analysis-details">
+        <summary>Additional analysis</summary>
+        <div class="additional-analysis-grid">
+          <div>
+            <span class="card-kicker">Key Phrases</span>
+            <div id="result-key-phrases" class="tag-list"></div>
+          </div>
+          <div class="record-details-compact">
+            <span class="card-kicker">Record Details</span>
+            <dl>
+              <div><dt>Record ID</dt><dd id="result-record-id">Not available</dd></div>
+              <div><dt>Created</dt><dd id="result-created-at">Not available</dd></div>
+              <div><dt>Analysis</dt><dd id="result-analysis-status">Not available</dd></div>
+              <div><dt>Generation</dt><dd id="result-generation-status">Not available</dd></div>
+            </dl>
+          </div>
+        </div>
       </details>
     </section>
 
-    <section id="saved-records" class="glass-panel records-panel" aria-labelledby="saved-records-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Projects</p>
-          <h2 id="saved-records-heading">Saved project notes</h2>
-          <p class="section-description">Your analyzed project records.</p>
+    <details id="saved-records" class="project-folder">
+      <summary>
+        <span class="folder-icon" aria-hidden="true">▰</span>
+        <span>
+          <strong>Saved Project Notes</strong>
+          <small>Open the project folder to browse analyzed records</small>
+        </span>
+        <span class="folder-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="folder-content">
+        <div class="folder-toolbar">
+          <p id="saved-records-heading">Project Folder</p>
+          <button id="refresh-records-button" class="secondary-button" type="button">Refresh</button>
         </div>
-        <button id="refresh-records-button" class="secondary-button" type="button">Refresh</button>
+        <div id="records-loading" class="records-message">Saved records will appear here after the API is connected.</div>
+        <div id="records-list" class="records-list"></div>
       </div>
-      <div id="records-loading" class="records-message">Saved records will appear here after the API is connected.</div>
-      <div id="records-list" class="records-list"></div>
-    </section>
-
-    <section id="dashboard-stats" class="dashboard-stats" aria-label="Project dashboard statistics">
-      <article class="stat-card"><div class="stat-icon">▦</div><div class="stat-copy"><span>Active Projects</span><strong>12</strong><small>+2 this week</small></div></article>
-      <article class="stat-card"><div class="stat-icon">▤</div><div class="stat-copy"><span>Notes This Week</span><strong>28</strong><small>+35% vs last week</small></div></article>
-      <article class="stat-card"><div class="stat-icon">↗</div><div class="stat-copy"><span>Reports Generated</span><strong>6</strong><small>+2 this week</small></div></article>
-      <article class="stat-card"><div class="stat-icon">✓</div><div class="stat-copy"><span>Actions Outstanding</span><strong>15</strong><small>High priority</small></div></article>
-      <article class="stat-card"><div class="stat-icon">◷</div><div class="stat-copy"><span>Avg. Response Time</span><strong>2.4 hrs</strong><small>-18% vs last week</small></div></article>
-    </section>
+    </details>
   </main>
 
   <footer class="site-footer">
