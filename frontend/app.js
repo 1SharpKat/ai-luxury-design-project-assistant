@@ -1,86 +1,150 @@
-const API_BASE_URL = "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
-const $ = (id) => document.getElementById(id);
+```javascript
+/* =========================================================
+   LuxNote AI
+   Dashboard Form and Quick Result Logic
+   ========================================================= */
 
-const form = $("project-note-form");
-const clientName = $("client-name");
-const projectName = $("project-name");
-const noteType = $("note-type");
-const source = $("source");
-const projectNotes = $("project-notes");
-const coverPhoto = $("cover-photo");
-const coverPhotoPreview = $("cover-photo-preview");
-const submitButton = $("submit-button");
-const submitLabel = submitButton.querySelector(".button-label");
-const clearButton = $("clear-button");
-const formMessage = $("form-message");
-const characterCount = $("character-count");
-const resultsSection = $("results-section");
+const API_BASE_URL =
+  "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
 
 const MAX_COVER_PHOTO_BYTES = 5 * 1024 * 1024;
 const ALLOWED_COVER_TYPES = new Set(["image/jpeg", "image/png"]);
+
+const getElement = (id) => document.getElementById(id);
+
+const elements = {
+  form: getElement("project-note-form"),
+  clientName: getElement("client-name"),
+  projectName: getElement("project-name"),
+  noteType: getElement("note-type"),
+  source: getElement("source"),
+  projectNotes: getElement("project-notes"),
+  coverPhoto: getElement("cover-photo"),
+  coverPhotoPreview: getElement("cover-photo-preview"),
+  submitButton: getElement("submit-button"),
+  clearButton: getElement("clear-button"),
+  formMessage: getElement("form-message"),
+  characterCount: getElement("character-count"),
+  resultsSection: getElement("results-section"),
+  resultProjectName: getElement("result-project-name"),
+  resultPriority: getElement("result-priority"),
+  resultSummary: getElement("result-summary"),
+  resultNextSteps: getElement("result-next-steps"),
+  generationStatus: getElement("generation-status"),
+  openReportLink: getElement("open-report-link")
+};
+
+const submitLabel =
+  elements.submitButton?.querySelector(".button-label") || null;
+
 let coverPreviewUrl = "";
 
+/* =========================================================
+   GENERAL HELPERS
+   ========================================================= */
+
 function setMessage(message = "", type = "") {
-  formMessage.textContent = message;
-  formMessage.className = type ? `form-message ${type}` : "form-message";
+  elements.formMessage.textContent = message;
+  elements.formMessage.className = type
+    ? `form-message ${type}`
+    : "form-message";
 }
 
 function setLoading(isLoading) {
-  submitButton.disabled = isLoading;
-  clearButton.disabled = isLoading;
-  coverPhoto.disabled = isLoading;
-  submitButton.classList.toggle("is-loading", isLoading);
-  submitLabel.textContent = isLoading ? "Saving Project Note" : "Analyze Project Notes";
+  elements.submitButton.disabled = isLoading;
+  elements.clearButton.disabled = isLoading;
+  elements.coverPhoto.disabled = isLoading;
+
+  elements.form.setAttribute("aria-busy", String(isLoading));
+  elements.submitButton.classList.toggle("is-loading", isLoading);
+
+  if (submitLabel) {
+    submitLabel.textContent = isLoading
+      ? "Analyzing Project Notes..."
+      : "Analyze Project Notes";
+  }
 }
 
 function updateCharacterCount() {
-  characterCount.textContent = `${projectNotes.value.length.toLocaleString()} characters`;
+  const count = elements.projectNotes.value.length;
+
+  elements.characterCount.textContent =
+    `${count.toLocaleString()} ${count === 1 ? "character" : "characters"}`;
 }
 
+function clearElement(element) {
+  element.replaceChildren();
+}
+
+function normalizeStatus(value) {
+  if (!value) {
+    return "Completed";
+  }
+
+  return value
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+/* =========================================================
+   API HELPERS
+   ========================================================= */
+
 async function readApiResponse(response) {
-  const text = await response.text();
+  const responseText = await response.text();
   let data = {};
 
-  try {
-    data = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error(`The API returned an unreadable response (${response.status}).`);
+  if (responseText) {
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      throw new Error(
+        `The server returned an unreadable response (${response.status}).`
+      );
+    }
   }
 
   if (data && typeof data.body === "string") {
-    try { data = JSON.parse(data.body); } catch {}
+    try {
+      data = JSON.parse(data.body);
+    } catch {
+      throw new Error("The server returned malformed project data.");
+    }
   }
 
   if (!response.ok) {
-    throw new Error(data.error || data.message || `Request failed (${response.status}).`);
+    throw new Error(
+      data.error ||
+      data.message ||
+      `The request failed with status ${response.status}.`
+    );
   }
 
   return data;
 }
 
 async function apiFetch(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, options);
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, options);
+  } catch {
+    throw new Error(
+      "LuxNote AI could not connect to the project service. Check your connection and try again."
+    );
+  }
+
   return readApiResponse(response);
 }
 
-function clearNode(node) {
-  while (node.firstChild) node.removeChild(node.firstChild);
-}
-
-function renderNextSteps(items) {
-  const list = $("result-next-steps");
-  clearNode(list);
-  const steps = Array.isArray(items) && items.length ? items : ["No next steps were returned."];
-
-  steps.forEach((step) => {
-    const item = document.createElement("li");
-    item.textContent = step;
-    list.appendChild(item);
-  });
-}
+/* =========================================================
+   COVER PHOTO
+   ========================================================= */
 
 function validateCoverPhoto(file) {
-  if (!file) return;
+  if (!file) {
+    return;
+  }
 
   if (!ALLOWED_COVER_TYPES.has(file.type)) {
     throw new Error("Cover photo must be a JPG, JPEG, or PNG file.");
@@ -97,103 +161,206 @@ function resetCoverPreview() {
     coverPreviewUrl = "";
   }
 
-  coverPhotoPreview.classList.add("is-empty");
-  coverPhotoPreview.replaceChildren();
+  elements.coverPhotoPreview.classList.add("is-empty");
+  clearElement(elements.coverPhotoPreview);
+
   const placeholder = document.createElement("span");
   placeholder.textContent = "No cover photo selected";
-  coverPhotoPreview.appendChild(placeholder);
+
+  elements.coverPhotoPreview.appendChild(placeholder);
 }
 
 function previewSelectedCover() {
   resetCoverPreview();
-  const file = coverPhoto.files?.[0];
-  if (!file) return;
+  setMessage();
+
+  const file = elements.coverPhoto.files?.[0];
+
+  if (!file) {
+    return;
+  }
 
   try {
     validateCoverPhoto(file);
   } catch (error) {
-    coverPhoto.value = "";
+    elements.coverPhoto.value = "";
     setMessage(error.message, "error");
     return;
   }
 
   coverPreviewUrl = URL.createObjectURL(file);
+
   const image = document.createElement("img");
   image.src = coverPreviewUrl;
-  image.alt = "Selected project cover photo preview";
-  coverPhotoPreview.classList.remove("is-empty");
-  coverPhotoPreview.replaceChildren(image);
-  setMessage();
+  image.alt = `Preview of ${file.name}`;
+
+  elements.coverPhotoPreview.classList.remove("is-empty");
+  elements.coverPhotoPreview.replaceChildren(image);
 }
 
-async function uploadCoverPhoto(file, projectNameValue) {
+async function uploadCoverPhoto(file, projectName) {
   validateCoverPhoto(file);
 
-  const uploadDetails = await apiFetch("/project-cover-upload-url", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      projectName: projectNameValue,
-      fileName: file.name,
-      contentType: file.type
-    })
-  });
+  const uploadDetails = await apiFetch(
+    "/project-cover-upload-url",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        projectName,
+        fileName: file.name,
+        contentType: file.type
+      })
+    }
+  );
 
-  if (!uploadDetails.uploadUrl || !uploadDetails.fileUrl || !uploadDetails.s3Key) {
-    throw new Error("The cover photo upload service returned incomplete information.");
+  const {
+    uploadUrl,
+    fileUrl,
+    s3Key
+  } = uploadDetails;
+
+  if (!uploadUrl || !fileUrl || !s3Key) {
+    throw new Error(
+      "The cover photo service returned incomplete upload information."
+    );
   }
 
-  const uploadResponse = await fetch(uploadDetails.uploadUrl, {
-    method: "PUT",
-    headers: { "Content-Type": file.type },
-    body: file
-  });
+  let uploadResponse;
+
+  try {
+    uploadResponse = await fetch(uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type
+      },
+      body: file
+    });
+  } catch {
+    throw new Error(
+      "The cover photo could not be uploaded. Check your connection and try again."
+    );
+  }
 
   if (!uploadResponse.ok) {
-    throw new Error(`Cover photo upload failed (${uploadResponse.status}).`);
+    throw new Error(
+      `The cover photo upload failed with status ${uploadResponse.status}.`
+    );
   }
 
   return {
-    coverPhotoUrl: uploadDetails.fileUrl,
-    coverPhotoKey: uploadDetails.s3Key,
+    coverPhotoUrl: fileUrl,
+    coverPhotoKey: s3Key,
     coverPhotoName: file.name,
     coverPhotoType: file.type
   };
 }
 
+/* =========================================================
+   QUICK RESULT
+   ========================================================= */
+
+function renderNextSteps(items) {
+  clearElement(elements.resultNextSteps);
+
+  const steps =
+    Array.isArray(items) && items.length > 0
+      ? items
+      : ["No immediate action items were identified."];
+
+  steps.forEach((step) => {
+    const item = document.createElement("li");
+    item.textContent = step;
+    elements.resultNextSteps.appendChild(item);
+  });
+}
+
 function showQuickResult(record) {
-  $("result-project-name").textContent = record.projectName || "Unnamed Project";
-  $("result-priority").textContent = record.priority || "Not assigned";
-  $("result-summary").textContent = record.summary || "No summary was generated.";
-  $("generation-status").textContent = record.generationStatus
-    ? record.generationStatus.replaceAll("_", " ")
-    : "Completed";
+  elements.resultProjectName.textContent =
+    record.projectName || "Unnamed Project";
+
+  elements.resultPriority.textContent =
+    record.priority || "Not assigned";
+
+  elements.resultSummary.textContent =
+    record.summary || "No summary was generated.";
+
+  elements.generationStatus.textContent =
+    normalizeStatus(record.generationStatus);
+
   renderNextSteps(record.nextSteps);
 
-  const reportLink = $("open-report-link");
-  reportLink.href = record.recordId
+  elements.openReportLink.href = record.recordId
     ? `report.html?id=${encodeURIComponent(record.recordId)}`
     : "projects.html";
 
-  resultsSection.classList.remove("is-hidden");
-  resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  elements.resultsSection.classList.remove("is-hidden");
+
+  elements.resultsSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+/* =========================================================
+   FORM VALIDATION AND SUBMISSION
+   ========================================================= */
+
+function getFormValues() {
+  return {
+    clientName:
+      elements.clientName.value.trim() || "Private Client",
+
+    projectName:
+      elements.projectName.value.trim(),
+
+    noteType:
+      elements.noteType.value,
+
+    source:
+      elements.source.value,
+
+    projectNotes:
+      elements.projectNotes.value.trim(),
+
+    coverPhoto:
+      elements.coverPhoto.files?.[0] || null
+  };
+}
+
+function validateForm(values) {
+  if (!values.projectName) {
+    elements.projectName.focus();
+
+    throw new Error(
+      "Add a project name before analyzing these notes."
+    );
+  }
+
+  if (!values.projectNotes) {
+    elements.projectNotes.focus();
+
+    throw new Error(
+      "Add project notes, a transcript, or walkthrough details first."
+    );
+  }
+
+  validateCoverPhoto(values.coverPhoto);
 }
 
 async function submitProjectNote(event) {
   event.preventDefault();
   setMessage();
 
-  const projectNameValue = projectName.value.trim();
-  const projectNotesValue = projectNotes.value.trim();
-  const selectedCover = coverPhoto.files?.[0] || null;
-
-  if (!projectNameValue) return setMessage("Project name is required.", "error");
-  if (!projectNotesValue) return setMessage("Project notes are required.", "error");
+  const values = getFormValues();
 
   try {
-    validateCoverPhoto(selectedCover);
+    validateForm(values);
   } catch (error) {
-    return setMessage(error.message, "error");
+    setMessage(error.message, "error");
+    return;
   }
 
   setLoading(true);
@@ -201,73 +368,200 @@ async function submitProjectNote(event) {
   try {
     let coverMetadata = {};
 
-    if (selectedCover) {
-      setMessage("Uploading the project cover photo.", "info");
-      coverMetadata = await uploadCoverPhoto(selectedCover, projectNameValue);
+    if (values.coverPhoto) {
+      setMessage(
+        "Uploading the project cover photo...",
+        "info"
+      );
+
+      coverMetadata = await uploadCoverPhoto(
+        values.coverPhoto,
+        values.projectName
+      );
     }
 
-    setMessage("Analyzing and saving project notes.", "info");
+    setMessage(
+      "Organizing the project details and generating your summary...",
+      "info"
+    );
 
     const payload = {
-      clientName: clientName.value.trim() || "Private Client",
-      projectName: projectNameValue,
-      noteType: noteType.value,
-      source: source.value,
-      projectNotes: projectNotesValue,
+      clientName: values.clientName,
+      projectName: values.projectName,
+      noteType: values.noteType,
+      source: values.source,
+      projectNotes: values.projectNotes,
       ...coverMetadata
     };
 
     const record = await apiFetch("/project-notes", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(payload)
     });
 
     showQuickResult(record);
+
     setMessage(
-      selectedCover
-        ? "Project note and cover photo saved successfully."
-        : "Project note saved successfully.",
+      values.coverPhoto
+        ? "Project intelligence and cover photo saved successfully."
+        : "Project intelligence saved successfully.",
       "success"
     );
   } catch (error) {
+    console.error("Project note submission failed:", error);
     setMessage(error.message, "error");
-    console.error(error);
   } finally {
     setLoading(false);
   }
 }
 
+/* =========================================================
+   FORM RESET
+   ========================================================= */
+
+function resetQuickResult() {
+  elements.resultProjectName.textContent = "Project name";
+  elements.resultPriority.textContent = "Not assigned";
+
+  elements.resultSummary.textContent =
+    "The AI-generated summary will appear here.";
+
+  elements.generationStatus.textContent = "Ready";
+
+  renderNextSteps([
+    "Generated next steps will appear here."
+  ]);
+
+  elements.openReportLink.href = "projects.html";
+  elements.resultsSection.classList.add("is-hidden");
+}
+
 function clearForm() {
-  form.reset();
+  elements.form.reset();
+
   resetCoverPreview();
+  resetQuickResult();
   updateCharacterCount();
   setMessage();
-  projectName.focus();
+
+  elements.projectName.focus();
 }
 
-function copyTarget(button) {
-  const target = $(button.dataset.copyTarget);
-  if (!target) return;
+/* =========================================================
+   COPY CONTROLS
+   ========================================================= */
 
-  const text = button.dataset.copyTarget === "result-next-steps"
-    ? [...target.querySelectorAll("li")].map((item, i) => `${i + 1}. ${item.textContent}`).join("\n")
-    : target.textContent.trim();
+function getCopyText(targetId) {
+  const target = getElement(targetId);
 
-  navigator.clipboard.writeText(text).then(() => {
-    const oldText = button.textContent;
+  if (!target) {
+    return "";
+  }
+
+  if (targetId === "result-next-steps") {
+    return [...target.querySelectorAll("li")]
+      .map((item, index) => {
+        return `${index + 1}. ${item.textContent.trim()}`;
+      })
+      .join("\n");
+  }
+
+  return target.textContent.trim();
+}
+
+async function writeToClipboard(text) {
+  if (!text) {
+    throw new Error("There is no content available to copy.");
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textArea = document.createElement("textarea");
+
+  textArea.value = text;
+  textArea.setAttribute("readonly", "");
+  textArea.style.position = "fixed";
+  textArea.style.opacity = "0";
+
+  document.body.appendChild(textArea);
+  textArea.select();
+
+  const copied = document.execCommand("copy");
+  textArea.remove();
+
+  if (!copied) {
+    throw new Error("Copying was blocked by the browser.");
+  }
+}
+
+async function copyTarget(button) {
+  const targetId = button.dataset.copyTarget;
+  const text = getCopyText(targetId);
+
+  try {
+    await writeToClipboard(text);
+
+    const originalText =
+      button.dataset.originalText || button.textContent;
+
+    button.dataset.originalText = originalText;
     button.textContent = "Copied";
-    window.setTimeout(() => { button.textContent = oldText; }, 1200);
-  }).catch(() => setMessage("Copy was blocked by the browser.", "error"));
+    button.classList.add("is-copied");
+
+    window.setTimeout(() => {
+      button.textContent = originalText;
+      button.classList.remove("is-copied");
+    }, 1400);
+  } catch (error) {
+    setMessage(
+      `${error.message} Select the text and copy it manually.`,
+      "error"
+    );
+  }
 }
 
-form.addEventListener("submit", submitProjectNote);
-clearButton.addEventListener("click", clearForm);
-projectNotes.addEventListener("input", updateCharacterCount);
-coverPhoto.addEventListener("change", previewSelectedCover);
-document.querySelectorAll(".copy-button").forEach((button) => {
-  button.addEventListener("click", () => copyTarget(button));
-});
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
 
-resetCoverPreview();
-updateCharacterCount();
+function initializeApp() {
+  elements.form.addEventListener(
+    "submit",
+    submitProjectNote
+  );
+
+  elements.clearButton.addEventListener(
+    "click",
+    clearForm
+  );
+
+  elements.projectNotes.addEventListener(
+    "input",
+    updateCharacterCount
+  );
+
+  elements.coverPhoto.addEventListener(
+    "change",
+    previewSelectedCover
+  );
+
+  document
+    .querySelectorAll(".copy-button")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        copyTarget(button);
+      });
+    });
+
+  resetCoverPreview();
+  updateCharacterCount();
+}
+
+initializeApp();
+```
