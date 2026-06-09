@@ -710,3 +710,102 @@ animation-iteration-count: 1;
 transition-duration: 0.01ms;
 }
 }
+/* =========================================================
+   FOOTER SPACING
+   ========================================================= */
+
+.site-footer {
+  align-items: center;
+  padding: 28px 32px 36px;
+  gap: 32px;
+}
+
+.footer-brand {
+  flex: 0 0 auto;
+  min-width: 220px;
+}
+
+.footer-brand strong,
+.footer-brand span {
+  display: block;
+  line-height: 1.45;
+}
+
+.site-footer p {
+  max-width: 760px;
+  margin: 0;
+  line-height: 1.65;
+}
+
+@media (max-width: 720px) {
+  .site-footer {
+    align-items: flex-start;
+    padding: 24px 22px 32px;
+    gap: 18px;
+  }
+
+  .footer-brand {
+    min-width: 0;
+  }
+
+  .site-footer p {
+    width: 100%;
+  }
+}
+/* =========================================================
+
+/* =========================================================
+   ORIGINAL BUTTON LIGHT FLASH
+   ========================================================= */
+
+.compact-hero .hero-button-left::after,
+.compact-hero .hero-button-right::after,
+.form-panel button::after,
+.results-panel button::after,
+.form-panel .primary-button::after,
+.form-panel .secondary-button::after,
+.results-panel .primary-button::after,
+.results-panel .secondary-button::after,
+.form-panel .copy-button::after,
+.results-panel .copy-button::after,
+.form-panel .record-action::after,
+.results-panel .record-action::after,
+.results-panel .report-actions a::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -90% !important;
+  display: block !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transform: translateX(-36%) rotate(28deg) !important;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 36%,
+      rgba(255, 255, 255, .06) 43%,
+      rgba(216, 190, 170, .23) 48%,
+      rgba(255, 253, 249, .90) 51%,
+      rgba(167, 124, 120, .23) 55%,
+      transparent 66%
+    ) !important;
+  transition:
+    opacity .18s ease,
+    transform .55s ease !important;
+}
+
+.compact-hero .hero-button-left:hover::after,
+.compact-hero .hero-button-right:hover::after,
+.form-panel button:hover::after,
+.results-panel button:hover::after,
+.form-panel .primary-button:hover::after,
+.form-panel .secondary-button:hover::after,
+.results-panel .primary-button:hover::after,
+.results-panel .secondary-button:hover::after,
+.form-panel .copy-button:hover::after,
+.results-panel .copy-button:hover::after,
+.form-panel .record-action:hover::after,
+.results-panel .record-action:hover::after,
+.results-panel .report-actions a:hover::after {
+  opacity: 1 !important;
+  transform: translateX(38%) rotate(28deg) !important;
+}
