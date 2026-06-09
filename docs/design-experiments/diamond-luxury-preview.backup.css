@@ -1,0 +1,1591 @@
+/* Temporary modern sapphire, gold, and diamond-light preview */
+
+:root {
+  --diamond-ivory: #F7F2E9;
+  --diamond-pearl: #EFE7D9;
+  --diamond-midnight: #0C1830;
+  --diamond-navy: #132A4A;
+  --diamond-sapphire: #1D4F7A;
+  --diamond-blue: #4FA8FF;
+  --diamond-gold: #D6B56C;
+  --diamond-gold-bright: #F0D89A;
+  --diamond-graphite: #252B33;
+
+  --diamond-border: rgba(214, 181, 108, .68);
+  --diamond-shadow: 0 20px 50px rgba(12, 24, 48, .18);
+}
+
+/* Warmer ivory field with gold-print blueprint */
+body {
+  background-color: var(--diamond-ivory) !important;
+  color: var(--diamond-graphite) !important;
+}
+
+body::before {
+  opacity: .16 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(2.5)
+    hue-rotate(350deg)
+    brightness(1.32)
+    contrast(.76) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Modernized blue. Less bright retail blue */
+.glass-nav,
+.site-footer {
+  background:
+    linear-gradient(
+      118deg,
+      var(--diamond-midnight) 0%,
+      var(--diamond-navy) 58%,
+      var(--diamond-sapphire) 100%
+    ) !important;
+  border-color: var(--diamond-border) !important;
+  box-shadow:
+    0 16px 38px rgba(12, 24, 48, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+}
+
+.nav-wordmark,
+.nav-links a,
+.footer-brand strong {
+  color: var(--diamond-ivory) !important;
+}
+
+.nav-links a:hover,
+.footer-brand span {
+  color: var(--diamond-gold-bright) !important;
+}
+
+/* Hero with deeper architectural navy */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  position: relative;
+  overflow: hidden !important;
+  background:
+    linear-gradient(
+      112deg,
+      #0A152A 0%,
+      #102542 52%,
+      #1B456A 100%
+    ) !important;
+  border: 1px solid var(--diamond-border) !important;
+  box-shadow:
+    0 24px 56px rgba(12, 24, 48, .28),
+    inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+}
+
+/* Subtle diamond-light reflection */
+.compact-hero::after {
+  content: "" !important;
+  position: absolute;
+  top: -55%;
+  left: -12%;
+  width: 54%;
+  height: 210%;
+  display: block !important;
+  pointer-events: none;
+  opacity: .44;
+  transform: rotate(18deg);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, .025) 32%,
+      rgba(240, 216, 154, .10) 48%,
+      rgba(255, 255, 255, .16) 52%,
+      rgba(79, 168, 255, .07) 57%,
+      transparent 76%
+    ) !important;
+  filter: blur(3px);
+}
+
+.compact-hero h1 {
+  color: var(--diamond-ivory) !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, .08),
+    0 10px 28px rgba(0, 0, 0, .26);
+}
+
+.compact-hero .eyebrow {
+  color: var(--diamond-gold-bright) !important;
+}
+
+/* Make logo treatment blend with palette */
+.compact-hero .hero-logo-cell {
+  overflow: hidden;
+  border: 1px solid rgba(214, 181, 108, .54);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12, 24, 48, .92),
+      rgba(19, 42, 74, .76)
+    ) !important;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+.compact-hero .hero-brand-logo {
+  border-radius: 16px !important;
+  opacity: .98;
+  filter:
+    sepia(.16)
+    saturate(.92)
+    brightness(1.07)
+    contrast(1.04)
+    drop-shadow(0 10px 24px rgba(0, 0, 0, .26)) !important;
+}
+
+/* Ivory and pearl cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .97),
+      rgba(239, 231, 217, .93)
+    ) !important;
+  border-color: rgba(214, 181, 108, .66) !important;
+  color: var(--diamond-graphite) !important;
+  box-shadow:
+    var(--diamond-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+/* Inner cards */
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .99),
+      rgba(245, 238, 226, .96)
+    ) !important;
+  border-color: rgba(214, 181, 108, .54) !important;
+  box-shadow:
+    0 10px 26px rgba(12, 24, 48, .07),
+    inset 0 1px 0 rgba(255, 255, 255, .94) !important;
+}
+
+/* Gold replaces steel accents */
+.eyebrow,
+.card-kicker,
+.summary-label,
+.folder-arrow,
+.note-priority {
+  color: #9C7630 !important;
+}
+
+.status-badge {
+  background: rgba(214, 181, 108, .16) !important;
+  border-color: rgba(214, 181, 108, .66) !important;
+  color: #76551D !important;
+}
+
+.project-cover-thumb,
+.folder-mark {
+  background:
+    linear-gradient(
+      145deg,
+      var(--diamond-midnight),
+      var(--diamond-navy)
+    ) !important;
+  border-color: var(--diamond-gold) !important;
+  color: var(--diamond-gold-bright) !important;
+}
+
+.tag {
+  background: rgba(214, 181, 108, .12) !important;
+  border-color: rgba(214, 181, 108, .44) !important;
+  color: #76551D !important;
+}
+
+/* Text */
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+.report-heading h1,
+label {
+  color: var(--diamond-midnight) !important;
+}
+
+/* Form controls */
+input,
+select,
+textarea {
+  background: rgba(255, 253, 248, .98) !important;
+  border-color: rgba(214, 181, 108, .62) !important;
+  color: var(--diamond-graphite) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--diamond-blue) !important;
+  box-shadow:
+    0 0 0 3px rgba(79, 168, 255, .12),
+    0 0 18px rgba(79, 168, 255, .12) !important;
+}
+
+/* Black-navy buttons with gold structure */
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #122540,
+      #091426
+    ) !important;
+  border: 1px solid rgba(214, 181, 108, .72) !important;
+  color: var(--diamond-ivory) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .07),
+    0 7px 18px rgba(12, 24, 48, .16) !important;
+}
+
+/* Diamond glow */
+.primary-button::after,
+.secondary-button::after,
+.primary-link::after,
+.secondary-link::after,
+.copy-button::after,
+.record-action::after,
+.cover-photo-picker::after,
+.compact-hero .hero-button-left::after,
+.compact-hero .hero-button-right::after {
+  content: "";
+  position: absolute;
+  inset: -80%;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(28deg);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 34%,
+      rgba(255, 255, 255, .08) 42%,
+      rgba(240, 216, 154, .42) 48%,
+      rgba(255, 255, 255, .92) 51%,
+      rgba(79, 168, 255, .44) 55%,
+      transparent 66%
+    );
+  transition:
+    opacity .22s ease,
+    transform .55s ease;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #193A5D,
+      #0C1D35
+    ) !important;
+  border-color: var(--diamond-gold-bright) !important;
+  box-shadow:
+    0 0 0 1px rgba(240, 216, 154, .34),
+    0 0 12px rgba(255, 255, 255, .16),
+    0 0 24px rgba(79, 168, 255, .26),
+    0 0 38px rgba(214, 181, 108, .16) !important;
+  transform: translateY(-1px);
+}
+
+.primary-button:hover::after,
+.secondary-button:hover::after,
+.primary-link:hover::after,
+.secondary-link:hover::after,
+.copy-button:hover::after,
+.record-action:hover::after,
+.cover-photo-picker:hover::after,
+.compact-hero .hero-button-left:hover::after,
+.compact-hero .hero-button-right:hover::after {
+  opacity: 1;
+  transform: translateX(38%) rotate(28deg);
+}
+
+/* Gold top line on report summary cards */
+.report-summary-strip .summary-card {
+  border-top: 2px solid var(--diamond-gold) !important;
+}
+
+/* Remove grey cast from hero shadow */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  box-shadow:
+    0 8px 18px rgba(12, 24, 48, .10),
+    0 0 0 1px rgba(214, 181, 108, .20),
+    inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+}
+
+/* Keep the area beneath the hero clean */
+.hero-shell {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent dark overlay spill into dashboard cards */
+.compact-hero::before,
+.compact-hero::after {
+  mix-blend-mode: normal !important;
+}
+
+/* Restore clean ivory card surfaces */
+.dashboard-shell .glass-panel,
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  box-shadow:
+    0 12px 28px rgba(12, 24, 48, .08),
+    inset 0 1px 0 rgba(255, 255, 255, .94) !important;
+}
+
+/* Brighter gold circuit-board wallpaper */
+body {
+  background-color: #F7F2E9 !important;
+}
+
+/* Retint the existing blueprint into clean metallic-gold linework */
+body::before {
+  opacity: .34 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(4.2)
+    hue-rotate(348deg)
+    brightness(1.10)
+    contrast(1.28) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Warm gold field beneath the blueprint instead of gray */
+body::after {
+  content: "" !important;
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 18% 12%,
+      rgba(240, 216, 154, .22),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(247, 242, 233, .82),
+      rgba(239, 225, 196, .66)
+    ) !important;
+}
+
+/* Let more wallpaper show around the cards */
+.page-shell,
+.dashboard-shell,
+.subpage-shell {
+  background: transparent !important;
+}
+
+/* Slightly increase card transparency */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .91),
+      rgba(245, 237, 222, .86)
+    ) !important;
+}
+
+/* Keep the center gap clean and gold rather than gray */
+.dashboard-shell {
+  column-gap: 28px !important;
+}
+
+.dashboard-shell::before,
+.dashboard-shell::after {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Remove any remaining gray overlay layers */
+.page-noise,
+.ambient-light,
+.ambient-light-one,
+.ambient-light-two {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* Keep card shadows warm */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  box-shadow:
+    0 12px 30px rgba(86, 61, 20, .09),
+    0 0 0 1px rgba(214, 181, 108, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .94) !important;
+}
+
+/* Unify every button with the hero navy */
+button,
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.report-actions a,
+.form-actions button,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  background:
+    linear-gradient(
+      180deg,
+      #132A4A 0%,
+      #0C1830 100%
+    ) !important;
+  border: 1px solid rgba(214, 181, 108, .78) !important;
+  color: #F7F2E9 !important;
+  opacity: 1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .07),
+    0 6px 14px rgba(12, 24, 48, .14) !important;
+}
+
+button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.report-actions a:hover,
+.form-actions button:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #1C3D63 0%,
+      #10223D 100%
+    ) !important;
+  border-color: #F0D89A !important;
+  color: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(240, 216, 154, .32),
+    0 0 12px rgba(255, 255, 255, .20),
+    0 0 24px rgba(79, 168, 255, .20),
+    0 0 34px rgba(214, 181, 108, .18) !important;
+}
+
+/* Match Quick Result buttons to the navy-and-gold form buttons */
+.results-panel button,
+.results-panel .copy-button,
+.results-panel .primary-link,
+.results-panel .secondary-link,
+.results-panel .report-actions a {
+  background:
+    linear-gradient(
+      180deg,
+      #132A4A 0%,
+      #0C1830 100%
+    ) !important;
+  border: 1px solid rgba(214, 181, 108, .82) !important;
+  color: #F7F2E9 !important;
+  opacity: 1 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .07),
+    0 6px 14px rgba(12, 24, 48, .16) !important;
+}
+
+.results-panel button:hover,
+.results-panel .copy-button:hover,
+.results-panel .primary-link:hover,
+.results-panel .secondary-link:hover,
+.results-panel .report-actions a:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #1C3D63 0%,
+      #10223D 100%
+    ) !important;
+  border-color: #F0D89A !important;
+  color: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(240, 216, 154, .30),
+    0 0 12px rgba(255, 255, 255, .18),
+    0 0 24px rgba(79, 168, 255, .20),
+    0 0 34px rgba(214, 181, 108, .18) !important;
+  transform: translateY(-1px);
+}
+
+/* Keep disabled or placeholder-state buttons navy instead of gray */
+.results-panel button:disabled,
+.results-panel .primary-link[aria-disabled="true"],
+.results-panel .secondary-link[aria-disabled="true"] {
+  background:
+    linear-gradient(
+      180deg,
+      #132A4A 0%,
+      #0C1830 100%
+    ) !important;
+  border-color: rgba(214, 181, 108, .58) !important;
+  color: rgba(247, 242, 233, .78) !important;
+  opacity: .88 !important;
+}
+
+/* Remove faded placeholder styling from Quick Result */
+.results-panel.is-hidden,
+.results-panel.is-hidden #generation-status,
+.results-panel.is-hidden .quick-result-meta,
+.results-panel.is-hidden .quick-summary-card,
+.results-panel.is-hidden .quick-actions-card,
+.results-panel.is-hidden .report-actions {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Force Quick Result buttons to navy and gold */
+.results-panel .copy-button,
+.results-panel .report-actions .primary-link,
+.results-panel .report-actions .secondary-link {
+  background:
+    linear-gradient(
+      180deg,
+      #132A4A 0%,
+      #0C1830 100%
+    ) !important;
+  background-color: #0C1830 !important;
+  border: 1px solid #D6B56C !important;
+  color: #F7F2E9 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .08),
+    0 6px 14px rgba(12, 24, 48, .18) !important;
+}
+
+/* Navy and diamond-gold hover */
+.results-panel .copy-button:hover,
+.results-panel .report-actions .primary-link:hover,
+.results-panel .report-actions .secondary-link:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #1C3D63 0%,
+      #10223D 100%
+    ) !important;
+  border-color: #F0D89A !important;
+  color: #FFFFFF !important;
+  box-shadow:
+    0 0 0 1px rgba(240, 216, 154, .34),
+    0 0 12px rgba(255, 255, 255, .18),
+    0 0 24px rgba(79, 168, 255, .22),
+    0 0 34px rgba(214, 181, 108, .18) !important;
+}
+
+/* Make the gold blueprint much more pronounced */
+body::before {
+  opacity: .52 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(5.4)
+    hue-rotate(346deg)
+    brightness(1.02)
+    contrast(1.62) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Keep the page field warm and clean */
+body {
+  background-color: #F7F2E9 !important;
+}
+
+/* Reduce card opacity so the blueprint remains visible */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .86),
+      rgba(244, 236, 221, .80)
+    ) !important;
+  backdrop-filter: blur(10px) saturate(1.04) !important;
+}
+
+/* Inner cards stay readable but slightly translucent */
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .88),
+      rgba(245, 238, 226, .84)
+    ) !important;
+}
+
+/* Let more print show in the spacing around sections */
+.page-shell,
+.dashboard-shell,
+.subpage-shell,
+.hero-shell,
+.site-header {
+  background: transparent !important;
+}
+
+/* Remove flat washes that conceal the wallpaper */
+body::after,
+.dashboard-shell::before,
+.dashboard-shell::after,
+.page-shell::before,
+.page-shell::after {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Sharper gold edges on the main cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  border-color: rgba(214, 181, 108, .78) !important;
+  box-shadow:
+    0 10px 24px rgba(78, 54, 17, .08),
+    0 0 0 1px rgba(214, 181, 108, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .9) !important;
+}
+
+/* New LuxNote AI logo treatment */
+.compact-hero .hero-logo-cell {
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 1px solid rgba(214, 181, 108, .66) !important;
+  border-radius: 20px !important;
+  background: #07162c !important;
+  box-shadow:
+    0 10px 24px rgba(5, 15, 31, .18),
+    0 0 0 1px rgba(240, 216, 154, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .07) !important;
+}
+
+.compact-hero .hero-brand-logo {
+  display: block !important;
+  width: 100% !important;
+  max-width: 590px !important;
+  height: 118px !important;
+  max-height: 118px !important;
+  border-radius: 19px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+/* Correct hero proportions for the new horizontal logo */
+.compact-hero {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr) !important;
+  grid-template-areas:
+    "logo headline"
+    "create open" !important;
+  column-gap: 34px !important;
+  row-gap: 16px !important;
+  align-items: center !important;
+  min-height: 220px !important;
+  max-height: none !important;
+  padding: 24px 36px !important;
+}
+
+/* Clean logo frame */
+.compact-hero .hero-logo-cell {
+  grid-area: logo !important;
+  width: 100% !important;
+  max-width: 590px !important;
+  height: 138px !important;
+  justify-self: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  padding: 8px 14px !important;
+  border-radius: 20px !important;
+  background: #07162c !important;
+}
+
+/* Show the full logo without cropping */
+.compact-hero .hero-brand-logo {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 560px !important;
+  max-height: 120px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  border-radius: 14px !important;
+}
+
+/* Balance title against the logo */
+.compact-hero .hero-headline-cell {
+  grid-area: headline !important;
+  width: 100% !important;
+  max-width: 520px !important;
+  justify-self: center !important;
+  text-align: left !important;
+}
+
+.compact-hero .hero-headline-cell .eyebrow {
+  margin: 0 0 8px !important;
+  font-size: .65rem !important;
+  letter-spacing: .24em !important;
+}
+
+.compact-hero .hero-headline-cell h1 {
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 !important;
+  font-size: clamp(1.65rem, 2.15vw, 2.45rem) !important;
+  line-height: 1.06 !important;
+  text-wrap: balance;
+}
+
+/* Align the hero buttons beneath their matching columns */
+.compact-hero .hero-button-left {
+  grid-area: create !important;
+}
+
+.compact-hero .hero-button-right {
+  grid-area: open !important;
+}
+
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  width: min(100%, 365px) !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  justify-self: center !important;
+  padding: 6px 16px !important;
+}
+
+/* Add breathing room before dashboard cards */
+.dashboard-shell {
+  margin-top: 30px !important;
+  gap: 30px !important;
+}
+
+/* Keep cards equal and aligned */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  align-self: stretch !important;
+  min-width: 0 !important;
+  border-radius: 20px !important;
+}
+
+/* Reduce the wallpaper intensity directly beneath cards */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .94),
+      rgba(244, 236, 221, .91)
+    ) !important;
+}
+
+/* Responsive layout */
+@media (max-width: 900px) {
+  .compact-hero {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "logo"
+      "headline"
+      "create"
+      "open" !important;
+    row-gap: 12px !important;
+    padding: 22px !important;
+  }
+
+  .compact-hero .hero-logo-cell {
+    max-width: 560px !important;
+    height: 125px !important;
+  }
+
+  .compact-hero .hero-headline-cell,
+  .compact-hero .hero-headline-cell h1 {
+    max-width: 580px !important;
+    text-align: center !important;
+  }
+
+  .compact-hero .hero-button-left,
+  .compact-hero .hero-button-right {
+    width: min(100%, 360px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .compact-hero .hero-logo-cell {
+    height: 100px !important;
+    padding: 6px 10px !important;
+  }
+
+  .compact-hero .hero-brand-logo {
+    max-height: 88px !important;
+  }
+
+  .compact-hero .hero-headline-cell h1 {
+    font-size: 1.55rem !important;
+  }
+}
+
+/* Correct blueprint from red ink to champagne-gold */
+body::before {
+  opacity: .42 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(2.2)
+    brightness(1.16)
+    contrast(1.34) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Remove any red or copper color wash */
+body::after {
+  background:
+    linear-gradient(
+      rgba(247, 242, 233, .18),
+      rgba(247, 242, 233, .18)
+    ) !important;
+}
+
+/* Enlarge the logo artwork inside its frame */
+.compact-hero .hero-logo-cell {
+  height: 142px !important;
+  padding: 0 !important;
+}
+
+.compact-hero .hero-brand-logo {
+  width: 112% !important;
+  height: 142px !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center 54% !important;
+  transform: scale(1.08);
+  transform-origin: center;
+}
+
+/* Warmer ivory and champagne wallpaper tone */
+body {
+  background-color: #F2E6D2 !important;
+}
+
+body::before {
+  opacity: .44 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(2.6)
+    brightness(1.08)
+    contrast(1.30) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(248, 239, 223, .34),
+      rgba(229, 207, 166, .22)
+    ) !important;
+}
+
+/* Keep cards warm instead of cool gray */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 250, 241, .94),
+      rgba(239, 225, 201, .90)
+    ) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 252, 246, .96),
+      rgba(244, 231, 208, .92)
+    ) !important;
+}
+
+/* Creamier wallpaper and less gray cast */
+body {
+  background-color: #F6EEDC !important;
+}
+
+body::before {
+  opacity: .38 !important;
+  filter:
+    grayscale(.35)
+    sepia(.9)
+    saturate(2.1)
+    brightness(1.16)
+    contrast(1.18) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 249, 238, .42),
+      rgba(239, 220, 184, .20)
+    ) !important;
+}
+
+/* Warm the main card surfaces slightly */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 251, 243, .95),
+      rgba(242, 228, 204, .90)
+    ) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 252, 246, .97),
+      rgba(246, 234, 214, .92)
+    ) !important;
+}
+
+/* Light dropdown menu styling */
+select {
+  color-scheme: light !important;
+  background-color: #FFF9EF !important;
+  color: #101E36 !important;
+}
+
+select option {
+  background: #FFF9EF !important;
+  color: #101E36 !important;
+}
+
+/* Selected and hovered options where supported */
+select option:checked {
+  background: #E9D8B4 !important;
+  color: #101E36 !important;
+}
+
+select:focus {
+  background-color: #FFFDF8 !important;
+  border-color: #D6B56C !important;
+  box-shadow:
+    0 0 0 3px rgba(214, 181, 108, .16),
+    0 0 16px rgba(60, 141, 255, .10) !important;
+}
+
+/* Correct the logo scale and preserve its full proportions */
+.compact-hero .hero-logo-cell {
+  width: 100% !important;
+  max-width: 640px !important;
+  aspect-ratio: 16 / 5 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 10px 18px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 20px !important;
+}
+
+.compact-hero .hero-brand-logo {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+  scale: 1 !important;
+}
+
+/* Keep the logo more prominent than the headline without overflowing */
+@media (min-width: 901px) {
+  .compact-hero {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr) !important;
+  }
+
+  .compact-hero .hero-logo-cell {
+    max-width: 620px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .compact-hero .hero-logo-cell {
+    max-width: 560px !important;
+    aspect-ratio: 16 / 5 !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .compact-hero .hero-logo-cell {
+    max-width: 100% !important;
+    padding: 8px 10px !important;
+  }
+}
+
+/* Blend and enlarge the new logo by cropping its empty canvas */
+.compact-hero .hero-logo-cell {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 640px !important;
+  aspect-ratio: 16 / 5 !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+  background:
+    #08172d
+    url("assets/luxnote-logo-navy-gold.png")
+    center 52% / 145% auto
+    no-repeat !important;
+  border: 1px solid rgba(214, 181, 108, .66) !important;
+  box-shadow:
+    inset 0 0 34px rgba(5, 15, 31, .18),
+    0 10px 24px rgba(5, 15, 31, .12) !important;
+}
+
+/* Hide the original img so it does not render twice */
+.compact-hero .hero-logo-cell .hero-brand-logo {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Soften the boundary between logo panel and hero */
+.compact-hero .hero-logo-cell::after {
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(8, 23, 45, .12),
+      transparent 18%,
+      transparent 82%,
+      rgba(8, 23, 45, .16)
+    ) !important;
+}
+
+/* Slightly favor the logo column */
+@media (min-width: 901px) {
+  .compact-hero {
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, .82fr) !important;
+  }
+}
+
+/* Reduce logo crop and restore balanced scale */
+.compact-hero .hero-logo-cell {
+  background-size: 118% auto !important;
+  background-position: center 52% !important;
+}
+
+/* Slightly reduce the logo frame width */
+@media (min-width: 901px) {
+  .compact-hero .hero-logo-cell {
+    max-width: 600px !important;
+  }
+
+  .compact-hero {
+    grid-template-columns: minmax(0, 1.10fr) minmax(0, .90fr) !important;
+  }
+}
+
+/* Final smaller logo scale */
+.compact-hero .hero-logo-cell {
+  background-size: 92% auto !important;
+  background-position: center 52% !important;
+}
+
+@media (min-width: 901px) {
+  .compact-hero .hero-logo-cell {
+    max-width: 560px !important;
+  }
+
+  .compact-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+}
+
+/* Center the cropped logo artwork more accurately */
+.compact-hero .hero-logo-cell {
+  background-position: 50% 52% !important;
+}
+
+/* Fine-tune desktop horizontal alignment */
+@media (min-width: 901px) {
+  .compact-hero .hero-logo-cell {
+    background-position: 53% 52% !important;
+  }
+}
+
+/* Lower the logo artwork so the roof tip is not cropped */
+.compact-hero .hero-logo-cell {
+  background-position: 53% 58% !important;
+}
+
+@media (max-width: 900px) {
+  .compact-hero .hero-logo-cell {
+    background-position: 50% 58% !important;
+  }
+}
+
+/* Move logo artwork upward to reveal the roof tip */
+.compact-hero .hero-logo-cell {
+  background-position: 53% 44% !important;
+}
+
+@media (max-width: 900px) {
+  .compact-hero .hero-logo-cell {
+    background-position: 50% 44% !important;
+  }
+}
+
+/* Soften header and hero so the content cards lead visually */
+.glass-nav {
+  background:
+    linear-gradient(
+      118deg,
+      rgba(12, 24, 48, .92) 0%,
+      rgba(19, 42, 74, .88) 58%,
+      rgba(29, 79, 122, .84) 100%
+    ) !important;
+  border-color: rgba(214, 181, 108, .46) !important;
+  box-shadow:
+    0 8px 18px rgba(12, 24, 48, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background:
+    linear-gradient(
+      112deg,
+      rgba(10, 21, 42, .93) 0%,
+      rgba(16, 37, 66, .90) 52%,
+      rgba(27, 69, 106, .86) 100%
+    ) !important;
+  border-color: rgba(214, 181, 108, .50) !important;
+  box-shadow:
+    0 8px 20px rgba(12, 24, 48, .10),
+    0 0 0 1px rgba(214, 181, 108, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+/* Tone down the logo frame */
+.compact-hero .hero-logo-cell {
+  background-color: rgba(7, 22, 44, .78) !important;
+  border-color: rgba(214, 181, 108, .48) !important;
+  box-shadow:
+    inset 0 0 24px rgba(5, 15, 31, .10),
+    0 6px 14px rgba(5, 15, 31, .08) !important;
+}
+
+/* Slightly soften hero text without losing contrast */
+.compact-hero h1 {
+  color: rgba(247, 242, 233, .90) !important;
+}
+
+.compact-hero .eyebrow {
+  color: rgba(240, 216, 154, .88) !important;
+}
+
+/* Make the main cards more visually prominent */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  box-shadow:
+    0 16px 34px rgba(78, 54, 17, .11),
+    0 0 0 1px rgba(214, 181, 108, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .96) !important;
+}
+
+/* Shift the wallpaper toward a cleaner ivory tone */
+body {
+  background-color: #F8F2E7 !important;
+}
+
+body::before {
+  opacity: .34 !important;
+  filter:
+    grayscale(.45)
+    sepia(.72)
+    saturate(1.7)
+    brightness(1.24)
+    contrast(1.12) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 252, 246, .48),
+      rgba(244, 231, 205, .14)
+    ) !important;
+}
+
+/* Keep surrounding areas ivory instead of gray-beige */
+.page-shell,
+.dashboard-shell,
+.subpage-shell,
+.hero-shell,
+.site-header {
+  background-color: transparent !important;
+}
+
+/* Warm the card edges to match the ivory field */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .96),
+      rgba(247, 238, 221, .91)
+    ) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 254, 250, .98),
+      rgba(249, 241, 227, .93)
+    ) !important;
+}
+
+/* Cohesive final palette. Match hero, logo, ivory, and gold */
+
+/* Warm ivory page */
+body {
+  background-color: #F7F0E3 !important;
+}
+
+body::before {
+  opacity: .30 !important;
+  filter:
+    grayscale(.30)
+    sepia(.85)
+    saturate(1.9)
+    brightness(1.18)
+    contrast(1.12) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 251, 243, .34),
+      rgba(233, 216, 183, .10)
+    ) !important;
+}
+
+/* Use the logo navy throughout the header and hero */
+.glass-nav {
+  background:
+    linear-gradient(
+      110deg,
+      #08172D 0%,
+      #0D2340 58%,
+      #123455 100%
+    ) !important;
+  border-color: rgba(214, 181, 108, .48) !important;
+  box-shadow:
+    0 8px 18px rgba(8, 23, 45, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background:
+    linear-gradient(
+      105deg,
+      #07162C 0%,
+      #0B1F39 54%,
+      #12385D 100%
+    ) !important;
+  border-color: rgba(214, 181, 108, .52) !important;
+  box-shadow:
+    0 9px 20px rgba(8, 23, 45, .11),
+    inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+}
+
+/* Remove the separate boxed logo appearance */
+.compact-hero .hero-logo-cell {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Blend the logo image directly into the hero */
+.compact-hero .hero-logo-cell {
+  background:
+    transparent
+    url("assets/luxnote-logo-navy-gold.png")
+    53% 44% / 92% auto
+    no-repeat !important;
+}
+
+.compact-hero .hero-logo-cell::after {
+  display: none !important;
+}
+
+/* Harmonize hero text with logo metals */
+.compact-hero h1 {
+  color: #F4EBDD !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, .05),
+    0 8px 20px rgba(0, 0, 0, .18) !important;
+}
+
+.compact-hero .eyebrow {
+  color: #E2C47E !important;
+}
+
+/* Unified ivory cards */
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 252, 246, .96),
+      rgba(246, 236, 217, .92)
+    ) !important;
+  border-color: rgba(214, 181, 108, .60) !important;
+  box-shadow:
+    0 14px 30px rgba(84, 59, 20, .09),
+    inset 0 1px 0 rgba(255, 255, 255, .96) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 248, .98),
+      rgba(249, 240, 223, .94)
+    ) !important;
+  border-color: rgba(214, 181, 108, .52) !important;
+}
+
+/* More consistent text hierarchy */
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+.report-heading h1,
+label {
+  color: #0A1A31 !important;
+}
+
+.section-description,
+.result-card p,
+.result-card li,
+.folder-copy small,
+.project-note-row small,
+.cover-photo-copy p,
+#character-count {
+  color: rgba(37, 43, 51, .74) !important;
+}
+
+.eyebrow,
+.card-kicker,
+.summary-label {
+  color: #9A6F24 !important;
+}
+
+/* Unified navy and gold controls */
+button,
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.report-actions a,
+.form-actions button {
+  background:
+    linear-gradient(
+      180deg,
+      #102A49 0%,
+      #07162C 100%
+    ) !important;
+  border: 1px solid rgba(214, 181, 108, .76) !important;
+  color: #F7F0E3 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .06),
+    0 6px 14px rgba(8, 23, 45, .14) !important;
+}
+
+button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.report-actions a:hover,
+.form-actions button:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #163A60 0%,
+      #0B203A 100%
+    ) !important;
+  border-color: #F0D89A !important;
+  box-shadow:
+    0 0 0 1px rgba(240, 216, 154, .28),
+    0 0 18px rgba(214, 181, 108, .18),
+    0 0 26px rgba(79, 168, 255, .14) !important;
+}
+
+/* Strengthen the main card titles and align them with the navy-gold palette */
+#project-note-heading,
+#results-heading {
+  color: #0B1F39 !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+  letter-spacing: -.015em !important;
+}
+
+/* Add a subtle platinum-gold accent without reducing readability */
+#project-note-heading::after,
+#results-heading::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      #B98A35,
+      #E5C986,
+      rgba(229, 201, 134, 0)
+    );
+}
+
+/* Make the supporting copy slightly darker */
+.form-panel .section-description,
+.results-panel .section-description {
+  color: rgba(37, 43, 51, .80) !important;
+}
+
+/* Keep the section labels gold and crisp */
+.form-panel .eyebrow,
+.results-panel .eyebrow {
+  color: #9A6F24 !important;
+  opacity: 1 !important;
+}

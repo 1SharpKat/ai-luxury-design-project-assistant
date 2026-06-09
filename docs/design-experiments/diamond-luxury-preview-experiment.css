@@ -1,0 +1,336 @@
+:root {
+  --navy: #0B1B32;
+  --navy-2: #123453;
+  --ivory: #F6F0E4;
+  --pearl: #FBF8F2;
+  --gold: #B8924F;
+  --gold-light: #D8BE82;
+  --graphite: #2B3037;
+}
+
+/* Page */
+body {
+  background: var(--ivory) !important;
+  color: var(--graphite) !important;
+}
+
+body::before {
+  opacity: .26 !important;
+  filter:
+    grayscale(.35)
+    sepia(.82)
+    saturate(1.8)
+    brightness(1.18)
+    contrast(1.12) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after,
+.ambient-light,
+.page-noise {
+  display: none !important;
+}
+
+/* Header and hero */
+.glass-nav,
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background: linear-gradient(110deg, var(--navy), var(--navy-2)) !important;
+  border: 1px solid rgba(184, 146, 79, .48) !important;
+  box-shadow: 0 8px 20px rgba(11, 27, 50, .10) !important;
+}
+
+.nav-wordmark,
+.nav-links a,
+.compact-hero h1 {
+  color: var(--pearl) !important;
+}
+
+.compact-hero .eyebrow {
+  color: var(--gold-light) !important;
+}
+
+/* Logo blends into hero */
+.compact-hero .hero-logo-cell {
+  border: 0 !important;
+  box-shadow: none !important;
+  background:
+    transparent
+    url("assets/luxnote-logo-navy-gold.png")
+    center 45% / 84% auto
+    no-repeat !important;
+}
+
+.compact-hero .hero-brand-logo {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background: rgba(251, 248, 242, .97) !important;
+  border: 1px solid rgba(184, 146, 79, .42) !important;
+  box-shadow:
+    0 12px 28px rgba(80, 56, 20, .08),
+    inset 0 1px 0 rgba(255, 255, 255, .95) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.report-cover-card {
+  background: rgba(255, 253, 248, .98) !important;
+  border: 1px solid rgba(184, 146, 79, .32) !important;
+  box-shadow: 0 8px 20px rgba(80, 56, 20, .05) !important;
+}
+
+/* Text */
+#project-note-heading,
+#results-heading,
+.section-heading h1,
+.section-heading h2,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+label {
+  color: var(--navy) !important;
+  opacity: 1 !important;
+}
+
+.section-description,
+.result-card p,
+.result-card li,
+#character-count {
+  color: rgba(43, 48, 55, .76) !important;
+}
+
+.eyebrow,
+.card-kicker,
+.summary-label {
+  color: #8C682C !important;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  background: #FFFDF8 !important;
+  border: 1px solid rgba(184, 146, 79, .48) !important;
+  color: var(--graphite) !important;
+}
+
+select {
+  color-scheme: light !important;
+}
+
+select option {
+  background: #FFFDF8 !important;
+  color: var(--navy) !important;
+}
+
+/* Diamond-shine buttons */
+button,
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.report-actions a,
+.form-actions button,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #102A49, #07162C) !important;
+  border: 1px solid rgba(184, 146, 79, .78) !important;
+  color: var(--ivory) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .06),
+    0 6px 14px rgba(11, 27, 50, .16) !important;
+}
+
+button::after,
+.primary-button::after,
+.secondary-button::after,
+.primary-link::after,
+.secondary-link::after,
+.copy-button::after,
+.record-action::after,
+.cover-photo-picker::after,
+.report-actions a::after,
+.form-actions button::after,
+.compact-hero .hero-button-left::after,
+.compact-hero .hero-button-right::after {
+  content: "";
+  position: absolute;
+  inset: -90%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-30%) rotate(28deg);
+  background: linear-gradient(
+    90deg,
+    transparent 36%,
+    rgba(255, 255, 255, .08) 43%,
+    rgba(216, 190, 130, .34) 48%,
+    rgba(255, 255, 255, .96) 51%,
+    rgba(216, 190, 130, .38) 55%,
+    transparent 66%
+  );
+  transition: opacity .2s ease, transform .55s ease;
+}
+
+button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.report-actions a:hover,
+.form-actions button:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background: linear-gradient(180deg, #163A60, #0B203A) !important;
+  border-color: var(--gold-light) !important;
+  box-shadow:
+    0 0 0 1px rgba(216, 190, 130, .30),
+    0 0 12px rgba(255, 255, 255, .16),
+    0 0 24px rgba(216, 190, 130, .20) !important;
+  transform: translateY(-1px);
+}
+
+button:hover::after,
+.primary-button:hover::after,
+.secondary-button:hover::after,
+.primary-link:hover::after,
+.secondary-link:hover::after,
+.copy-button:hover::after,
+.record-action:hover::after,
+.cover-photo-picker:hover::after,
+.report-actions a:hover::after,
+.form-actions button:hover::after,
+.compact-hero .hero-button-left:hover::after,
+.compact-hero .hero-button-right:hover::after {
+  opacity: 1;
+  transform: translateX(38%) rotate(28deg);
+}
+
+/* Rebalance the desktop hero into two equal visual columns */
+.compact-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  grid-template-areas:
+    "logo headline"
+    "create open" !important;
+  column-gap: 44px !important;
+  row-gap: 18px !important;
+  align-items: center !important;
+  justify-items: stretch !important;
+  min-height: 235px !important;
+  padding: 26px 42px !important;
+}
+
+/* Left column */
+.compact-hero .hero-logo-cell {
+  grid-area: logo !important;
+  width: 100% !important;
+  max-width: 540px !important;
+  min-height: 138px !important;
+  justify-self: center !important;
+  background:
+    transparent
+    url("assets/luxnote-logo-navy-gold.png")
+    center 45% / 84% auto
+    no-repeat !important;
+}
+
+/* Right column */
+.compact-hero .hero-headline-cell {
+  grid-area: headline !important;
+  width: 100% !important;
+  max-width: 540px !important;
+  justify-self: center !important;
+  align-self: center !important;
+  text-align: left !important;
+}
+
+.compact-hero .hero-headline-cell .eyebrow {
+  margin: 0 0 8px !important;
+}
+
+.compact-hero .hero-headline-cell h1 {
+  width: 100% !important;
+  max-width: 540px !important;
+  margin: 0 !important;
+  font-size: clamp(1.7rem, 2.2vw, 2.55rem) !important;
+  line-height: 1.05 !important;
+  text-wrap: balance;
+}
+
+/* Match button width and alignment under each column */
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  width: min(100%, 420px) !important;
+  min-height: 38px !important;
+  justify-self: center !important;
+}
+
+.compact-hero .hero-button-left {
+  grid-area: create !important;
+}
+
+.compact-hero .hero-button-right {
+  grid-area: open !important;
+}
+
+/* Keep dashboard cards aligned beneath the hero */
+.dashboard-shell {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  column-gap: 32px !important;
+  align-items: stretch !important;
+}
+
+.dashboard-shell .form-panel,
+.dashboard-shell .results-panel {
+  width: 100% !important;
+  min-width: 0 !important;
+  align-self: stretch !important;
+}
+
+/* Split-screen and mobile */
+@media (max-width: 900px) {
+  .compact-hero {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "logo"
+      "headline"
+      "create"
+      "open" !important;
+    row-gap: 14px !important;
+    padding: 22px !important;
+  }
+
+  .compact-hero .hero-logo-cell,
+  .compact-hero .hero-headline-cell {
+    max-width: 620px !important;
+  }
+
+  .compact-hero .hero-headline-cell,
+  .compact-hero .hero-headline-cell h1 {
+    text-align: center !important;
+  }
+
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+  }
+}

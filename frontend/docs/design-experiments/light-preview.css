@@ -1,0 +1,195 @@
+/* Temporary light-mode preview. Blueprint wallpaper remains visible. */
+
+:root {
+  --light-panel: rgba(245, 248, 252, .90);
+  --light-panel-strong: rgba(255, 255, 255, .95);
+  --light-border: rgba(35, 72, 108, .28);
+  --light-text: #102235;
+  --light-muted: #5a6e81;
+}
+
+/* Preserve the blueprint wallpaper */
+html,
+body {
+  color: var(--light-text) !important;
+}
+
+body {
+  background-color: #dbe4ed !important;
+}
+
+/* Keep the existing wallpaper image but brighten it */
+body::before {
+  opacity: .32 !important;
+  filter: brightness(1.55) contrast(.72) saturate(.65) !important;
+}
+
+/* Remove dark lighting overlays */
+.ambient-light,
+.page-noise {
+  display: none !important;
+}
+
+/* Light navigation */
+.site-header,
+.glass-nav {
+  background: rgba(249, 251, 254, .92) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text) !important;
+  box-shadow: 0 12px 34px rgba(10, 34, 56, .16) !important;
+}
+
+.nav-wordmark,
+.nav-links a {
+  color: var(--light-text) !important;
+}
+
+/* Keep the logo hero black */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background: #000 !important;
+  background-image: none !important;
+  color: #f4f8ff !important;
+}
+
+.compact-hero h1,
+.compact-hero .eyebrow {
+  color: #f4f8ff !important;
+}
+
+/* Main cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background: var(--light-panel) !important;
+  background-image: none !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text) !important;
+  box-shadow: 0 18px 44px rgba(8, 30, 50, .18) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+/* Interior cards */
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message {
+  background: var(--light-panel-strong) !important;
+  background-image: none !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-text) !important;
+}
+
+/* Text */
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+label,
+p,
+li,
+pre {
+  color: var(--light-text) !important;
+}
+
+.section-description,
+.folder-copy small,
+.project-note-row small,
+.cover-photo-copy p,
+#character-count {
+  color: var(--light-muted) !important;
+}
+
+.eyebrow,
+.card-kicker,
+.summary-label {
+  color: #246da9 !important;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  background: rgba(255, 255, 255, .96) !important;
+  background-image: none !important;
+  border-color: rgba(37, 78, 117, .3) !important;
+  color: var(--light-text) !important;
+  box-shadow: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #7b8b9b !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #3187cb !important;
+  box-shadow: 0 0 0 3px rgba(49, 135, 203, .15) !important;
+}
+
+/* Dark buttons retained */
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.cover-photo-picker {
+  background: #07111d !important;
+  background-image: none !important;
+  border-color: rgba(52, 139, 216, .55) !important;
+  color: #f3f8ff !important;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.cover-photo-picker:hover {
+  border-color: rgba(69, 160, 239, .9) !important;
+  box-shadow: 0 0 20px rgba(35, 130, 220, .3) !important;
+}
+
+/* Footer */
+.site-footer {
+  background: rgba(249, 251, 254, .9) !important;
+  border-color: var(--light-border) !important;
+  color: var(--light-muted) !important;
+}
+
+.footer-brand strong {
+  color: var(--light-text) !important;
+}
+
+/* Light hero preview */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background: rgba(248, 250, 253, .94) !important;
+  background-image: none !important;
+  border-color: rgba(35, 72, 108, .28) !important;
+  color: var(--light-text) !important;
+  box-shadow: 0 18px 44px rgba(8, 30, 50, .18) !important;
+}
+
+.compact-hero h1,
+.compact-hero .eyebrow {
+  color: var(--light-text) !important;
+}
+
+.compact-hero .eyebrow {
+  color: #246da9 !important;
+}
+
+.compact-hero .hero-brand-logo {
+  background: transparent !important;
+}

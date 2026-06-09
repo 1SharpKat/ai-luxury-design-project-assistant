@@ -1,0 +1,433 @@
+/* Temporary Midnight Sapphire and Champagne theme */
+
+:root {
+  --ivory: #F7F2E9;
+  --champagne: #D8C39A;
+  --midnight: #101E36;
+  --sapphire: #174A7E;
+  --electric: #3C8DFF;
+  --graphite: #252B33;
+}
+
+/* Ivory page with champagne-gold blueprint */
+body {
+  color: var(--graphite) !important;
+  background-color: var(--ivory) !important;
+}
+
+body::before {
+  opacity: .25 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(2.4)
+    hue-rotate(350deg)
+    brightness(1.22)
+    contrast(.82) !important;
+  mix-blend-mode: multiply !important;
+}
+
+.ambient-light,
+.page-noise {
+  display: none !important;
+}
+
+/* Navigation */
+.glass-nav {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 30, 54, .98),
+    rgba(23, 74, 126, .96)
+  ) !important;
+  border: 1px solid rgba(216, 195, 154, .7) !important;
+  box-shadow: 0 18px 42px rgba(16, 30, 54, .22) !important;
+}
+
+.nav-wordmark,
+.nav-links a {
+  color: var(--ivory) !important;
+}
+
+.nav-links a:hover {
+  color: var(--champagne) !important;
+}
+
+/* Hero */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background: linear-gradient(
+    120deg,
+    var(--midnight),
+    var(--sapphire)
+  ) !important;
+  border: 1px solid rgba(216, 195, 154, .75) !important;
+  box-shadow: 0 22px 52px rgba(16, 30, 54, .28) !important;
+  color: var(--ivory) !important;
+}
+
+.compact-hero h1 {
+  color: var(--ivory) !important;
+}
+
+.compact-hero .eyebrow {
+  color: var(--champagne) !important;
+}
+
+/* Main cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 253, 249, .96),
+    rgba(247, 242, 233, .91)
+  ) !important;
+  border: 1px solid rgba(216, 195, 154, .72) !important;
+  color: var(--graphite) !important;
+  box-shadow:
+    0 20px 48px rgba(16, 30, 54, .15),
+    inset 0 1px 0 rgba(255, 255, 255, .9) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+/* Inner cards */
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background: rgba(255, 253, 249, .94) !important;
+  border: 1px solid rgba(216, 195, 154, .62) !important;
+  color: var(--graphite) !important;
+  box-shadow: 0 10px 28px rgba(16, 30, 54, .08) !important;
+}
+
+/* Typography */
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+.report-heading h1,
+label {
+  color: var(--midnight) !important;
+}
+
+.section-description,
+.folder-copy small,
+.project-note-row small,
+.cover-photo-copy p,
+#character-count {
+  color: rgba(37, 43, 51, .7) !important;
+}
+
+.eyebrow,
+.card-kicker,
+.summary-label {
+  color: var(--sapphire) !important;
+}
+
+.status-badge {
+  background: rgba(216, 195, 154, .18) !important;
+  border-color: rgba(216, 195, 154, .72) !important;
+  color: var(--sapphire) !important;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  background: rgba(255, 253, 249, .97) !important;
+  border: 1px solid rgba(216, 195, 154, .78) !important;
+  color: var(--graphite) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(37, 43, 51, .48) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--electric) !important;
+  box-shadow: 0 0 0 3px rgba(60, 141, 255, .14) !important;
+}
+
+/* Buttons */
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  background: linear-gradient(
+    180deg,
+    var(--midnight),
+    #091527
+  ) !important;
+  border: 1px solid rgba(216, 195, 154, .72) !important;
+  color: var(--ivory) !important;
+  box-shadow: none !important;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background: linear-gradient(
+    180deg,
+    var(--sapphire),
+    var(--midnight)
+  ) !important;
+  border-color: var(--electric) !important;
+  box-shadow:
+    0 0 0 1px rgba(60, 141, 255, .2),
+    0 0 24px rgba(60, 141, 255, .36) !important;
+  transform: translateY(-1px);
+}
+
+/* Projects and report accents */
+.project-cover-thumb,
+.folder-mark {
+  background: var(--midnight) !important;
+  border-color: var(--champagne) !important;
+  color: var(--champagne) !important;
+}
+
+.folder-arrow,
+.note-priority,
+.tag {
+  color: var(--sapphire) !important;
+}
+
+.tag {
+  background: rgba(23, 74, 126, .08) !important;
+  border-color: rgba(23, 74, 126, .24) !important;
+}
+
+/* Footer */
+.site-footer {
+  background: linear-gradient(
+    135deg,
+    var(--midnight),
+    var(--sapphire)
+  ) !important;
+  border-color: rgba(216, 195, 154, .62) !important;
+  color: rgba(247, 242, 233, .78) !important;
+}
+
+.footer-brand strong {
+  color: var(--ivory) !important;
+}
+
+.footer-brand span {
+  color: var(--champagne) !important;
+}
+
+/* Final luxury refinement pass */
+
+/* Warmer page background */
+body {
+  background-color: #F2EBDD !important;
+}
+
+/* Softer gold-print blueprint */
+body::before {
+  opacity: .18 !important;
+  filter:
+    grayscale(1)
+    sepia(1)
+    saturate(2.1)
+    hue-rotate(350deg)
+    brightness(1.30)
+    contrast(.78) !important;
+}
+
+/* More even midnight-to-sapphire hero */
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background:
+    linear-gradient(
+      100deg,
+      #101E36 0%,
+      #132E52 52%,
+      #174A7E 100%
+    ) !important;
+}
+
+/* Reduce the hard black edge around the logo */
+.compact-hero .hero-logo-cell,
+.compact-hero .hero-brand-logo {
+  background: transparent !important;
+}
+
+.compact-hero .hero-brand-logo {
+  border-radius: 14px;
+  mix-blend-mode: screen;
+  opacity: .96;
+  filter:
+    brightness(1.08)
+    contrast(1.05)
+    drop-shadow(0 12px 24px rgba(0, 0, 0, .24)) !important;
+}
+
+/* Warmer, richer ivory cards */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(250, 247, 240, .97),
+      rgba(241, 233, 219, .94)
+    ) !important;
+}
+
+/* Inner cards with more depth */
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 252, 246, .98),
+      rgba(244, 237, 225, .96)
+    ) !important;
+  box-shadow:
+    0 10px 26px rgba(16, 30, 54, .08),
+    inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+/* Stronger text contrast */
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+.report-heading h1,
+label {
+  color: #101E36 !important;
+}
+
+.section-description,
+.folder-copy small,
+.project-note-row small,
+.cover-photo-copy p,
+#character-count,
+.original-notes,
+.result-card p,
+.result-card li {
+  color: rgba(37, 43, 51, .78) !important;
+}
+
+/* Make dashboard headings more readable */
+#project-note-heading,
+#results-heading {
+  color: #101E36 !important;
+  opacity: 1 !important;
+}
+
+/* Better placeholders */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(37, 43, 51, .56) !important;
+  opacity: 1 !important;
+}
+
+/* More elegant champagne borders */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel,
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.report-cover-card {
+  border-color: rgba(216, 195, 154, .70) !important;
+}
+
+/* Keep electric blue only for interaction */
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .07),
+    0 7px 16px rgba(16, 30, 54, .14) !important;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  border-color: #3C8DFF !important;
+  box-shadow:
+    0 0 0 1px rgba(60, 141, 255, .20),
+    0 0 24px rgba(60, 141, 255, .36) !important;
+}
+
+/* Refine badges */
+.status-badge {
+  background: rgba(216, 195, 154, .14) !important;
+  border-color: rgba(216, 195, 154, .74) !important;
+  color: #174A7E !important;
+}
+
+/* Slightly softer card corners */
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  border-radius: 18px !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.report-cover-card {
+  border-radius: 12px !important;
+}
