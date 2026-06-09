@@ -1,89 +1,258 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Report | LuxNote AI</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="Review a complete LuxNote AI project report with project details, priorities, next steps, key phrases, draft communication, and original notes."
+  >
+  <meta name="theme-color" content="#f7f1eb">
 
+  <title>Project Report | LuxNote AI</title>
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23391214'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='34' fill='%23fffdfc'%3EL%3C/text%3E%3C/svg%3E"
+  >
+
+  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pages.css">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css">
 </head>
+
 <body>
   <header class="site-header">
     <nav class="glass-nav" aria-label="Primary navigation">
-      <a class="nav-wordmark" href="index.html">LuxNote AI</a>
-      <div class="nav-links">
-        <a href="index.html#new-note">New Note</a>
-        <a href="projects.html">Projects</a>
-      </div>
-    </nav>
+      <a class="nav-wordmark" href="index.html">
+        LuxNote AI
+      </a>
+
+```
+  <div class="nav-links">
+    <a href="index.html#new-note">
+      New Note
+    </a>
+
+    <a href="projects.html">
+      Projects
+    </a>
+  </div>
+</nav>
+```
+
   </header>
 
   <main class="subpage-shell">
-    <section class="glass-panel report-panel">
-      <div id="report-status" class="records-message">Loading report.</div>
-
-      <div id="report-content" class="report-content is-hidden">
-        <div class="report-heading">
-          <div>
-            <p class="eyebrow">Project Report</p>
-            <h1 id="report-project-name">Project</h1>
-            <p id="report-client" class="section-description"></p>
-          </div>
-          <div class="report-toolbar">
-            <button class="secondary-button" type="button" onclick="window.print()">Print Report</button>
-            <a class="secondary-link" href="projects.html">Back to Projects</a>
-          </div>
-        </div>
-
-        <div id="report-cover-card" class="report-cover-card is-hidden">
-          <img id="report-cover-image" src="" alt="Project cover photo">
-        </div>
-
-        <div class="report-summary-strip">
-          <article class="summary-card"><span class="summary-label">Category</span><strong id="report-category"></strong></article>
-          <article class="summary-card"><span class="summary-label">Priority</span><strong id="report-priority"></strong></article>
-          <article class="summary-card"><span class="summary-label">Sentiment</span><strong id="report-sentiment"></strong></article>
-          <article class="summary-card"><span class="summary-label">Created</span><strong id="report-created"></strong></article>
-        </div>
-
-        <div class="report-grid">
-          <article class="result-card report-wide">
-            <span class="card-kicker">Overview</span>
-            <h2>Project Summary</h2>
-            <p id="report-summary"></p>
-          </article>
-
-          <article class="result-card">
-            <span class="card-kicker">Action</span>
-            <h2>Next Steps</h2>
-            <ol id="report-next-steps"></ol>
-          </article>
-
-          <article class="result-card">
-            <span class="card-kicker">Analysis</span>
-            <h2>Key Phrases</h2>
-            <div id="report-key-phrases" class="tag-list"></div>
-          </article>
-
-          <article class="result-card report-wide">
-            <span class="card-kicker">Communication</span>
-            <h2>Draft Follow-Up Message</h2>
-            <pre id="report-draft"></pre>
-          </article>
-
-          <article class="result-card report-wide">
-            <span class="card-kicker">Source</span>
-            <h2>Original Project Notes</h2>
-            <p id="report-notes" class="original-notes"></p>
-          </article>
-        </div>
+    <section
+      class="glass-panel report-panel"
+      aria-labelledby="report-project-name"
+    >
+      <div
+        id="report-status"
+        class="records-message loading-state"
+        role="status"
+        aria-live="polite"
+      >
+        Loading project report...
       </div>
+
+```
+  <div
+    id="report-content"
+    class="report-content is-hidden"
+  >
+    <header class="report-heading">
+      <div>
+        <p class="eyebrow">Project Report</p>
+
+        <h1 id="report-project-name">
+          Project
+        </h1>
+
+        <p
+          id="report-client"
+          class="section-description"
+        >
+          Private Client
+        </p>
+      </div>
+
+      <div
+        class="report-toolbar"
+        aria-label="Report actions"
+      >
+        <button
+          class="secondary-button"
+          type="button"
+          onclick="window.print()"
+        >
+          Print Report
+        </button>
+
+        <a
+          class="secondary-link"
+          href="projects.html"
+        >
+          Back to Projects
+        </a>
+      </div>
+    </header>
+
+    <div
+      id="report-cover-card"
+      class="report-cover-card is-hidden"
+    >
+      <img
+        id="report-cover-image"
+        src=""
+        alt=""
+      >
+    </div>
+
+    <section
+      class="report-summary-strip"
+      aria-label="Project details"
+    >
+      <article class="summary-card">
+        <span class="summary-label">
+          Category
+        </span>
+
+        <strong id="report-category">
+          General
+        </strong>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">
+          Priority
+        </span>
+
+        <strong id="report-priority">
+          Not assigned
+        </strong>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">
+          Sentiment
+        </span>
+
+        <strong id="report-sentiment">
+          Not analyzed
+        </strong>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">
+          Created
+        </span>
+
+        <strong id="report-created">
+          Date unavailable
+        </strong>
+      </article>
     </section>
+
+    <div class="report-grid">
+      <article class="result-card report-wide">
+        <span class="card-kicker">
+          Overview
+        </span>
+
+        <h2>Project Summary</h2>
+
+        <p id="report-summary">
+          A project summary has not been generated yet.
+        </p>
+      </article>
+
+      <article class="result-card">
+        <span class="card-kicker">
+          Action
+        </span>
+
+        <h2>Next Steps</h2>
+
+        <ol id="report-next-steps">
+          <li>
+            No immediate next steps were identified.
+          </li>
+        </ol>
+      </article>
+
+      <article class="result-card">
+        <span class="card-kicker">
+          Analysis
+        </span>
+
+        <h2>Key Phrases</h2>
+
+        <div
+          id="report-key-phrases"
+          class="tag-list"
+          aria-label="Key phrases"
+        >
+          <span class="tag">
+            No key phrases identified
+          </span>
+        </div>
+      </article>
+
+      <article class="result-card report-wide">
+        <span class="card-kicker">
+          Communication
+        </span>
+
+        <h2>Draft Follow-Up Message</h2>
+
+        <pre id="report-draft">A follow-up message has not been generated yet.</pre>
+      </article>
+
+      <article class="result-card report-wide">
+        <span class="card-kicker">
+          Source
+        </span>
+
+        <h2>Original Project Notes</h2>
+
+        <p
+          id="report-notes"
+          class="original-notes"
+        >
+          Original project notes are unavailable.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+```
+
   </main>
 
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <strong>LuxNote AI</strong>
+      <span>Luxury Design Project Assistant</span>
+    </div>
+
+```
+<p>
+  AI-generated content requires human review before it is used
+  for client, builder, vendor, electrical, construction, or
+  design decisions.
+</p>
+```
+
+  </footer>
+
   <script src="report.js"></script>
+
 </body>
 </html>

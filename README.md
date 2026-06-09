@@ -1,83 +1,137 @@
 # LuxNote AI
 
-LuxNote AI is a cloud-based project note assistant for luxury design, AV integration, lighting design, builder coordination, and client communication.
+LuxNote AI is a cloud-based project intelligence assistant designed for luxury design, architectural lighting, AV integration, builder coordination, and client communication.
 
-The application helps capture project notes, walkthrough details, meeting notes, client preferences, and coordination items. It then organizes the information into project records, quick summaries, next steps, and full project reports.
+The application transforms raw meeting notes, site walkthrough transcripts, client preferences, deadlines, and coordination details into organized project records with summaries, priorities, next steps, and professional follow-up communication.
 
-## Project Purpose
+## Product Overview
 
-Luxury design and AV projects create large amounts of scattered information across walkthroughs, client meetings, builder requests, vendor updates, and internal notes. Important details can be missed, delayed, or buried in long transcripts.
+Complex design projects generate information across client meetings, construction walkthroughs, builder requests, vendor updates, emails, and internal notes. Important details can become difficult to track when they are spread across multiple tools and long transcripts.
 
-LuxNote AI is designed to turn raw project notes into organized project intelligence.
+LuxNote AI provides a single workflow for capturing that information and turning it into structured project intelligence.
 
-The goal is to help design and project teams:
+The application helps project teams:
 
-* Capture project information quickly
-* Organize notes by client and project
-* Identify priority items and next steps
-* Generate clear project summaries
-* Create follow-up communication
-* Maintain a searchable project history
-* Build full project reports from saved records
+* Capture project notes and transcripts
+* Organize records by client and project
+* Identify priorities and coordination requirements
+* Generate concise project summaries
+* Produce actionable next steps
+* Draft professional follow-up communication
+* Maintain a project history
+* Create printable project reports
+* Associate cover photography with project records
 
-## Current Build Status
+## Current Product Experience
 
-LuxNote AI now includes a working frontend dashboard, a dedicated Projects page, and a full Report page.
+LuxNote AI includes three connected frontend experiences:
 
-### Completed Frontend Features
+| Page      | File                     | Purpose                                                |
+| --------- | ------------------------ | ------------------------------------------------------ |
+| Dashboard | `frontend/index.html`    | Captures new project notes and displays a quick result |
+| Projects  | `frontend/projects.html` | Groups saved records into project folders              |
+| Report    | `frontend/report.html`   | Displays a complete report for a selected record       |
 
-* Luxury-style dark dashboard interface
-* LuxNote AI branded hero section
-* Lighting-design blueprint wallpaper
-* Project note submission form
-* Quick Result panel on the main dashboard
-* Dedicated Projects page for saved project records
-* Dedicated Report page for full project intelligence
-* Navigation between Dashboard, Projects, and Reports
-* Saved project notes grouped into project folders
-* Full report view for individual saved notes
-* Responsive page styling for different screen sizes
+### Dashboard
 
-### Current Application Pages
+The dashboard provides:
 
-| Page      | File                     | Purpose                                              |
-| --------- | ------------------------ | ---------------------------------------------------- |
-| Dashboard | `frontend/index.html`    | Captures new project notes and shows a quick result  |
-| Projects  | `frontend/projects.html` | Displays saved project records grouped by project    |
-| Report    | `frontend/report.html`   | Displays the full report for a selected project note |
+* Client and project identification
+* Note type and source selection
+* Project note and transcript entry
+* Optional project cover-photo upload
+* File type and size validation
+* Submission, loading, success, and error states
+* AI-assisted project summary
+* Priority identification
+* Actionable next steps
+* Copy controls
+* Direct access to the full report
 
-## Current User Flow
+### Projects Library
 
-1. User opens the LuxNote AI dashboard.
-2. User enters client name, project name, project type, source, and project notes.
-3. User submits the note for analysis.
-4. The application displays a Quick Result on the main page.
-5. The note is saved as a project record.
-6. User opens the Projects page.
-7. User selects a saved project note.
-8. The full project report opens on the Report page.
+The Projects page provides:
+
+* Records grouped by project
+* Project cover thumbnails
+* Client and note counts
+* Most recently updated project ordering
+* Individual note types and categories
+* Priority indicators
+* Links to full project reports
+* Loading, empty, success, retry, and image-fallback states
+
+### Project Reports
+
+The Report page provides:
+
+* Project and client details
+* Project category
+* Priority
+* Sentiment status
+* Record creation date
+* Project summary
+* Next steps
+* Key phrases
+* Draft follow-up communication
+* Original project notes
+* Project cover photography
+* Printable report formatting
+* Missing-report and service-error states
+
+## Design Direction
+
+The interface uses a restrained light-luxury visual system designed to feel appropriate for high-end design and construction work.
+
+The current design includes:
+
+* Warm handmade-paper-inspired page backgrounds
+* Raspberry, chocolate, sienna, and muted rose accents
+* Editorial typography
+* Soft neutral surfaces
+* Responsive two-column dashboard layout
+* Accessible focus states
+* Reduced-motion support
+* Mobile-responsive project and report pages
+
+The active brand asset is:
+
+```text
+frontend/assets/luxnote-logo-transparent.png
+```
+
+## User Flow
+
+1. Open the LuxNote AI dashboard.
+2. Enter the client and project information.
+3. Select the note type and source.
+4. Paste project notes or a walkthrough transcript.
+5. Optionally attach a project cover photo.
+6. Submit the record for processing.
+7. Review the generated Quick Result.
+8. Open the complete project report.
+9. Browse saved records from the Projects library.
+10. Print or copy project information for further review.
 
 ## AWS Architecture
 
-LuxNote AI is built as a serverless cloud application using AWS services.
+LuxNote AI uses a serverless AWS architecture.
 
-### Current AWS Services
+| AWS Service        | Purpose                                          |
+| ------------------ | ------------------------------------------------ |
+| Amazon API Gateway | Exposes the application API                      |
+| AWS Lambda         | Processes API requests and project-note logic    |
+| Amazon DynamoDB    | Stores project-note records and generated fields |
+| Amazon S3          | Stores uploaded project cover images             |
+| AWS IAM            | Controls access between AWS services             |
+| AWS Amplify        | Hosts and deploys the frontend application       |
 
-| AWS Service        | Purpose                                                                  |
-| ------------------ | ------------------------------------------------------------------------ |
-| Amazon API Gateway | Provides the public API endpoint used by the frontend                    |
-| AWS Lambda         | Handles backend logic for creating and retrieving project notes          |
-| Amazon DynamoDB    | Stores saved project note records                                        |
-| Amazon S3          | Planned storage for project images and media uploads                     |
-| Amazon Comprehend  | Planned or partial support for key phrase and text analysis              |
-| Amazon Bedrock     | Planned or partial support for summaries, next steps, and draft messages |
-
-## Application Architecture
+### Request Flow
 
 ```text
 User
   ↓
-Frontend Web App
+LuxNote AI Frontend
   ↓
 Amazon API Gateway
   ↓
@@ -86,117 +140,169 @@ AWS Lambda
 Amazon DynamoDB
 ```
 
-Planned media upload architecture:
+### Cover-Photo Upload Flow
 
 ```text
-Frontend Web App
+User selects image
+  ↓
+Frontend requests upload information
   ↓
 Amazon API Gateway
   ↓
-AWS Lambda
+AWS Lambda creates upload details
   ↓
-Amazon S3
+Frontend uploads image to Amazon S3
   ↓
-DynamoDB image metadata
+Image metadata is saved with the project record
 ```
+
+## Application Architecture
+
+```text
+┌─────────────────────────────┐
+│          User               │
+│ Designer, PM, Coordinator   │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│     LuxNote AI Frontend     │
+│ Dashboard, Projects, Report │
+└──────────────┬──────────────┘
+               │ HTTPS
+               ▼
+┌─────────────────────────────┐
+│     Amazon API Gateway      │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│         AWS Lambda          │
+│ Processing and API logic    │
+└──────────┬───────────┬──────┘
+           │           │
+           ▼           ▼
+┌─────────────────┐  ┌─────────────────┐
+│ Amazon DynamoDB │  │    Amazon S3    │
+│ Project records │  │ Project images  │
+└─────────────────┘  └─────────────────┘
+```
+
+## API
+
+The frontend currently connects to:
+
+```javascript
+const API_BASE_URL =
+  "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
+```
+
+### Current Routes
+
+```text
+POST /project-notes
+GET  /project-notes
+GET  /project-notes/{recordId}
+POST /project-cover-upload-url
+```
+
+### Route Responsibilities
+
+| Route                            | Responsibility                                              |
+| -------------------------------- | ----------------------------------------------------------- |
+| `POST /project-notes`            | Creates and stores a project-note record                    |
+| `GET /project-notes`             | Retrieves saved project-note records                        |
+| `GET /project-notes/{recordId}`  | Retrieves one complete project record                       |
+| `POST /project-cover-upload-url` | Provides the information required to upload a project image |
 
 ## Data Model
 
-Project note records may include:
+A project record can include:
 
 ```json
 {
-  "recordId": "unique-record-id",
+  "recordId": "791e1f89-fbc9-4ff8-ab14-9b9efc9a64c3",
   "clientName": "Private Client",
   "projectName": "Deer Valley Residence",
   "noteType": "site_walkthrough_transcript",
   "source": "Plaud transcript",
-  "projectNotes": "Raw project notes or transcript text",
-  "category": "Lighting Design",
+  "projectNotes": "Client wants warm architectural lighting, hidden speakers, simple controls, and keypad locations sent to the builder before Friday.",
+  "category": "Lighting Design / A/V Integration / Builder / Vendor Coordination",
   "priority": "High",
-  "keyPhrases": ["lighting scenes", "keypad locations", "builder deadline"],
-  "sentiment": "Neutral",
-  "summary": "AI-generated project summary",
+  "keyPhrases": [],
+  "sentiment": "Not analyzed yet",
+  "summary": "The project notes include lighting, AV, and builder coordination requirements.",
   "nextSteps": [
     "Confirm keypad locations",
-    "Follow up with builder",
-    "Review lighting control zones"
+    "Confirm equipment locations",
+    "Coordinate details with builder",
+    "Prepare information for the electrical walkthrough",
+    "Update client preference notes"
   ],
-  "draftMessage": "AI-generated follow-up message",
-  "createdAt": "2026-06-08T00:00:00Z"
+  "draftMessage": "A generated project follow-up message.",
+  "coverPhotoUrl": "https://example-bucket.s3.amazonaws.com/project-cover.jpg",
+  "coverPhotoKey": "projects/deer-valley-residence/project-cover.jpg",
+  "coverPhotoName": "project-cover.jpg",
+  "coverPhotoType": "image/jpeg",
+  "createdAt": "2026-06-04T21:53:17.370633+00:00"
 }
 ```
 
-## Frontend File Structure
+## Repository Structure
 
 ```text
-frontend/
-  index.html
-  app.js
-  projects.html
-  projects.js
-  report.html
-  report.js
-  styles.css
-  upgrade.css
-  pages.css
-  assets/
-    luxnote-logo.png
-    lighting-blueprint-wallpaper.png
+ai-luxury-design-project-assistant/
+├── frontend/
+│   ├── assets/
+│   │   └── luxnote-logo-transparent.png
+│   ├── index.html
+│   ├── projects.html
+│   ├── report.html
+│   ├── app.js
+│   ├── projects.js
+│   ├── report.js
+│   ├── styles.css
+│   ├── pages.css
+│   ├── cover-photo.css
+│   └── light-luxury-theme.css
+├── lambda/
+│   └── lambda_function.py
+├── docs/
+│   └── design-experiments/
+└── README.md
 ```
 
-### Key Frontend Files
+## Frontend Files
 
-| File                                      | Purpose                                                |
-| ----------------------------------------- | ------------------------------------------------------ |
-| `index.html`                              | Main dashboard and project note capture page           |
-| `app.js`                                  | Handles note submission and Quick Result display       |
-| `projects.html`                           | Project library page                                   |
-| `projects.js`                             | Loads saved project records and groups them by project |
-| `report.html`                             | Full report page for individual project notes          |
-| `report.js`                               | Loads and displays a selected project record           |
-| `styles.css`                              | Base styling                                           |
-| `upgrade.css`                             | Dashboard visual upgrade styling                       |
-| `pages.css`                               | Additional page-specific styling                       |
-| `assets/luxnote-logo.png`                 | LuxNote AI logo                                        |
-| `assets/lighting-blueprint-wallpaper.png` | Lighting-design blueprint background                   |
-
-## Backend/API
-
-The frontend connects to an API Gateway endpoint:
-
-```javascript
-const API_BASE_URL = "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
-```
-
-### Current API Behavior
-
-The application uses API routes for:
-
-* Creating project notes
-* Retrieving saved project notes
-* Opening a selected project note as a report
-
-Expected API routes include:
-
-```text
-POST /project-notes
-GET /project-notes
-GET /project-notes/{recordId}
-```
+| File                              | Responsibility                                                         |
+| --------------------------------- | ---------------------------------------------------------------------- |
+| `frontend/index.html`             | Dashboard structure and project-note form                              |
+| `frontend/app.js`                 | Validation, submission, image upload, quick results, and copy controls |
+| `frontend/projects.html`          | Projects library structure                                             |
+| `frontend/projects.js`            | Project retrieval, grouping, sorting, and display states               |
+| `frontend/report.html`            | Full project-report structure                                          |
+| `frontend/report.js`              | Individual record retrieval and report rendering                       |
+| `frontend/styles.css`             | Shared foundation, forms, navigation, controls, and cards              |
+| `frontend/pages.css`              | Dashboard, Projects, Report, responsive, and print layouts             |
+| `frontend/cover-photo.css`        | Cover-photo picker, preview, and image presentation                    |
+| `frontend/light-luxury-theme.css` | Warm luxury color system and visual treatment                          |
 
 ## Local Development
 
-To preview the frontend locally in Codespaces:
+From the repository root:
 
 ```bash
 cd frontend
 python3 -m http.server 8000
 ```
 
-Then open the forwarded port URL from the Codespaces **Ports** tab.
+In GitHub Codespaces:
 
-### Test URLs
+1. Open the **Ports** panel.
+2. Find port `8000`.
+3. Open the forwarded URL in a browser.
+
+### Local Routes
 
 ```text
 /
@@ -210,102 +316,113 @@ Then open the forwarded port URL from the Codespaces **Ports** tab.
 /report.html?id=YOUR_RECORD_ID
 ```
 
-## Git Branch Workflow
-
-Current UI upgrade work is being developed on:
+Example:
 
 ```text
-ui-dashboard-upgrade
+/report.html?id=791e1f89-fbc9-4ff8-ab14-9b9efc9a64c3
 ```
 
-Recommended workflow:
+## Validation and Quality Checks
+
+Check all frontend JavaScript files:
 
 ```bash
-git checkout ui-dashboard-upgrade
-git status
+cd frontend
+node --check app.js
+node --check projects.js
+node --check report.js
 ```
 
-Commit current changes:
+Check the repository for whitespace errors:
 
 ```bash
-git add .
-git commit -m "Finalize dashboard projects and report layout"
-git push origin ui-dashboard-upgrade
+git diff --check
 ```
 
-For new feature work, create a separate branch:
+Review the current changes:
 
 ```bash
-git checkout -b project-media-uploads
-git push -u origin project-media-uploads
+git status --short
+git diff --stat
 ```
 
-## Completed Week 4 Work
+## Manual Test Checklist
 
-During Week 4, the project moved from architecture planning into working backend and frontend development.
+Before deployment, verify:
 
-### Week 4 Completed Items
+* Required-field validation
+* Character-count updates
+* Valid project-note submission
+* Loading and success messaging
+* API error handling
+* Quick Result rendering
+* Summary and next-step copy controls
+* Cover-photo type validation
+* Cover-photo size validation
+* Cover-photo preview
+* S3 image upload
+* Form clearing and reset behavior
+* Projects loading state
+* Projects empty state
+* Projects retry state
+* Project grouping and ordering
+* Report loading with a valid record ID
+* Missing-report state
+* Invalid-record state
+* Broken-image fallback
+* Print layout
+* Mobile responsiveness
+* Keyboard focus visibility
+* Browser console errors
 
-* Built the backend serverless foundation
-* Connected frontend requests to API Gateway
-* Used Lambda as the backend processing layer
-* Used DynamoDB for project note storage
-* Tested project note submission
-* Tested saved project note retrieval
-* Built a working frontend dashboard
-* Added a Projects page for saved records
-* Added a Report page for full note details
-* Improved the interface with branded LuxNote AI styling
-* Added lighting-design themed visual direction
+## Current Limitations
 
-## Planned Next Feature: Project Media Uploads
+* Authentication and user-specific project access are not yet implemented.
+* Project search and filtering are not yet available.
+* Sentiment and key-phrase fields may use fallback values when advanced AI analysis is unavailable.
+* Reports are printable but do not yet generate a downloadable PDF file directly.
+* The frontend currently stores the API endpoint in each page-specific JavaScript file.
+* Uploaded media currently focuses on one project cover image rather than a complete attachment gallery.
 
-The next planned feature is project media support.
+## Roadmap
 
-### Planned Media Features
+Potential future enhancements include:
 
-* Add a project cover photo
-* Add walkthrough photo uploads
-* Preview images before saving
-* Store image files in Amazon S3
-* Store image metadata in DynamoDB
-* Display cover photos on the Projects page
-* Display walkthrough photos in the Report page
-
-### Planned Media Data Structure
-
-```json
-{
-  "coverPhotoUrl": "S3 image URL or signed URL",
-  "attachments": [
-    {
-      "fileName": "walkthrough-photo-1.jpg",
-      "fileType": "image/jpeg",
-      "s3Key": "projects/project-id/photos/file.jpg",
-      "uploadedAt": "2026-06-08T00:00:00Z"
-    }
-  ]
-}
-```
-
-## Future Improvements
-
-Planned future enhancements include:
-
-* User authentication with Amazon Cognito
-* Permanent image uploads using Amazon S3
-* Project cover photos
+* Amazon Cognito authentication
+* Role-based access controls
+* Project search and filtering
+* Multiple image and document attachments
 * Walkthrough photo galleries
-* Better project search and filtering
-* Exportable reports
-* Printable client-facing summaries
-* Builder/vendor follow-up templates
-* More advanced AI-generated task lists
-* Role-based user permissions
-* Deployment with a custom domain
+* Amazon Bedrock-generated summaries and communication
+* Amazon Comprehend key-phrase and sentiment analysis
+* Exportable PDF reports
+* Client-facing report templates
+* Builder and vendor communication templates
+* Task ownership and due dates
+* Project status dashboards
+* Shared API configuration
+* Automated testing
+* Additional accessibility testing
 
-## Project Disclaimer
+## Portfolio Focus
 
-AI-generated summaries, next steps, and draft messages should be reviewed by a human before being used for client, builder, vendor, electrical, construction, or design decisions.
+LuxNote AI demonstrates:
 
-LuxNote AI is intended to assist project coordination, not replace professional judgment.
+* Product-oriented frontend design
+* Serverless AWS architecture
+* REST API integration
+* DynamoDB data persistence
+* S3 media uploads
+* Form validation
+* Asynchronous application states
+* Defensive rendering
+* Responsive design
+* Print styling
+* Accessibility-focused interface decisions
+* Git-based feature development and deployment workflow
+
+## Disclaimer
+
+AI-generated summaries, priorities, next steps, and draft messages should be reviewed by a qualified person before they are used for client, builder, vendor, electrical, construction, or design decisions.
+
+LuxNote AI supports project coordination. It does not replace professional judgment.

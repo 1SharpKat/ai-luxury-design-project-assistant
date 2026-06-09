@@ -1,159 +1,414 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="LuxNote AI organizes luxury design project notes, walkthrough transcripts, action items, and professional follow-up communication.">
-  <title>LuxNote AI | Luxury Design Project Assistant</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="LuxNote AI organizes luxury design project notes, walkthrough transcripts, action items, and professional follow-up communication."
+  >
+  <meta name="theme-color" content="#f7f1eb">
 
+  <title>LuxNote AI | Luxury Design Project Assistant</title>
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23391214'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='34' fill='%23fffdfc'%3EL%3C/text%3E%3C/svg%3E"
+  >
+
+  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pages.css">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css">
 </head>
-<body>
-  <div class="ambient-light ambient-light-one" aria-hidden="true"></div>
-  <div class="ambient-light ambient-light-two" aria-hidden="true"></div>
-  <div class="page-noise" aria-hidden="true"></div>
 
+<body>
   <header class="site-header">
     <nav class="glass-nav" aria-label="Primary navigation">
-      <a class="nav-wordmark" href="index.html">LuxNote AI</a>
-      <div class="nav-links">
-        <a href="#new-note">New Note</a>
-        <a href="projects.html">Projects</a>
-        <a href="projects.html">Reports</a>
-      </div>
-    </nav>
+      <a
+        class="nav-wordmark"
+        href="index.html"
+        aria-current="page"
+      >
+        LuxNote AI
+      </a>
 
-    <div id="top" class="hero-shell">
-      <section class="hero-glass-card compact-hero" aria-labelledby="hero-heading">
-        <div class="hero-top hero-logo-cell">
-          <img class="hero-brand-logo" src="assets/luxnote-logo-transparent.png" alt="LuxNote AI, Luxury Design Project Assistant">
-        </div>
+```
+  <div class="nav-links">
+    <a href="#new-note">New Note</a>
+    <a href="projects.html">Projects</a>
+  </div>
+</nav>
 
-        <div class="hero-top hero-headline-cell">
-          <p class="eyebrow">Intelligent Project Coordination</p>
-          <h1 id="hero-heading">Refined project intelligence for complex design work.</h1>
-        </div>
-
-        <a class="primary-link hero-button-left" href="#new-note">Create Project Note</a>
-        <a class="secondary-link hero-button-right" href="projects.html">Open Projects</a>
-      </section>
+<div id="top" class="hero-shell">
+  <section
+    class="hero-glass-card compact-hero"
+    aria-labelledby="hero-heading"
+  >
+    <div class="hero-logo-cell">
+      <img
+        class="hero-brand-logo"
+        src="assets/luxnote-logo-transparent.png"
+        alt="LuxNote AI"
+      >
     </div>
+
+    <div class="hero-headline-cell">
+      <p class="eyebrow">Intelligent Project Coordination</p>
+
+      <h1 id="hero-heading">
+        Refined project intelligence for complex design work.
+      </h1>
+    </div>
+
+    <a
+      class="primary-link hero-button-left"
+      href="#new-note"
+    >
+      Create Project Note
+    </a>
+
+    <a
+      class="secondary-link hero-button-right"
+      href="projects.html"
+    >
+      Open Projects
+    </a>
+  </section>
+</div>
+```
+
   </header>
 
   <main class="page-shell dashboard-shell">
-    <section id="new-note" class="glass-panel form-panel" aria-labelledby="project-note-heading">
+    <section
+      id="new-note"
+      class="glass-panel form-panel"
+      aria-labelledby="project-note-heading"
+    >
       <div class="section-heading">
         <div>
           <p class="eyebrow">New Project Note</p>
-          <h2 id="project-note-heading">Capture project intelligence</h2>
-          <p class="section-description">Submit notes, transcripts, client preferences, deadlines, and coordination requirements for AI-assisted analysis.</p>
-        </div>
-        <span class="status-badge">AI-Powered</span>
+
+```
+      <h2 id="project-note-heading">
+        Capture project intelligence
+      </h2>
+
+      <p class="section-description">
+        Submit notes, transcripts, client preferences, deadlines,
+        and coordination requirements for AI-assisted analysis.
+      </p>
+    </div>
+
+    <span class="status-badge">AI-Powered</span>
+  </div>
+
+  <form id="project-note-form" novalidate>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="client-name">Client name</label>
+
+        <input
+          id="client-name"
+          name="clientName"
+          type="text"
+          placeholder="Private Client"
+          autocomplete="organization"
+        >
       </div>
 
-      <form id="project-note-form">
-        <div class="form-grid">
-          <div class="form-field">
-            <label for="client-name">Client name</label>
-            <input id="client-name" name="clientName" type="text" placeholder="Private Client" autocomplete="organization">
-          </div>
-          <div class="form-field">
-            <label for="project-name">Project name <span aria-hidden="true">*</span></label>
-            <input id="project-name" name="projectName" type="text" placeholder="Deer Valley Residence" required>
-          </div>
-          <div class="form-field">
-            <label for="note-type">Project type</label>
-            <select id="note-type" name="noteType">
-              <option value="site_walkthrough_transcript">Site walkthrough transcript</option>
-              <option value="client_meeting_notes">Client meeting notes</option>
-              <option value="builder_coordination">Builder coordination</option>
-              <option value="vendor_update">Vendor update</option>
-              <option value="design_review">Design review</option>
-              <option value="manual_project_notes">General project notes</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="source">Source</label>
-            <select id="source" name="source">
-              <option value="Plaud transcript">Plaud transcript</option>
-              <option value="manual entry">Manual entry</option>
-              <option value="email notes">Email notes</option>
-              <option value="client meeting">Client meeting</option>
-              <option value="site walkthrough">Site walkthrough</option>
-              <option value="builder communication">Builder communication</option>
-            </select>
-          </div>
-        </div>
+      <div class="form-field">
+        <label for="project-name">
+          Project name
+          <span aria-hidden="true">*</span>
+        </label>
 
-        <div class="form-field full-width">
-          <div class="label-row">
-            <label for="project-notes">Project notes <span aria-hidden="true">*</span></label>
-            <span id="character-count">0 characters</span>
-          </div>
-          <textarea id="project-notes" name="projectNotes" rows="10" maxlength="10000" placeholder="Paste meeting notes, transcripts, or walkthrough details here." required></textarea>
-        </div>
+        <input
+          id="project-name"
+          name="projectName"
+          type="text"
+          placeholder="Deer Valley Residence"
+          autocomplete="off"
+          required
+        >
+      </div>
 
-        <section class="cover-photo-field" aria-labelledby="cover-photo-heading">
-          <div class="cover-photo-copy">
-            <span class="card-kicker">Project Media</span>
-            <h3 id="cover-photo-heading">Project cover photo</h3>
-            <p>Optional. Add one JPEG or PNG, up to 5 MB, to represent the project.</p>
-          </div>
-          <label class="cover-photo-picker" for="cover-photo">
-            <input id="cover-photo" name="coverPhoto" type="file" accept="image/jpeg,image/png">
-            <span>Choose Cover Photo</span>
-          </label>
-          <div id="cover-photo-preview" class="cover-photo-preview is-empty">
-            <span>No cover photo selected</span>
-          </div>
-        </section>
+      <div class="form-field">
+        <label for="note-type">Note type</label>
 
-        <div class="form-actions">
-          <button id="submit-button" class="primary-button" type="submit">
-            <span class="button-label">Analyze Project Notes</span>
-            <span id="button-spinner" class="button-spinner" aria-hidden="true"></span>
-          </button>
-          <button id="clear-button" class="secondary-button" type="button">Clear Form</button>
-        </div>
-        <div id="form-message" class="form-message" role="status" aria-live="polite"></div>
-      </form>
+        <select id="note-type" name="noteType">
+          <option value="site_walkthrough_transcript">
+            Site walkthrough transcript
+          </option>
+          <option value="client_meeting_notes">
+            Client meeting notes
+          </option>
+          <option value="builder_coordination">
+            Builder coordination
+          </option>
+          <option value="vendor_update">
+            Vendor update
+          </option>
+          <option value="design_review">
+            Design review
+          </option>
+          <option value="manual_project_notes">
+            General project notes
+          </option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="source">Source</label>
+
+        <select id="source" name="source">
+          <option value="Plaud transcript">
+            Plaud transcript
+          </option>
+          <option value="manual entry">
+            Manual entry
+          </option>
+          <option value="email notes">
+            Email notes
+          </option>
+          <option value="client meeting">
+            Client meeting
+          </option>
+          <option value="site walkthrough">
+            Site walkthrough
+          </option>
+          <option value="builder communication">
+            Builder communication
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-field full-width">
+      <div class="label-row">
+        <label for="project-notes">
+          Project notes
+          <span aria-hidden="true">*</span>
+        </label>
+
+        <span id="character-count" aria-live="polite">
+          0 characters
+        </span>
+      </div>
+
+      <textarea
+        id="project-notes"
+        name="projectNotes"
+        rows="10"
+        maxlength="10000"
+        placeholder="Paste meeting notes, transcripts, or walkthrough details here."
+        required
+      ></textarea>
+    </div>
+
+    <section
+      class="cover-photo-field"
+      aria-labelledby="cover-photo-heading"
+    >
+      <div class="cover-photo-copy">
+        <span class="card-kicker">Project Media</span>
+
+        <h3 id="cover-photo-heading">
+          Project cover photo
+        </h3>
+
+        <p>
+          Optional. Add one JPEG or PNG, up to 5 MB, to
+          represent the project.
+        </p>
+      </div>
+
+      <label
+        class="cover-photo-picker"
+        for="cover-photo"
+      >
+        <input
+          id="cover-photo"
+          name="coverPhoto"
+          type="file"
+          accept="image/jpeg,image/png"
+        >
+
+        <span>Choose Cover Photo</span>
+      </label>
+
+      <div
+        id="cover-photo-preview"
+        class="cover-photo-preview is-empty"
+        aria-live="polite"
+      >
+        <span>No cover photo selected</span>
+      </div>
     </section>
 
-    <section id="results-section" class="glass-panel results-panel is-hidden" aria-labelledby="results-heading">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Quick Result</p>
-          <h2 id="results-heading">Ready for review</h2>
-          <p class="section-description">Review the essentials here, then open the full report for complete project intelligence.</p>
-        </div>
-        <span id="generation-status" class="status-badge">Completed</span>
+    <div class="form-actions">
+      <button
+        id="submit-button"
+        class="primary-button"
+        type="submit"
+      >
+        <span class="button-label">
+          Analyze Project Notes
+        </span>
+
+        <span
+          id="button-spinner"
+          class="button-spinner"
+          aria-hidden="true"
+        ></span>
+      </button>
+
+      <button
+        id="clear-button"
+        class="secondary-button"
+        type="button"
+      >
+        Clear Form
+      </button>
+    </div>
+
+    <div
+      id="form-message"
+      class="form-message"
+      role="status"
+      aria-live="polite"
+    ></div>
+  </form>
+</section>
+
+<section
+  id="results-section"
+  class="glass-panel results-panel is-hidden"
+  aria-labelledby="results-heading"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Quick Result</p>
+
+      <h2 id="results-heading">
+        Ready for review
+      </h2>
+
+      <p class="section-description">
+        Review the essentials here, then open the full report
+        for complete project intelligence.
+      </p>
+    </div>
+
+    <span
+      id="generation-status"
+      class="status-badge"
+    >
+      Ready
+    </span>
+  </div>
+
+  <div class="quick-result-meta">
+    <article class="summary-card">
+      <span class="summary-label">Project</span>
+      <strong id="result-project-name">
+        Project name
+      </strong>
+    </article>
+
+    <article class="summary-card">
+      <span class="summary-label">Priority</span>
+      <strong id="result-priority">
+        Not assigned
+      </strong>
+    </article>
+  </div>
+
+  <article class="result-card quick-summary-card">
+    <div class="result-card-heading">
+      <div>
+        <span class="card-kicker">Overview</span>
+        <h3>Project Summary</h3>
       </div>
-      <div class="quick-result-meta">
-        <article class="summary-card"><span class="summary-label">Project</span><strong id="result-project-name">Project name</strong></article>
-        <article class="summary-card"><span class="summary-label">Priority</span><strong id="result-priority">Not assigned</strong></article>
+
+      <button
+        class="copy-button"
+        type="button"
+        data-copy-target="result-summary"
+      >
+        Copy
+      </button>
+    </div>
+
+    <p id="result-summary">
+      The AI-generated summary will appear here.
+    </p>
+  </article>
+
+  <article class="result-card quick-actions-card">
+    <div class="result-card-heading">
+      <div>
+        <span class="card-kicker">Action</span>
+        <h3>Next Steps</h3>
       </div>
-      <article class="result-card quick-summary-card">
-        <div class="result-card-heading"><div><span class="card-kicker">Overview</span><h3>Project Summary</h3></div><button class="copy-button" type="button" data-copy-target="result-summary">Copy</button></div>
-        <p id="result-summary">The AI-generated summary will appear here.</p>
-      </article>
-      <article class="result-card quick-actions-card">
-        <div class="result-card-heading"><div><span class="card-kicker">Action</span><h3>Next Steps</h3></div><button class="copy-button" type="button" data-copy-target="result-next-steps">Copy</button></div>
-        <ol id="result-next-steps"></ol>
-      </article>
-      <div class="report-actions">
-        <a id="open-report-link" class="primary-link" href="projects.html">Open Full Report</a>
-        <a class="secondary-link" href="projects.html">View All Projects</a>
-      </div>
-    </section>
+
+      <button
+        class="copy-button"
+        type="button"
+        data-copy-target="result-next-steps"
+      >
+        Copy
+      </button>
+    </div>
+
+    <ol id="result-next-steps">
+      <li>Generated next steps will appear here.</li>
+    </ol>
+  </article>
+
+  <div class="report-actions">
+    <a
+      id="open-report-link"
+      class="primary-link"
+      href="projects.html"
+    >
+      Open Full Report
+    </a>
+
+    <a
+      class="secondary-link"
+      href="projects.html"
+    >
+      View All Projects
+    </a>
+  </div>
+</section>
+```
+
   </main>
 
   <footer class="site-footer">
-    <div class="footer-brand"><strong>LuxNote AI</strong><span>Luxury Design Project Assistant</span></div>
-    <p>AI-generated content requires human review before it is used for client, builder, vendor, electrical, construction, or design decisions.</p>
+    <div class="footer-brand">
+      <strong>LuxNote AI</strong>
+      <span>Luxury Design Project Assistant</span>
+    </div>
+
+```
+<p>
+  AI-generated content requires human review before it is used
+  for client, builder, vendor, electrical, construction, or
+  design decisions.
+</p>
+```
+
   </footer>
+
   <script src="app.js"></script>
+
 </body>
 </html>
