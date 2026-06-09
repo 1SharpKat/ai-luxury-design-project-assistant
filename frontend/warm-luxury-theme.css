@@ -1,0 +1,346 @@
+:root {
+  --soft-dove: #C0BAB3;
+  --spiced-chocolate: #52423D;
+  --moon-rock: #887D77;
+  --dark-sienna: #391214;
+  --black-raspberry: #160F0C;
+
+  --warm-white: #FAF7F3;
+  --warm-cream: #F3EEE9;
+  --soft-border: rgba(82, 66, 61, .22);
+  --warm-shadow: 0 14px 34px rgba(22, 15, 12, .10);
+}
+
+html,
+body {
+  color: var(--black-raspberry) !important;
+}
+
+body {
+  background-color: var(--warm-cream) !important;
+}
+
+body::before {
+  opacity: .20 !important;
+  filter:
+    grayscale(1)
+    sepia(.42)
+    saturate(1.2)
+    brightness(1.30)
+    contrast(.90) !important;
+  mix-blend-mode: multiply !important;
+}
+
+body::after,
+.ambient-light,
+.page-noise {
+  display: none !important;
+}
+
+.glass-nav {
+  background:
+    linear-gradient(
+      115deg,
+      var(--black-raspberry),
+      var(--dark-sienna)
+    ) !important;
+  border: 1px solid rgba(192, 186, 179, .30) !important;
+  box-shadow: 0 10px 24px rgba(22, 15, 12, .14) !important;
+}
+
+.nav-wordmark,
+.nav-links a {
+  color: var(--warm-white) !important;
+}
+
+.compact-hero,
+.hero-glass-card.compact-hero {
+  background:
+    linear-gradient(
+      110deg,
+      var(--black-raspberry) 0%,
+      var(--dark-sienna) 58%,
+      var(--spiced-chocolate) 100%
+    ) !important;
+  border: 1px solid rgba(192, 186, 179, .30) !important;
+  box-shadow: 0 12px 28px rgba(22, 15, 12, .14) !important;
+}
+
+.compact-hero h1 {
+  color: var(--warm-white) !important;
+}
+
+.compact-hero .eyebrow {
+  color: var(--soft-dove) !important;
+}
+
+.glass-panel,
+.form-panel,
+.results-panel,
+.subpage-panel,
+.report-panel {
+  background: rgba(250, 247, 243, .97) !important;
+  border: 1px solid var(--soft-border) !important;
+  color: var(--black-raspberry) !important;
+  box-shadow:
+    var(--warm-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+.summary-card,
+.result-card,
+.project-folder-card,
+.project-note-row,
+.cover-photo-field,
+.cover-photo-preview,
+.records-message,
+.report-cover-card {
+  background: rgba(243, 238, 233, .92) !important;
+  border: 1px solid rgba(136, 125, 119, .28) !important;
+  color: var(--black-raspberry) !important;
+}
+
+#project-note-heading,
+#results-heading,
+.section-heading h1,
+.section-heading h2,
+.section-heading h3,
+.result-card h2,
+.result-card h3,
+.summary-card strong,
+.folder-copy strong,
+.report-heading h1,
+label {
+  color: var(--dark-sienna) !important;
+  opacity: 1 !important;
+}
+
+.section-description,
+.result-card p,
+.result-card li,
+.folder-copy small,
+.project-note-row small,
+.cover-photo-copy p,
+#character-count {
+  color: rgba(82, 66, 61, .78) !important;
+}
+
+.eyebrow,
+.card-kicker,
+.summary-label {
+  color: var(--moon-rock) !important;
+}
+
+.status-badge {
+  background: rgba(192, 186, 179, .18) !important;
+  border: 1px solid rgba(136, 125, 119, .36) !important;
+  color: var(--dark-sienna) !important;
+}
+
+input,
+select,
+textarea {
+  background: #FFFDFC !important;
+  border: 1px solid rgba(136, 125, 119, .42) !important;
+  color: var(--black-raspberry) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(82, 66, 61, .48) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--dark-sienna) !important;
+  box-shadow: 0 0 0 3px rgba(57, 18, 20, .10) !important;
+}
+
+select {
+  color-scheme: light !important;
+}
+
+select option {
+  background: #FFFDFC !important;
+  color: var(--black-raspberry) !important;
+}
+
+/* Premium button shine */
+button,
+.primary-button,
+.secondary-button,
+.primary-link,
+.secondary-link,
+.copy-button,
+.record-action,
+.cover-photo-picker,
+.report-actions a,
+.form-actions button,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      var(--dark-sienna),
+      var(--black-raspberry)
+    ) !important;
+  border: 1px solid rgba(192, 186, 179, .42) !important;
+  color: var(--warm-white) !important;
+}
+
+button::after,
+.primary-button::after,
+.secondary-button::after,
+.primary-link::after,
+.secondary-link::after,
+.copy-button::after,
+.record-action::after,
+.cover-photo-picker::after,
+.report-actions a::after,
+.form-actions button::after,
+.compact-hero .hero-button-left::after,
+.compact-hero .hero-button-right::after {
+  content: "";
+  position: absolute;
+  inset: -90%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-34%) rotate(28deg);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 36%,
+      rgba(255, 255, 255, .07) 43%,
+      rgba(192, 186, 179, .24) 48%,
+      rgba(255, 255, 255, .92) 51%,
+      rgba(192, 186, 179, .28) 55%,
+      transparent 66%
+    );
+  transition: opacity .20s ease, transform .55s ease;
+}
+
+button:hover,
+.primary-button:hover,
+.secondary-button:hover,
+.primary-link:hover,
+.secondary-link:hover,
+.copy-button:hover,
+.record-action:hover,
+.cover-photo-picker:hover,
+.report-actions a:hover,
+.form-actions button:hover,
+.compact-hero .hero-button-left:hover,
+.compact-hero .hero-button-right:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #572125,
+      var(--dark-sienna)
+    ) !important;
+  border-color: var(--soft-dove) !important;
+  box-shadow:
+    0 0 0 1px rgba(192, 186, 179, .24),
+    0 0 12px rgba(255, 255, 255, .14),
+    0 0 24px rgba(136, 125, 119, .22) !important;
+  transform: translateY(-1px);
+}
+
+button:hover::after,
+.primary-button:hover::after,
+.secondary-button:hover::after,
+.primary-link:hover::after,
+.secondary-link:hover::after,
+.copy-button:hover::after,
+.record-action:hover::after,
+.cover-photo-picker:hover::after,
+.report-actions a:hover::after,
+.form-actions button:hover::after,
+.compact-hero .hero-button-left:hover::after,
+.compact-hero .hero-button-right:hover::after {
+  opacity: 1;
+  transform: translateX(38%) rotate(28deg);
+}
+
+/* Updated warm luxury logo */
+.compact-hero .hero-logo-cell {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.compact-hero .hero-brand-logo {
+  display: block !important;
+  width: 100% !important;
+  max-width: 560px !important;
+  height: auto !important;
+  max-height: 135px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  border-radius: 18px !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Fit the warm LuxNote logo cleanly inside the hero */
+.compact-hero .hero-logo-cell {
+  width: 100% !important;
+  max-width: 610px !important;
+  min-height: 150px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.compact-hero .hero-brand-logo {
+  display: block !important;
+  width: 100% !important;
+  height: 150px !important;
+  max-width: 610px !important;
+  max-height: 150px !important;
+  object-fit: cover !important;
+  object-position: center 52% !important;
+  border-radius: 18px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+  transform: none !important;
+}
+
+/* Transparent permanent LuxNote logo */
+.compact-hero .hero-logo-cell {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.compact-hero .hero-brand-logo {
+  display: block !important;
+  width: min(100%, 570px) !important;
+  height: auto !important;
+  max-height: 135px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  transform: none !important;
+}
