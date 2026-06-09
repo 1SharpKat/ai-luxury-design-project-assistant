@@ -720,3 +720,53 @@ select option {
     font-size: 1.55rem !important;
   }
 }
+
+/* Polished loading, success, and error states */
+.form-message {
+  min-height: 1.35rem;
+  margin-top: 12px;
+  font-size: .88rem;
+  line-height: 1.45;
+  color: var(--moon-rock) !important;
+}
+
+.form-message.info {
+  color: #74514B !important;
+}
+
+.form-message.success {
+  color: #49634D !important;
+}
+
+.form-message.error {
+  color: #8B3438 !important;
+}
+
+button:disabled,
+.primary-button:disabled,
+.secondary-button:disabled {
+  cursor: wait !important;
+  opacity: .68 !important;
+  transform: none !important;
+}
+
+#submit-button.is-loading {
+  cursor: wait !important;
+}
+
+.copy-button.is-copied {
+  background: linear-gradient(
+    180deg,
+    #66765F,
+    #4C5E49
+  ) !important;
+  border-color: rgba(76, 94, 73, .35) !important;
+  color: #FFFDFC !important;
+  -webkit-text-fill-color: #FFFDFC !important;
+}
+
+[aria-busy="true"] input,
+[aria-busy="true"] select,
+[aria-busy="true"] textarea {
+  opacity: .78;
+}
