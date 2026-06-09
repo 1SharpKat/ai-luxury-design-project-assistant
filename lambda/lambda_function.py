@@ -1,1052 +1,334 @@
-
-/* =========================================================
-   LuxNote AI
-   Base Styles
-   ========================================================= */
-
-:root {
-  --page-gap: 24px;
-  --max-width: 1440px;
-
-  --radius-large: 24px;
-  --radius-medium: 16px;
-  --radius-small: 10px;
-
-  --transition-fast: 170ms ease;
-  --transition-medium: 260ms ease;
-
-  --text: #391214;
-  --body-text: #52423d;
-  --muted-text: #887d77;
-
-  --surface: #fffdfc;
-  --surface-soft: #f8f2ed;
-
-  --border: rgba(82, 66, 61, 0.18);
-  --border-strong: rgba(82, 66, 61, 0.28);
-
-  --success: #2f7a58;
-  --error: #a43b45;
-  --info: #6a4943;
-}
-
-/* =========================================================
-   RESET
-   ========================================================= */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  margin: 0;
-  overflow-x: hidden;
-  color: var(--body-text);
-  background: #f7f1eb;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  line-height: 1.6;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.58;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-img {
-  max-width: 100%;
-}
-
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
-}
-
-h1,
-h2 {
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-  font-weight: 500;
-}
-
-h1 {
-  margin-bottom: 0;
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-
-h2 {
-  margin-bottom: 0;
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-}
-
-h3 {
-  margin-bottom: 0;
-  font-size: 1.05rem;
-}
-
-::selection {
-  color: #ffffff;
-  background: rgba(106, 73, 67, 0.72);
-}
-
-/* =========================================================
-   DECORATIVE BACKGROUND ELEMENTS
-   ========================================================= */
-
-.ambient-light,
-.page-noise {
-  position: fixed;
-  pointer-events: none;
-}
-
-.ambient-light {
-  z-index: -2;
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  opacity: 0.08;
-  filter: blur(110px);
-}
-
-.ambient-light-one {
-  top: -180px;
-  left: -140px;
-}
-
-.ambient-light-two {
-  right: -160px;
-  bottom: 8%;
-}
-
-.page-noise {
-  inset: 0;
-  z-index: -1;
-  opacity: 0.02;
-}
-
-/* =========================================================
-   SITE HEADER AND NAVIGATION
-   ========================================================= */
-
-.site-header {
-  position: relative;
-  padding: 18px var(--page-gap) 32px;
-}
-
-.glass-nav {
-  position: sticky;
-  top: 12px;
-  z-index: 20;
-
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-
-  width: min(100%, var(--max-width));
-  min-height: 52px;
-  margin: 0 auto;
-  padding: 7px 14px;
-
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: rgba(255, 253, 250, 0.94);
-  box-shadow: 0 10px 24px rgba(82, 66, 61, 0.07);
-
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.nav-wordmark {
-  color: var(--text);
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-  font-size: 1.08rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.nav-links {
-  display: flex;
-  justify-content: flex-end;
-  gap: 26px;
-}
-
-.nav-links a {
-  position: relative;
-  color: var(--body-text);
-  font-size: 0.82rem;
-  font-weight: 700;
-  transition: color var(--transition-fast);
-}
-
-.nav-links a::after {
-  position: absolute;
-  right: 0;
-  bottom: -7px;
-  left: 0;
-
-  height: 1px;
-
-  content: "";
-  background: currentColor;
-
-  opacity: 0.5;
-  transform: scaleX(0);
-  transition: transform var(--transition-fast);
-}
-
-.nav-links a:hover,
-.nav-links a[aria-current="page"] {
-  color: var(--text);
-}
-
-.nav-links a:hover::after,
-.nav-links a[aria-current="page"]::after {
-  transform: scaleX(1);
-}
-
-/* =========================================================
-   HERO
-   ========================================================= */
-
-.hero-shell {
-  position: relative;
-  z-index: 1;
-
-  width: min(100%, var(--max-width));
-  margin: 28px auto 0;
-}
-
-.hero-glass-card {
-  position: relative;
-  overflow: hidden;
-
-  padding: 38px 44px;
-
-  border: 1px solid var(--border);
-  border-radius: 28px;
-
-  background: var(--surface);
-  box-shadow: 0 14px 30px rgba(82, 66, 61, 0.08);
-}
-
-.hero-glass-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.hero-brand-logo {
-  display: block;
-  width: min(100%, 820px);
-  height: auto;
-  margin-inline: auto;
-  object-fit: contain;
-}
-
-.eyebrow {
-  margin: 0 0 12px;
-  color: var(--muted-text);
-  font-size: 0.71rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.hero-description {
-  max-width: 760px;
-  margin: 24px auto 0;
-  color: var(--muted-text);
-  font-size: 1rem;
-  line-height: 1.75;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-/* =========================================================
-   LINKS AND BUTTONS
-   ========================================================= */
-
-.primary-link,
-.secondary-link,
-.primary-button,
-.secondary-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 46px;
-  padding: 0 20px;
-
-  border-radius: 10px;
-
-  font-size: 0.86rem;
-  font-weight: 800;
-  text-align: center;
-
-  transition:
-    transform var(--transition-fast),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-.primary-link,
-.primary-button {
-  border: 1px solid rgba(82, 66, 61, 0.32);
-  color: #ffffff;
-  background: #5b3c37;
-  box-shadow: 0 8px 18px rgba(82, 66, 61, 0.14);
-}
-
-.secondary-link,
-.secondary-button {
-  border: 1px solid var(--border-strong);
-  color: var(--text);
-  background: var(--surface-soft);
-}
-
-.primary-link:hover,
-.secondary-link:hover,
-.primary-button:hover:not(:disabled),
-.secondary-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.primary-link:focus-visible,
-.secondary-link:focus-visible,
-.primary-button:focus-visible,
-.secondary-button:focus-visible,
-.copy-button:focus-visible,
-.record-action:focus-visible {
-  outline: 3px solid rgba(167, 124, 120, 0.18);
-  outline-offset: 2px;
-}
-
-/* =========================================================
-   PAGE LAYOUT
-   ========================================================= */
-
-.page-shell {
-  display: grid;
-
-  width: min(calc(100% - (var(--page-gap) * 2)), var(--max-width));
-  margin: 0 auto 72px;
-
-  gap: 28px;
-}
-
-.glass-panel {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 14px 30px rgba(82, 66, 61, 0.08);
-}
-
-.form-panel,
-.results-panel,
-.records-panel,
-.subpage-panel,
-.report-panel {
-  position: relative;
-  overflow: hidden;
-
-  padding: clamp(26px, 4vw, 42px);
-
-  border-radius: var(--radius-large);
-}
-
-.section-heading {
-  position: relative;
-  z-index: 1;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 24px;
-  margin-bottom: 30px;
-}
-
-.section-description {
-  max-width: 700px;
-  margin: 10px 0 0;
-
-  color: var(--muted-text);
-  font-size: 0.9rem;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 34px;
-  padding: 7px 12px;
-
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-
-  color: var(--text);
-  background: var(--surface-soft);
-
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.07em;
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-
-/* =========================================================
-   FORMS
-   ========================================================= */
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.full-width {
-  margin-top: 20px;
-}
-
-label {
-  color: var(--text);
-  font-size: 0.84rem;
-  font-weight: 800;
-}
-
-label span {
-  color: var(--error);
-}
-
-.label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-#character-count {
-  color: var(--muted-text);
-  font-size: 0.74rem;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-small);
-
-  color: var(--text);
-  background: var(--surface);
-
-  outline: none;
-  box-shadow: inset 0 1px 2px rgba(82, 66, 61, 0.035);
-
-  transition:
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-input,
-select {
-  min-height: 50px;
-  padding: 0 15px;
-}
-
-textarea {
-  min-height: 230px;
-  padding: 15px;
-  line-height: 1.65;
-  resize: vertical;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgba(82, 66, 61, 0.46);
-}
-
-select option {
-  color: var(--text);
-  background: var(--surface);
-}
-
-input:hover,
-select:hover,
-textarea:hover {
-  border-color: rgba(82, 66, 61, 0.36);
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #a77c78;
-  box-shadow:
-    0 0 0 3px rgba(167, 124, 120, 0.12),
-    0 4px 10px rgba(82, 66, 61, 0.045);
-}
-
-.field-help {
-  margin: 0;
-  color: var(--muted-text);
-  font-size: 0.78rem;
-}
-
-.form-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.form-message {
-  min-height: 24px;
-  margin-top: 16px;
-  font-size: 0.86rem;
-}
-
-.form-message.success {
-  color: var(--success);
-}
-
-.form-message.error {
-  color: var(--error);
-}
-
-.form-message.info {
-  color: var(--info);
-}
-
-/* =========================================================
-   RESULT AND SUMMARY CARDS
-   ========================================================= */
-
-.result-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.summary-card,
-.result-card,
-.record-item {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: 0 7px 16px rgba(82, 66, 61, 0.055);
-}
-
-.summary-card {
-  min-height: 116px;
-  padding: 18px;
-  border-radius: var(--radius-medium);
-}
-
-.summary-label {
-  display: block;
-  margin-bottom: 9px;
-
-  color: var(--muted-text);
-
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.summary-card strong {
-  display: block;
-  color: var(--text);
-  font-size: 0.93rem;
-  line-height: 1.45;
-}
-
-.result-content-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.result-card {
-  min-width: 0;
-  padding: 23px;
-  border-radius: var(--radius-medium);
-}
-
-.result-card-wide {
-  grid-column: 1 / -1;
-}
-
-.result-card-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.card-kicker {
-  display: block;
-  margin-bottom: 3px;
-
-  color: var(--muted-text);
-
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.result-card p,
-.result-card ol,
-#result-draft-message {
-  color: var(--body-text);
-}
-
-.result-card p {
-  margin-bottom: 0;
-  white-space: pre-wrap;
-}
-
-.result-card ol {
-  margin: 0;
-  padding-left: 22px;
-}
-
-.result-card li + li {
-  margin-top: 10px;
-}
-
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-
-  min-height: 30px;
-  padding: 5px 10px;
-
-  border: 1px solid var(--border);
-  border-radius: 999px;
-
-  color: var(--text);
-  background: var(--surface-soft);
-
-  font-size: 0.74rem;
-  font-weight: 700;
-}
-
-#result-draft-message {
-  margin: 0;
-  overflow: auto;
-
-  background: transparent;
-
-  font-family: inherit;
-  font-size: 0.9rem;
-  line-height: 1.72;
-  white-space: pre-wrap;
-}
-
-/* =========================================================
-   SMALL ACTION BUTTONS
-   ========================================================= */
-
-.copy-button,
-.record-action {
-  min-height: 38px;
-  padding: 7px 12px;
-
-  border: 1px solid var(--border-strong);
-  border-radius: 9px;
-
-  color: var(--text);
-  background: var(--surface-soft);
-
-  font-size: 0.78rem;
-  font-weight: 800;
-
-  transition:
-    transform var(--transition-fast),
-    border-color var(--transition-fast),
-    background-color var(--transition-fast),
-    box-shadow var(--transition-fast);
-}
-
-.copy-button:hover,
-.record-action:hover {
-  transform: translateY(-1px);
-  border-color: #a77c78;
-  background: #fffdf9;
-  box-shadow: 0 5px 12px rgba(82, 66, 61, 0.08);
-}
-
-.copy-button.is-copied {
-  color: #ffffff;
-  background: #5b3c37;
-}
-
-/* =========================================================
-   RECORDS
-   ========================================================= */
-
-.record-details {
-  margin-top: 20px;
-  overflow: hidden;
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-medium);
-
-  background: var(--surface-soft);
-}
-
-.record-details summary {
-  padding: 15px 18px;
-
-  color: var(--text);
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-.record-details dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 14px;
-  margin: 0;
-  padding: 0 18px 18px;
-}
-
-.record-details dt {
-  color: var(--muted-text);
-  font-size: 0.67rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
-.record-details dd {
-  margin: 4px 0 0;
-  overflow-wrap: anywhere;
-
-  color: var(--body-text);
-  font-size: 0.84rem;
-}
-
-.records-list {
-  display: grid;
-  gap: 14px;
-}
-
-.records-message {
-  padding: 22px;
-
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-medium);
-
-  color: var(--muted-text);
-  background: var(--surface-soft);
-
-  text-align: center;
-}
-
-.record-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-
-  gap: 18px;
-  padding: 19px;
-
-  border-radius: var(--radius-medium);
-
-  transition:
-    transform var(--transition-medium),
-    border-color var(--transition-medium),
-    box-shadow var(--transition-medium),
-    background-color var(--transition-medium);
-}
-
-.record-item:hover {
-  transform: translateY(-3px);
-  border-color: rgba(167, 124, 120, 0.32);
-  background: #fffdf9;
-  box-shadow: 0 10px 22px rgba(82, 66, 61, 0.08);
-}
-
-.record-item h3 {
-  margin-bottom: 5px;
-}
-
-.record-meta {
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 8px 14px;
-
-  color: var(--muted-text);
-  font-size: 0.77rem;
-}
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.site-footer {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  width: min(calc(100% - (var(--page-gap) * 2)), var(--max-width));
-  margin: 0 auto;
-  padding: 0 0 42px;
-
-  gap: 24px;
-
-  color: var(--muted-text);
-  font-size: 0.76rem;
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-}
-
-.footer-brand strong {
-  color: var(--text);
-}
-
-.footer-brand span {
-  margin-top: 3px;
-}
-
-.site-footer p {
-  max-width: 700px;
-  margin: 0;
-  text-align: right;
-}
-
-/* =========================================================
-   LOADING SPINNER
-   ========================================================= */
-
-.button-spinner {
-  display: none;
-
-  width: 17px;
-  height: 17px;
-
-  border: 2px solid rgba(255, 255, 255, 0.34);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-
-  animation: spin 700ms linear infinite;
-}
-
-.primary-button.is-loading .button-spinner {
-  display: inline-block;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 980px) {
-  .nav-links {
-    gap: 18px;
-  }
-
-  .result-summary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 720px) {
-  :root {
-    --page-gap: 14px;
-  }
-
-  .site-header {
-    padding: 12px var(--page-gap) 28px;
-  }
-
-  .glass-nav {
-    top: 8px;
-    min-height: 48px;
-    padding: 7px 11px;
-    border-radius: 15px;
-  }
-
-  .nav-links {
-    gap: 14px;
-  }
-
-  .nav-links a {
-    font-size: 0.76rem;
-  }
-
-  .hero-shell {
-    margin-top: 22px;
-  }
-
-  .hero-glass-card {
-    padding: 28px 20px 32px;
-    border-radius: 22px;
-  }
-
-  .hero-metrics,
-  .form-grid,
-  .result-content-grid,
-  .record-details dl {
-    grid-template-columns: 1fr;
-  }
-
-  .result-card-wide {
-    grid-column: auto;
-  }
-
-  .page-shell {
-    width: min(calc(100% - 20px), var(--max-width));
-    margin-bottom: 54px;
-  }
-
-  .form-panel,
-  .results-panel,
-  .records-panel,
-  .subpage-panel,
-  .report-panel {
-    padding: 22px;
-    border-radius: 20px;
-  }
-
-  .section-heading,
-  .site-footer {
-    flex-direction: column;
-  }
-
-  .record-item {
-    grid-template-columns: 1fr;
-  }
-
-  .site-footer p {
-    text-align: left;
-  }
-}
-
-@media (max-width: 500px) {
-  .glass-nav {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: 8px;
-  }
-
-  .nav-links {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hero-actions,
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .primary-link,
-  .secondary-link,
-  .primary-button,
-  .secondary-button {
-    width: 100%;
-  }
-
-  .result-summary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .label-row {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-  }
-}
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+import base64
+import json
+import logging
+import os
+import re
+import uuid
+from datetime import datetime, timezone
+from decimal import Decimal
+from typing import Any
+
+import boto3
+from botocore.exceptions import ClientError
+
+
+LOGGER = logging.getLogger()
+LOGGER.setLevel(logging.INFO)
+
+AWS_REGION = os.environ.get("AWS_REGION", "us-west-2")
+TABLE_NAME = os.environ.get("TABLE_NAME", "LuxuryDesignProjectNotes")
+COVER_PHOTO_BUCKET = os.environ.get("COVER_PHOTO_BUCKET", "")
+COVER_PHOTO_URL_BASE = os.environ.get("COVER_PHOTO_URL_BASE", "")
+
+MAX_COVER_PHOTO_BYTES = 5 * 1024 * 1024
+ALLOWED_COVER_TYPES = {"image/jpeg", "image/png"}
+
+
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+table = dynamodb.Table(TABLE_NAME)
+comprehend = boto3.client("comprehend", region_name=AWS_REGION)
+s3 = boto3.client("s3", region_name=AWS_REGION)
+
+
+RESPONSE_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+}
+
+
+def json_default(value: Any) -> Any:
+    if isinstance(value, Decimal):
+        if value % 1 == 0:
+            return int(value)
+        return float(value)
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
+def convert_floats_to_decimal(value: Any) -> Any:
+    if isinstance(value, float):
+        return Decimal(str(value))
+    if isinstance(value, dict):
+        return {key: convert_floats_to_decimal(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [convert_floats_to_decimal(item) for item in value]
+    return value
+
+
+def create_response(status_code: int, body: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "statusCode": status_code,
+        "headers": RESPONSE_HEADERS,
+        "body": json.dumps(body, default=json_default),
+    }
+
+
+def parse_request_body(event: dict[str, Any]) -> dict[str, Any]:
+    body = event.get("body")
+    if body is None:
+        return {}
+    if event.get("isBase64Encoded"):
+        body = base64.b64decode(body).decode("utf-8")
+    if isinstance(body, dict):
+        return body
+    if not isinstance(body, str):
+        raise ValueError("Request body must be a JSON object or JSON string")
+    if not body.strip():
+        return {}
+    parsed_body = json.loads(body)
+    if not isinstance(parsed_body, dict):
+        raise ValueError("Request body must contain a JSON object")
+    return parsed_body
+
+
+def safe_slug(value: str) -> str:
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip().lower()).strip("-")
+    return slug[:80] or "project"
+
+
+def file_extension(content_type: str, file_name: str) -> str:
+    if content_type == "image/png":
+        return "png"
+    if content_type == "image/jpeg":
+        return "jpg"
+    original = file_name.rsplit(".", 1)[-1].lower() if "." in file_name else "jpg"
+    return "png" if original == "png" else "jpg"
+
+
+def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
+    if not COVER_PHOTO_BUCKET:
+        return create_response(500, {"error": "COVER_PHOTO_BUCKET is not configured"})
+
+    try:
+        body = parse_request_body(event)
+    except json.JSONDecodeError:
+        return create_response(400, {"error": "Request body must contain valid JSON"})
+    except ValueError as error:
+        return create_response(400, {"error": str(error)})
+
+    project_name = str(body.get("projectName", "project")).strip()
+    file_name = str(body.get("fileName", "cover-photo.jpg")).strip()
+    content_type = str(body.get("contentType", "")).strip().lower()
+
+    if content_type not in ALLOWED_COVER_TYPES:
+        return create_response(400, {"error": "Cover photo must be JPG, JPEG, or PNG"})
+
+    extension = file_extension(content_type, file_name)
+    key = f"project-covers/{safe_slug(project_name)}/{uuid.uuid4()}.{extension}"
+
+    upload_url = s3.generate_presigned_url(
+        ClientMethod="put_object",
+        Params={
+            "Bucket": COVER_PHOTO_BUCKET,
+            "Key": key,
+            "ContentType": content_type,
+        },
+        ExpiresIn=900,
+    )
+
+    if COVER_PHOTO_URL_BASE:
+        file_url = f"{COVER_PHOTO_URL_BASE.rstrip('/')}/{key}"
+    else:
+        file_url = f"https://{COVER_PHOTO_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{key}"
+
+    return create_response(200, {"uploadUrl": upload_url, "fileUrl": file_url, "s3Key": key})
+
+
+def classify_category(notes: str) -> str:
+    text = notes.lower()
+    categories: list[str] = []
+    category_keywords = {
+        "Lighting Design": ["lighting", "keypad", "dimmer", "fixture", "architectural lighting"],
+        "A/V Integration": ["speaker", "audio", "video", "tv", "television", "theater", "rack"],
+        "Shades": ["shade", "shades", "window treatment"],
+        "Networking": ["network", "wifi", "wi-fi", "router", "access point"],
+        "Security": ["camera", "surveillance", "security", "alarm"],
+        "Builder / Vendor Coordination": ["builder", "electrician", "vendor", "deadline", "walkthrough"],
+    }
+    for category, keywords in category_keywords.items():
+        if any(keyword in text for keyword in keywords):
+            categories.append(category)
+    return " / ".join(categories) if categories else "General Project Notes"
+
+
+def assign_priority(notes: str) -> str:
+    text = notes.lower()
+    high_priority_words = ["urgent", "asap", "today", "tomorrow", "before friday", "deadline", "walkthrough", "builder needs", "electrician needs"]
+    medium_priority_words = ["follow up", "follow-up", "confirm", "review", "needs", "requested"]
+    if any(word in text for word in high_priority_words):
+        return "High"
+    if any(word in text for word in medium_priority_words):
+        return "Medium"
+    return "Low"
+
+
+def create_next_steps(notes: str) -> list[str]:
+    text = notes.lower()
+    steps: list[str] = []
+    if "keypad" in text:
+        steps.append("Confirm keypad locations")
+    if "equipment" in text:
+        steps.append("Confirm equipment locations")
+    if "builder" in text:
+        steps.append("Coordinate details with builder")
+    if "electric" in text:
+        steps.append("Prepare information for the electrical walkthrough")
+    if "client" in text:
+        steps.append("Update client preference notes")
+    if "speaker" in text or "audio" in text:
+        steps.append("Confirm audio and speaker requirements")
+    if "lighting" in text:
+        steps.append("Update lighting design requirements")
+    if not steps:
+        steps.append("Review notes and assign follow-up tasks")
+    return steps
+
+
+def analyze_notes_with_comprehend(project_notes: str) -> dict[str, Any]:
+    try:
+        key_phrase_response = comprehend.detect_key_phrases(Text=project_notes, LanguageCode="en")
+        sentiment_response = comprehend.detect_sentiment(Text=project_notes, LanguageCode="en")
+        key_phrases = [phrase["Text"] for phrase in key_phrase_response.get("KeyPhrases", []) if phrase.get("Text")][:10]
+        sentiment_scores = convert_floats_to_decimal(sentiment_response.get("SentimentScore", {}))
+        return {
+            "keyPhrases": key_phrases,
+            "sentiment": sentiment_response.get("Sentiment", "UNKNOWN"),
+            "sentimentScores": sentiment_scores,
+            "analysisStatus": "COMPLETED",
+        }
+    except ClientError as error:
+        LOGGER.warning("Amazon Comprehend unavailable: %s", error)
+        return {"keyPhrases": [], "sentiment": "UNKNOWN", "sentimentScores": {}, "analysisStatus": "COMPREHEND_UNAVAILABLE"}
+    except Exception:
+        LOGGER.exception("Unexpected Amazon Comprehend error")
+        return {"keyPhrases": [], "sentiment": "UNKNOWN", "sentimentScores": {}, "analysisStatus": "COMPREHEND_ERROR"}
+
+
+def create_summary(project_name: str, category: str, priority: str) -> str:
+    return f"{project_name} has been categorized as {category} with {priority.lower()} priority. Review the action items and follow-up message before sharing with the project team."
+
+
+def create_draft_message(project_name: str, project_notes: str) -> str:
+    return f"Hi, I wanted to share a quick summary from the {project_name} notes. The main items captured include: {project_notes[:250]} I will confirm the next steps and follow up with any needed details."
+
+
+def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
+    try:
+        body = parse_request_body(event)
+    except json.JSONDecodeError:
+        return create_response(400, {"error": "Request body must contain valid JSON"})
+    except ValueError as error:
+        return create_response(400, {"error": str(error)})
+
+    client_name = str(body.get("clientName", "Private Client")).strip()
+    project_name = str(body.get("projectName", "Unnamed Project")).strip()
+    note_type = str(body.get("noteType", "manual_project_notes")).strip()
+    source = str(body.get("source", "manual entry")).strip()
+    project_notes = str(body.get("projectNotes", "")).strip()
+
+    if not project_notes:
+        return create_response(400, {"error": "projectNotes is required"})
+
+    record_id = str(uuid.uuid4())
+    created_at = datetime.now(timezone.utc).isoformat()
+    category = classify_category(project_notes)
+    priority = assign_priority(project_notes)
+    next_steps = create_next_steps(project_notes)
+    comprehend_analysis = analyze_notes_with_comprehend(project_notes)
+
+    item = {
+        "recordId": record_id,
+        "clientName": client_name,
+        "projectName": project_name,
+        "noteType": note_type,
+        "source": source,
+        "projectNotes": project_notes,
+        "category": category,
+        "priority": priority,
+        "keyPhrases": comprehend_analysis["keyPhrases"],
+        "sentiment": comprehend_analysis["sentiment"],
+        "sentimentScores": comprehend_analysis["sentimentScores"],
+        "analysisStatus": comprehend_analysis["analysisStatus"],
+        "summary": create_summary(project_name, category, priority),
+        "nextSteps": next_steps,
+        "draftMessage": create_draft_message(project_name, project_notes),
+        "createdAt": created_at,
+    }
+
+    for key in ["coverPhotoUrl", "coverPhotoKey", "coverPhotoName", "coverPhotoType"]:
+        value = body.get(key)
+        if value:
+            item[key] = str(value)
+
+    table.put_item(Item=item, ConditionExpression="attribute_not_exists(recordId)")
+    return create_response(201, item)
+
+
+def get_project_notes() -> dict[str, Any]:
+    items: list[dict[str, Any]] = []
+    scan_arguments: dict[str, Any] = {}
+    while True:
+        response = table.scan(**scan_arguments)
+        items.extend(response.get("Items", []))
+        last_evaluated_key = response.get("LastEvaluatedKey")
+        if not last_evaluated_key:
+            break
+        scan_arguments["ExclusiveStartKey"] = last_evaluated_key
+    items.sort(key=lambda item: item.get("createdAt", ""), reverse=True)
+    return create_response(200, {"count": len(items), "items": items})
+
+
+def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
+    path_parameters = event.get("pathParameters") or {}
+    record_id = path_parameters.get("recordId")
+    if not record_id:
+        path = get_request_path(event)
+        record_id = path.rsplit("/", 1)[-1]
+    if not record_id:
+        return create_response(400, {"error": "recordId is required"})
+    response = table.get_item(Key={"recordId": record_id})
+    item = response.get("Item")
+    if not item:
+        return create_response(404, {"error": "Project note not found"})
+    return create_response(200, item)
+
+
+def get_http_method(event: dict[str, Any]) -> str:
+    method = event.get("requestContext", {}).get("http", {}).get("method")
+    if method:
+        return method.upper()
+    return str(event.get("httpMethod", "")).upper()
+
+
+def get_request_path(event: dict[str, Any]) -> str:
+    path = event.get("requestContext", {}).get("http", {}).get("path")
+    if path:
+        return path
+    return str(event.get("path", ""))
+
+
+def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+    request_id = getattr(context, "aws_request_id", "unknown")
+    try:
+        method = get_http_method(event)
+        path = get_request_path(event)
+        LOGGER.info("Request %s. Method: %s. Path: %s", request_id, method, path)
+
+        if method == "OPTIONS":
+            return create_response(200, {"message": "CORS preflight successful"})
+        if method == "POST" and path == "/project-cover-upload-url":
+            return create_project_cover_upload_url(event)
+        if method == "POST" and path == "/project-notes":
+            return create_project_note(event)
+        if method == "GET" and path == "/project-notes":
+            return get_project_notes()
+        if method == "GET" and path.startswith("/project-notes/"):
+            return get_project_note_by_id(event)
+        return create_response(404, {"error": "Route not found"})
+    except ClientError as error:
+        LOGGER.exception("AWS service error for request %s", request_id)
+        return create_response(500, {"error": "AWS service request failed", "requestId": request_id})
+    except Exception:
+        LOGGER.exception("Unexpected error for request %s", request_id)
+        return create_response(500, {"error": "Internal server error", "requestId": request_id})
