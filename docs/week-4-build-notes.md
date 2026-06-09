@@ -12,12 +12,14 @@ The backend was also expanded to include Amazon Comprehend and Amazon Bedrock so
 
 ## Current Build Status
 
-The AI-enhanced backend MVP is working.
+The AI-enhanced full-stack MVP is working.
 
 The application can now:
 
-* Accept project notes through an API
+* Accept project notes through a browser-based frontend
+* Validate required project-name and project-note fields
 * Process manually entered notes and walkthrough transcript text
+* Upload and preview an optional JPEG or PNG project cover photo
 * Assign project categories
 * Assign priority levels
 * Extract key phrases
@@ -28,6 +30,10 @@ The application can now:
 * Save completed project records in DynamoDB
 * Retrieve all saved project records
 * Retrieve one project record by `recordId`
+* Display a quick result after submission
+* Display saved projects in a Projects page
+* Display a complete project report in a Report page
+* Copy generated summaries, next steps, and messages from the interface
 
 ## AWS Services Used
 
@@ -36,6 +42,8 @@ The application can now:
 * Amazon DynamoDB
 * Amazon Comprehend
 * Amazon Bedrock
+* Amazon S3
+* AWS Amplify Hosting
 * AWS Identity and Access Management
 * Amazon CloudWatch
 
@@ -43,6 +51,9 @@ The application can now:
 
 ```text
 User or Project Coordinator
+            ↓
+LuxNote AI Frontend
+Dashboard / Projects / Report
             ↓
 Amazon API Gateway
             ↓
@@ -52,10 +63,12 @@ Amazon         Amazon
 Comprehend     Bedrock
         ↘       ↙
      Structured Project Record
+        ↙               ↘
+Amazon DynamoDB       Amazon S3
+        ↘               ↙
+      JSON API Response
             ↓
-     Amazon DynamoDB
-            ↓
-     JSON API Response
+LuxNote AI Frontend
 ```
 
 ## AWS Resources Created
@@ -273,14 +286,18 @@ The GitHub repository includes:
 * Working Lambda source code
 * Sample request data
 * Week 4 build notes
-* AWS infrastructure screenshots
-* API test screenshots
-* Amazon Comprehend test evidence
-* Amazon Bedrock test evidence
+* A complete frontend in `/frontend`
+* Dashboard, Projects, and Report pages
+* Frontend JavaScript for API interaction and page behavior
+* Responsive styling and the light-luxury visual theme
+* Project cover-photo upload and preview support
+* Archived design experiments in `docs/design-experiments`
+
+AWS infrastructure and API screenshots were captured during development. Their current repository location must be verified before final submission.
 
 ## Screenshots Captured
 
-The project documentation includes screenshots of:
+Screenshots were captured during backend development for:
 
 * API Gateway POST route
 * API Gateway Lambda integration
@@ -294,6 +311,8 @@ The project documentation includes screenshots of:
 * Successful direct Amazon Bedrock model test
 * Successful Bedrock Lambda test
 * Successful full Bedrock API test
+
+Before final submission, the screenshot files must be located, restored to the repository if necessary, and verified against the current AWS configuration.
 
 ## Current Backend Capabilities
 
@@ -318,32 +337,38 @@ It can process:
 
 The current version:
 
-* Does not yet include a frontend
 * Does not yet include user authentication
 * Uses a public API endpoint during development
-* Accepts text input only through the current API
 * Does not yet accept raw audio
-* Does not yet accept plans, photos, or design-image uploads
+* Does not yet perform floor-plan or design-image analysis
 * Does not automatically send generated messages
 * Requires human review of AI-generated content
+* Requires final verification of Amplify deployment and custom-domain routing
+* Requires recovery and verification of the AWS evidence screenshots before submission
 
 ## Next Steps
 
-* Build a frontend project-note submission form
-* Display AI-generated results in the frontend
-* Display saved project records
-* Connect the frontend to API Gateway
-* Configure CORS for the frontend domain
-* Add authentication and API protection
-* Add S3 storage for project files and images
-* Add floor-plan, site-photo, and markup analysis
-* Add search and project filtering
-* Add editing and archive functionality
-* Add user review and approval workflows
-* Complete final testing and demo preparation
+* Complete end-to-end frontend testing
+* Verify required-field validation
+* Verify note submission and API responses
+* Verify loading, success, and error states
+* Verify quick-result and copy-button behavior
+* Verify Projects and Report pages
+* Verify invalid report-ID handling
+* Verify cover-photo validation and upload
+* Verify mobile layout and browser-console output
+* Recover and organize AWS screenshots
+* Commit and push final frontend fixes
+* Merge the completed branch into `main`
+* Verify AWS Amplify deployment
+* Verify the LuxNote custom domain and redirects
+* Add authentication and API protection in a future release
+* Add floor-plan, site-photo, and markup analysis in a future release
 
 ## Week 4 Outcome
 
-The Week 4 backend and serverless-development milestone has been completed successfully.
+The Week 4 backend and serverless-development milestone was completed successfully.
 
-The application now has a functioning AWS serverless backend with database integration, three working API routes, Amazon Comprehend analysis, Amazon Bedrock content generation, CloudWatch logging, IAM permissions, error handling, GitHub source control, and documented test evidence.
+The application has a functioning AWS serverless backend with database integration, three working API routes, Amazon Comprehend analysis, Amazon Bedrock content generation, CloudWatch logging, IAM permissions, error handling, and GitHub source control.
+
+Since the Week 4 milestone, the project has expanded into a full-stack MVP with a responsive browser frontend, project submission workflow, quick-result display, saved-project library, detailed report page, copy controls, and project cover-photo support. Final work now focuses on quality assurance, screenshot recovery, deployment verification, and merging the polished branch into `main`.
