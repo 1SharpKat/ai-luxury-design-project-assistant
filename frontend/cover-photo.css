@@ -1,10 +1,14 @@
-/* Project cover photo feature */
+/* =========================================================
+   LuxNote AI
+   Optional Project Cover Photos
+   ========================================================= */
+
 .cover-photo-field {
   margin-top: 20px;
   padding: 18px;
-  border: 1px solid rgba(145, 174, 207, .22);
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
   border-radius: 14px;
-  background: rgba(4, 17, 31, .52);
+  background: var(--surface-soft, #f8f2ed);
 }
 
 .cover-photo-copy h3 {
@@ -14,8 +18,8 @@
 
 .cover-photo-copy p {
   margin: 0 0 14px;
-  color: var(--up-muted);
-  font-size: .78rem;
+  color: var(--muted-text, #887d77);
+  font-size: 0.78rem;
   line-height: 1.45;
 }
 
@@ -25,19 +29,21 @@
   margin-bottom: 12px;
   padding: 6px 14px;
   place-items: center;
-  border: 1px solid rgba(108, 182, 255, .38);
+  border: 1px solid var(--border-strong, rgba(82, 66, 61, 0.28));
   border-radius: 8px;
-  background: #05080d;
-  color: #eef6ff;
+  color: var(--text, #391214);
+  background: var(--surface, #fffdfc);
   cursor: pointer;
-  font-size: .72rem;
-  letter-spacing: .08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.cover-photo-picker:hover {
-  border-color: rgba(104, 181, 255, .78);
-  box-shadow: 0 0 22px rgba(33, 126, 226, .24);
+.cover-photo-picker:hover,
+.cover-photo-picker:focus-visible {
+  border-color: var(--muted-rose, #a77c78);
+  box-shadow: 0 0 0 3px rgba(167, 124, 120, 0.12);
 }
 
 .cover-photo-picker input {
@@ -51,16 +57,16 @@
 .cover-photo-preview {
   min-height: 86px;
   overflow: hidden;
-  border: 1px solid rgba(145, 174, 207, .2);
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
   border-radius: 10px;
-  background: rgba(2, 10, 19, .64);
+  background: var(--surface, #fffdfc);
 }
 
 .cover-photo-preview.is-empty {
   display: grid;
   place-items: center;
-  color: var(--up-muted);
-  font-size: .74rem;
+  color: var(--muted-text, #887d77);
+  font-size: 0.74rem;
 }
 
 .cover-photo-preview img {
@@ -76,10 +82,10 @@
   height: 52px;
   overflow: hidden;
   place-items: center;
-  border: 1px solid rgba(108, 182, 255, .25);
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
   border-radius: 9px;
-  color: #6cb6ff;
-  background: rgba(26, 106, 184, .13);
+  color: var(--warm-brown, #6a4943);
+  background: var(--surface-soft, #f8f2ed);
 }
 
 .project-cover-thumb img {
@@ -91,9 +97,9 @@
 .report-cover-card {
   overflow: hidden;
   margin-bottom: 16px;
-  border: 1px solid rgba(145, 174, 207, .24);
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
   border-radius: 14px;
-  background: rgba(4, 17, 31, .72);
+  background: var(--surface-soft, #f8f2ed);
 }
 
 .report-cover-card img {
