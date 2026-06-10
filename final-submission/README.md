@@ -4,11 +4,11 @@ This folder contains the final course submission materials for LuxNote AI.
 
 ## Contents
 
-- `presentation/` contains the final 8 to 10 slide presentation.
-- `architecture/` contains the AWS architecture diagram.
-- `aws-evidence/` contains screenshots proving the AWS implementation.
-- `demo-video/` contains the demo video link and recording notes.
-- `documentation/` contains supporting technical documentation.
+- `architecture/` contains the AWS architecture source files and rendered PNG.
+- `aws-evidence/` contains screenshots documenting the AWS implementation.
+- `presentation/` is reserved for the required 8 to 10 slide presentation.
+- `demo-video/` contains the recording plan and will contain the final shareable video link.
+- `documentation/` is reserved for any additional supporting submission documents.
 
 ## Source Code
 
@@ -16,6 +16,8 @@ Repository: `1SharpKat/ai-luxury-design-project-assistant`
 
 Final working branch: `light-luxury-redesign`
 
+Live application: `https://luxnote.ai`
+
 ## Privacy Notice
 
-All demonstration records are fictional. The submission must not contain AWS account numbers, credentials, secrets, environment-variable values, presigned URLs, or real client information.
+All demonstration records are fictional. Submission materials must not contain AWS account numbers, credentials, secrets, environment-variable values, pre-signed URLs, or real client information.
