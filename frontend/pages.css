@@ -171,9 +171,9 @@
 
 .compact-hero .hero-brand-logo {
   display: block !important;
-  width: min(100%, 520px) !important;
-  max-width: 520px !important;
-  max-height: 112px !important;
+  width: min(100%, 620px) !important;
+  max-width: 620px !important;
+  max-height: 155px !important;
   object-fit: contain !important;
   object-position: center !important;
   background: transparent !important;
@@ -680,8 +680,8 @@ body:has(.report-panel) {
   }
 
   .compact-hero .hero-brand-logo {
-    width: min(100%, 460px) !important;
-    max-height: 96px !important;
+    width: min(100%, 540px) !important;
+    max-height: 128px !important;
   }
 
   .compact-hero .hero-headline-cell h1 {
@@ -736,8 +736,8 @@ body:has(.report-panel) {
   }
 
   .compact-hero .hero-brand-logo {
-    width: min(100%, 420px) !important;
-    max-height: 82px !important;
+    width: min(100%, 460px) !important;
+    max-height: 112px !important;
   }
 
   .compact-hero .hero-headline-cell .eyebrow {
@@ -808,8 +808,8 @@ body:has(.report-panel) {
   }
 
   .compact-hero .hero-brand-logo {
-    width: min(100%, 340px) !important;
-    max-height: 68px !important;
+    width: min(100%, 320px) !important;
+    max-height: 84px !important;
   }
 
   .compact-hero .hero-headline-cell .eyebrow {
@@ -892,5 +892,73 @@ body:has(.report-panel) {
 
   .report-summary-strip {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* FINAL ALIGNED HERO */
+@media (min-width: 1101px) {
+  .hero-shell {
+    width: calc(100% - (var(--page-gap) * 2)) !important;
+    max-width: 1440px !important;
+  }
+
+  .compact-hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: minmax(130px, auto) 38px !important;
+    grid-template-areas:
+      "logo headline"
+      "create open" !important;
+
+    column-gap: 24px !important;
+    row-gap: 18px !important;
+
+    min-height: 250px !important;
+    max-height: none !important;
+    padding: 24px 0 !important;
+  }
+
+  .compact-hero .hero-logo-cell,
+  .compact-hero .hero-headline-cell {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-inline: 28px !important;
+  }
+
+  .compact-hero .hero-logo-cell {
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .compact-hero .hero-brand-logo {
+    display: block !important;
+    width: min(100%, 510px) !important;
+    max-width: 510px !important;
+    max-height: 120px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    object-fit: contain !important;
+  }
+
+  .compact-hero .hero-headline-cell {
+    max-width: none !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    text-align: left !important;
+  }
+
+  .compact-hero .hero-headline-cell h1 {
+    max-width: 560px !important;
+    margin-right: auto !important;
+    font-size: clamp(1.9rem, 2.45vw, 2.55rem) !important;
+    line-height: 1.04 !important;
+  }
+
+  .compact-hero .hero-button-left,
+  .compact-hero .hero-button-right {
+    width: calc(100% - 56px) !important;
+    max-width: none !important;
+    justify-self: center !important;
   }
 }
