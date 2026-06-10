@@ -1,0 +1,23 @@
+[
+  {
+    "clientName": "Fictional Client A",
+    "projectName": "Alder Ridge Residence",
+    "noteType": "site_walkthrough_transcript",
+    "source": "fictional demo transcript",
+    "projectNotes": "During the walkthrough, the client requested warm architectural lighting in the great room, hidden speakers, and simplified keypad controls. The builder needs final keypad and equipment locations before Friday so the electrician can complete rough-in planning."
+  },
+  {
+    "clientName": "Fictional Client B",
+    "projectName": "Harborview Wellness Club",
+    "noteType": "coordination_notes",
+    "source": "fictional meeting notes",
+    "projectNotes": "The project team requested a review of the Wi-Fi access point layout, security camera coverage at the service entrance, and motorized shade controls in the lounge. Confirm network cabinet ventilation and follow up with the shade vendor after the reflected ceiling plan is updated."
+  },
+  {
+    "clientName": "Fictional Client C",
+    "projectName": "Riverside Aquarium Education Center",
+    "noteType": "design_concept_notes",
+    "source": "fictional manual entry",
+    "projectNotes": "Concept notes describe distributed audio in the exhibit corridors, a central equipment rack for educational displays, and soft blue accent lighting around the learning alcoves. The client prefers simple touch-panel navigation and discreet speaker placement."
+  }
+]

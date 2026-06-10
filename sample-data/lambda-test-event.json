@@ -1,0 +1,19 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /project-notes",
+  "rawPath": "/project-notes",
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/project-notes"
+    }
+  },
+  "body": {
+    "clientName": "Fictional Client A",
+    "projectName": "Alder Ridge Residence",
+    "noteType": "site_walkthrough_transcript",
+    "source": "fictional Lambda test event",
+    "projectNotes": "During the walkthrough, the client requested warm architectural lighting in the great room, hidden speakers, and simplified keypad controls. The builder needs final keypad and equipment locations before Friday so the electrician can complete rough-in planning."
+  },
+  "isBase64Encoded": false
+}
