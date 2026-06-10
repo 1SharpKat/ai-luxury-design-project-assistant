@@ -1,152 +1,112 @@
-# Project Cover Photo Setup
+# Optional Project Cover Photo Setup
 
-This branch adds one optional project cover photo per project note.
+LuxNote AI supports one optional JPG or PNG cover photo per project note. This feature is supplemental and is not required for the core course demonstration.
 
-## What the feature does
+## Feature Behavior
 
-- Adds a cover photo input to the main dashboard form.
-- Validates JPG/JPEG and PNG files only.
-- Limits the selected file to 5 MB.
-- Shows a local preview before saving.
-- Uploads the cover image to Amazon S3 using a pre-signed URL.
-- Saves the S3 image reference with the project note record in DynamoDB.
-- Displays cover photos on the Projects page.
-- Displays the cover photo on the Report page when available.
+The frontend:
 
-## New frontend files changed
+- Accepts JPG, JPEG, and PNG files
+- Limits files to 5 MB
+- Shows a local preview before submission
+- Requests a pre-signed upload URL from the API
+- Uploads the image directly to Amazon S3
+- Saves the image URL and metadata with the DynamoDB project record
+- Displays available cover photos on the Projects and Report pages
 
-- `frontend/index.html`
-- `frontend/app.js`
-- `frontend/projects.js`
-- `frontend/report.html`
-- `frontend/report.js`
-- `frontend/pages.css`
+The active backend implementation is:
 
-## New backend reference file
+```text
+lambda/lambda_function.py
+```
 
-- `backend/lambda_function_with_cover_photo.py`
-
-This backend file includes the current project-note Lambda logic plus a new route:
+## API Route
 
 ```text
 POST /project-cover-upload-url
 ```
 
-The frontend calls that route before submitting the project note. The route returns:
+The route returns:
 
 ```json
 {
-  "uploadUrl": "pre-signed S3 PUT URL",
-  "fileUrl": "public or readable S3 image URL",
-  "s3Key": "project-covers/project-name/file-id.jpg"
+  "uploadUrl": "temporary pre-signed S3 PUT URL",
+  "fileUrl": "stored project image URL",
+  "s3Key": "project-covers/project-name/generated-file-id.jpg"
 }
 ```
 
-## Required AWS setup
+Pre-signed URLs are temporary and must never be committed to the repository or included in final submission materials.
 
-### 1. Create or choose an S3 bucket
+## Lambda Configuration
 
-Use a bucket for project media, for example:
-
-```text
-luxnote-project-media
-```
-
-### 2. Set Lambda environment variables
-
-Add these environment variables to the Lambda function:
+The optional feature uses these Lambda environment-variable names:
 
 ```text
-TABLE_NAME=LuxuryDesignProjectNotes
-COVER_PHOTO_BUCKET=your-s3-bucket-name
-COVER_PHOTO_URL_BASE=https://your-s3-bucket-name.s3.us-west-2.amazonaws.com
+COVER_PHOTO_BUCKET
+COVER_PHOTO_URL_BASE
 ```
 
-`COVER_PHOTO_URL_BASE` is optional. If it is not set, the Lambda builds a standard S3 URL.
+`COVER_PHOTO_URL_BASE` is optional. Environment-variable values must not be committed or shown in submission screenshots.
 
-### 3. Add Lambda IAM permissions
+The existing `TABLE_NAME` and `BEDROCK_MODEL_ID` configuration remains separate from the cover-photo feature.
 
-The Lambda role needs S3 permission for the cover photo bucket:
+## IAM Permission
 
-```json
-{
-  "Effect": "Allow",
-  "Action": [
-    "s3:PutObject"
-  ],
-  "Resource": "arn:aws:s3:::your-s3-bucket-name/project-covers/*"
-}
+The Lambda execution role needs permission to upload objects to the selected S3 path. Scope the permission to the intended bucket and prefix rather than granting broad S3 access.
+
+Example action:
+
+```text
+s3:PutObject
 ```
 
-It also still needs the existing DynamoDB and Comprehend permissions.
+## API Gateway
 
-### 4. Add API Gateway route
-
-Add this route to API Gateway and connect it to the same Lambda integration:
+Connect this route to the existing Lambda integration:
 
 ```text
 POST /project-cover-upload-url
 ```
 
-Keep the existing routes:
+The core API routes remain:
 
 ```text
 POST /project-notes
-GET /project-notes
-GET /project-notes/{recordId}
+GET  /project-notes
+GET  /project-notes/{recordId}
 ```
 
-### 5. Configure CORS
+## CORS
 
-The API already allows `GET`, `POST`, and `OPTIONS` in the Lambda response headers. If API Gateway has separate CORS configuration, make sure it also allows:
+API Gateway must allow the frontend origin to use `POST` and `Content-Type`.
 
-```text
-GET, POST, OPTIONS
-Content-Type
-```
+The S3 bucket must allow browser `PUT` requests from the deployed frontend origin. Use the specific production and development origins rather than `*` for a production deployment.
 
-For S3 direct browser uploads, the S3 bucket also needs CORS that allows PUT requests from the frontend origin.
+## Optional DynamoDB Fields
 
-Example S3 CORS configuration:
-
-```json
-[
-  {
-    "AllowedHeaders": ["*"],
-    "AllowedMethods": ["PUT", "GET"],
-    "AllowedOrigins": ["*"],
-    "ExposeHeaders": []
-  }
-]
-```
-
-For production, replace `*` with the deployed frontend domain.
-
-## Data fields added to DynamoDB records
-
-When a cover photo is included, the project note record may include:
+When a cover photo is included, a project record may contain:
 
 ```json
 {
-  "coverPhotoUrl": "https://bucket.s3.us-west-2.amazonaws.com/project-covers/example/file.jpg",
-  "coverPhotoKey": "project-covers/example/file.jpg",
+  "coverPhotoUrl": "stored image URL",
+  "coverPhotoKey": "project-covers/example/generated-file.jpg",
   "coverPhotoName": "cover.jpg",
   "coverPhotoType": "image/jpeg"
 }
 ```
 
-## Testing checklist
+## Test Checklist
 
-1. Open the dashboard.
-2. Choose a JPG or PNG under Project cover photo.
-3. Confirm the preview displays.
-4. Submit the project note.
-5. Confirm the note saves successfully.
-6. Open `projects.html`.
-7. Confirm the project folder shows the cover thumbnail.
-8. Open the report.
-9. Confirm the cover image displays at the top of the report.
+1. Select a JPG or PNG under 5 MB.
+2. Confirm the local preview appears.
+3. Submit the fictional project record.
+4. Confirm the project record saves successfully.
+5. Open the Projects page and verify the thumbnail.
+6. Open the full report and verify the cover image.
+7. Test an unsupported file type and a file larger than 5 MB.
+8. Confirm no pre-signed URL or private configuration value appears in committed files.
 
-## Notes
+## Current Scope
 
-This branch intentionally supports only one cover photo per project note. Walkthrough photo galleries can be added later after the S3 upload flow is confirmed.
+The application supports one optional cover photo per project note. Multiple attachments, walkthrough galleries, document uploads, and private authenticated media access are future enhancements.
