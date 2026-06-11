@@ -51,8 +51,9 @@ Cedar, Linen, Olive, Mauve
   --info: var(--clockwork);
 
   --shadow-soft: 0 7px 16px rgba(68, 50, 35, 0.035);
-  --shadow-card: 0 4px 12px rgba(68, 50, 35, 0.03);
-  --shadow-hover: 0 8px 18px rgba(68, 50, 35, 0.055);
+  --shadow-panel: 0 1px 2px rgba(68, 50, 35, 0.04);
+  --shadow-card: none;
+  --shadow-hover: none;
 
   --radius-page: 8px;
   --radius-panel: 8px;
@@ -309,7 +310,7 @@ TRUSTED ADVISOR HERO
   background: linear-gradient(135deg, #77755c 0%, #87846a 52%, #756258 100%);
   border: 1px solid rgba(255, 249, 243, 0.18);
   border-radius: var(--radius-panel);
-  box-shadow: 0 9px 20px rgba(68, 50, 35, 0.075);
+  box-shadow: var(--shadow-panel);
 }
 
 .advisor-brand-panel {
@@ -409,7 +410,7 @@ TRUSTED ADVISOR HERO
   background: #87846a !important;
   border: 1px solid rgba(255, 249, 243, 0.18) !important;
   border-radius: var(--radius-panel) !important;
-  box-shadow: 0 8px 18px rgba(68, 50, 35, 0.07) !important;
+  box-shadow: var(--shadow-panel) !important;
 }
 
 .compact-hero::before,
@@ -439,7 +440,7 @@ PANELS AND STATIC CARDS
   background: rgba(255, 249, 243, 0.80) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius-panel) !important;
-  box-shadow: var(--shadow-soft) !important;
+  box-shadow: var(--shadow-panel) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -460,6 +461,7 @@ PANELS AND STATIC CARDS
   border: 1px solid var(--border) !important;
   border-radius: var(--radius-card) !important;
   box-shadow: var(--shadow-card) !important;
+  transition: border-color 0.16s ease, background-color 0.16s ease !important;
 }
 
 .summary-card {
@@ -478,7 +480,7 @@ PANELS AND STATIC CARDS
 .report-cover-card:hover {
   background: rgba(255, 249, 243, 0.90) !important;
   border-color: var(--border) !important;
-  box-shadow: var(--shadow-card) !important;
+  box-shadow: none !important;
   transform: none !important;
 }
 
@@ -491,6 +493,7 @@ PANELS AND STATIC CARDS
   border: 1px solid var(--border) !important;
   border-radius: var(--radius-card) !important;
   box-shadow: var(--shadow-card) !important;
+  transition: border-color 0.16s ease, background-color 0.16s ease !important;
 }
 
 .project-folder-card:hover,
@@ -498,7 +501,7 @@ PANELS AND STATIC CARDS
 .record-item:hover {
   background: rgba(255, 249, 243, 0.96) !important;
   border-color: var(--mauve-border) !important;
-  box-shadow: var(--shadow-hover) !important;
+  box-shadow: none !important;
   transform: none !important;
 }
 
