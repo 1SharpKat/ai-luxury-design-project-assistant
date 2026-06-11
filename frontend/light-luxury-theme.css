@@ -318,9 +318,9 @@ TRUSTED ADVISOR HERO
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
-  gap: 34px;
+  gap: 22px;
   min-height: 360px;
   padding: clamp(34px, 4.1vw, 52px) clamp(28px, 3.2vw, 44px);
   overflow: hidden;
@@ -334,10 +334,10 @@ TRUSTED ADVISOR HERO
   display: block;
   position: relative;
   z-index: 1;
-  width: min(100%, 300px);
-  max-height: 150px;
-  margin-top: clamp(18px, 4.5vw, 58px);
-  opacity: 0.62;
+  width: min(100%, 280px);
+  max-height: 138px;
+  margin-top: 0;
+  opacity: 0.68;
   object-fit: contain;
   object-position: left center;
   pointer-events: none;
@@ -348,7 +348,7 @@ TRUSTED ADVISOR HERO
   z-index: 1;
   max-width: 245px;
   margin: 0;
-  padding-top: 18px;
+  padding-top: 16px;
   color: rgba(255, 249, 243, 0.86);
   border-top: 1px solid rgba(255, 249, 243, 0.18);
   font-size: 0.72rem;
