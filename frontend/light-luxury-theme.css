@@ -76,10 +76,10 @@ body {
   font-family: var(--font-ui) !important;
   background-color: var(--paper) !important;
   background-image:
-    radial-gradient(circle at 8% 4%, rgba(124, 121, 96, 0.10), transparent 30%),
-    radial-gradient(circle at 94% 8%, rgba(117, 81, 81, 0.04), transparent 28%),
+    linear-gradient(90deg, rgba(68, 66, 45, 0.025) 1px, transparent 1px),
     linear-gradient(180deg, #e4d4bf 0%, #f2e8dc 48%, #e9ddca 100%) !important;
   background-attachment: fixed;
+  background-size: 56px 100%, auto;
 }
 
 body::before,
@@ -130,7 +130,7 @@ h3,
 .advisor-hero h1 {
   font-family: var(--font-display) !important;
   font-weight: 600 !important;
-  letter-spacing: -0.035em !important;
+  letter-spacing: 0 !important;
   color: var(--text) !important;
   -webkit-text-fill-color: currentColor !important;
   background: none !important;
@@ -138,11 +138,11 @@ h3,
 
 .advisor-hero h1 {
   margin: 0;
-  max-width: 760px;
+  max-width: 700px;
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
-  font-size: clamp(2.45rem, 4.4vw, 4.65rem) !important;
-  line-height: 0.98 !important;
+  font-size: clamp(2.35rem, 3.7vw, 4.15rem) !important;
+  line-height: 1.05 !important;
   text-wrap: balance;
 }
 
@@ -249,7 +249,7 @@ NAVIGATION
   color: var(--cedar-dark) !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
-  letter-spacing: -0.035em !important;
+  letter-spacing: 0 !important;
 }
 
 .nav-links a {
@@ -282,52 +282,62 @@ TRUSTED ADVISOR HERO
 
 .dashboard-shell .advisor-hero {
   grid-area: advisor !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  order: -2 !important;
 }
 
 .dashboard-shell .form-panel {
   grid-area: form !important;
+  grid-row: 2 !important;
+  order: 1 !important;
 }
 
 .dashboard-shell .results-panel {
   grid-area: results !important;
+  grid-row: 2 !important;
+  order: 2 !important;
 }
 
 .advisor-hero {
   display: grid;
-  grid-template-columns: minmax(280px, 0.72fr) minmax(520px, 1.28fr);
+  grid-template-columns: minmax(300px, 0.68fr) minmax(560px, 1.32fr);
   align-items: stretch;
-  min-height: 330px;
+  min-height: 360px;
   overflow: hidden;
   color: var(--linen);
-  background: #87846a;
+  background: linear-gradient(135deg, #77755c 0%, #87846a 52%, #756258 100%);
   border: 1px solid rgba(255, 249, 243, 0.18);
   border-radius: var(--radius-panel);
-  box-shadow: 0 8px 18px rgba(68, 50, 35, 0.07);
+  box-shadow: 0 9px 20px rgba(68, 50, 35, 0.075);
 }
 
 .advisor-brand-panel {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 22px;
-  padding: clamp(34px, 5vw, 62px);
-  background: rgba(68, 66, 45, 0.12);
+  gap: 28px;
+  padding: clamp(32px, 4.5vw, 58px);
+  background: linear-gradient(180deg, rgba(68, 66, 45, 0.18), rgba(68, 66, 45, 0.08));
   border-right: 1px solid rgba(255, 249, 243, 0.15);
 }
 
 .advisor-brand-logo {
   display: block;
-  width: min(100%, 300px);
-  max-height: 140px;
+  width: min(100%, 340px);
+  max-height: 150px;
+  margin-top: 4px;
   object-fit: contain;
   object-position: left center;
 }
 
 .advisor-brand-kicker {
-  max-width: 300px;
+  max-width: 280px;
   margin: 0;
-  color: rgba(255, 249, 243, 0.78);
+  padding-top: 18px;
+  color: rgba(255, 249, 243, 0.82);
+  border-top: 1px solid rgba(255, 249, 243, 0.18);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -340,7 +350,7 @@ TRUSTED ADVISOR HERO
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: clamp(40px, 5.5vw, 72px);
+  padding: clamp(46px, 6vw, 82px);
 }
 
 .advisor-statement-panel .eyebrow {
@@ -349,23 +359,25 @@ TRUSTED ADVISOR HERO
 }
 
 .advisor-hero-copy {
-  max-width: 690px;
-  margin: 20px 0 0;
+  max-width: 650px;
+  margin: 24px 0 0;
   color: rgba(255, 249, 243, 0.84);
-  font-size: 1.02rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.72;
 }
 
 .advisor-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 30px;
+  gap: 10px;
+  margin-top: 34px;
 }
 
 .advisor-actions .primary-link,
 .advisor-actions .secondary-link {
-  min-width: 190px;
+  min-width: 184px;
+  min-height: 42px !important;
+  padding-inline: 18px !important;
 }
 
 /* retire the old hero class if any cached markup still renders */
@@ -529,6 +541,9 @@ button,
   overflow: hidden !important;
   border-radius: var(--radius-button) !important;
   box-shadow: none !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.1 !important;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
 }
 
@@ -552,8 +567,8 @@ button,
 .compact-hero .hero-button-left:hover {
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
-  background: var(--mauve) !important;
-  border-color: var(--mauve) !important;
+  background: var(--deep-olive) !important;
+  border-color: var(--deep-olive) !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -579,10 +594,10 @@ button,
 .cover-photo-picker:focus-visible,
 .results-panel .report-actions .secondary-link:hover,
 .compact-hero .hero-button-right:hover {
-  color: var(--linen) !important;
-  -webkit-text-fill-color: var(--linen) !important;
-  background: var(--mauve) !important;
-  border-color: var(--mauve) !important;
+  color: var(--mauve) !important;
+  -webkit-text-fill-color: var(--mauve) !important;
+  background: rgba(117, 81, 81, 0.08) !important;
+  border-color: rgba(117, 81, 81, 0.34) !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -639,7 +654,7 @@ PROJECTS, REPORT, STATES
 }
 
 .note-priority,
-.tag,
+tag,
 .status-badge {
   color: var(--mauve) !important;
   background: var(--mauve-soft) !important;
@@ -738,11 +753,29 @@ PROJECTS, REPORT, STATES
       "results" !important;
   }
 
+  .dashboard-shell .advisor-hero {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .dashboard-shell .form-panel {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .dashboard-shell .results-panel {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+  }
+
   .advisor-hero {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
   .advisor-brand-panel {
+    justify-content: flex-start;
+    gap: 18px;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 249, 243, 0.15);
   }
@@ -753,10 +786,25 @@ PROJECTS, REPORT, STATES
 
   .advisor-hero h1 {
     font-size: clamp(2.15rem, 8vw, 3.4rem) !important;
+    line-height: 1.07 !important;
   }
 }
 
 @media (max-width: 720px) {
+  .advisor-brand-panel,
+  .advisor-statement-panel {
+    padding: 26px;
+  }
+
+  .advisor-actions {
+    width: 100%;
+  }
+
+  .advisor-actions .primary-link,
+  .advisor-actions .secondary-link {
+    flex: 1 1 180px;
+  }
+
   .site-footer {
     align-items: flex-start;
     padding: 24px 22px 32px;
