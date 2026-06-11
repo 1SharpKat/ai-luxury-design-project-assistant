@@ -471,6 +471,12 @@ label span {
   color: var(--error);
 }
 
+.field-hint {
+  color: var(--muted-text);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
 .label-row {
   display: flex;
   align-items: center;

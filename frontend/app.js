@@ -22,6 +22,7 @@ noteType: getElement("note-type"),
 source: getElement("source"),
 projectNotes: getElement("project-notes"),
 coverPhoto: getElement("cover-photo"),
+coverPhotoUrl: getElement("cover-photo-url"),
 coverPhotoPreview: getElement("cover-photo-preview"),
 submitButton: getElement("submit-button"),
 clearButton: getElement("clear-button"),
@@ -56,6 +57,7 @@ function setLoading(isLoading) {
 elements.submitButton.disabled = isLoading;
 elements.clearButton.disabled = isLoading;
 elements.coverPhoto.disabled = isLoading;
+elements.coverPhotoUrl.disabled = isLoading;
 
 elements.form.setAttribute(
 "aria-busy",
@@ -176,6 +178,30 @@ throw new Error(
 }
 }
 
+function validateCoverPhotoUrl(value) {
+if (!value) {
+return "";
+}
+
+let url;
+
+try {
+url = new URL(value);
+} catch {
+throw new Error(
+"Cover photo URL must be a valid HTTPS image address."
+);
+}
+
+if (url.protocol !== "https:") {
+throw new Error(
+"Cover photo URL must start with https:// so it can display on LuxNote AI."
+);
+}
+
+return url.href;
+}
+
 function resetCoverPreview() {
 if (coverPreviewUrl) {
 URL.revokeObjectURL(coverPreviewUrl);
@@ -207,6 +233,8 @@ if (!file) {
 return;
 }
 
+elements.coverPhotoUrl.value = "";
+
 try {
 validateCoverPhoto(file);
 } catch (error) {
@@ -228,6 +256,60 @@ elements.coverPhotoPreview.classList.remove(
 elements.coverPhotoPreview.replaceChildren(
 image
 );
+}
+
+function previewCoverUrl() {
+resetCoverPreview();
+setMessage();
+
+const coverUrl =
+elements.coverPhotoUrl.value.trim();
+
+if (!coverUrl) {
+return;
+}
+
+let validatedUrl;
+
+try {
+validatedUrl = validateCoverPhotoUrl(coverUrl);
+} catch (error) {
+setMessage(error.message, "error");
+return;
+}
+
+elements.coverPhoto.value = "";
+
+const image = document.createElement("img");
+image.src = validatedUrl;
+image.alt = "Preview of linked project cover photo";
+
+image.addEventListener("error", () => {
+resetCoverPreview();
+setMessage(
+"That image URL could not be previewed. Try a direct HTTPS link to a JPG or PNG.",
+"error"
+);
+});
+
+elements.coverPhotoPreview.classList.remove(
+"is-empty"
+);
+
+elements.coverPhotoPreview.replaceChildren(
+image
+);
+}
+
+function createLinkedCoverMetadata(coverPhotoUrl) {
+const validatedUrl =
+validateCoverPhotoUrl(coverPhotoUrl);
+
+return {
+coverPhotoUrl: validatedUrl,
+coverPhotoName: validatedUrl,
+coverPhotoType: "image/url"
+};
 }
 
 async function uploadCoverPhoto(
@@ -393,7 +475,10 @@ projectNotes:
   elements.projectNotes.value.trim(),
 
 coverPhoto:
-  elements.coverPhoto.files?.[0] || null
+  elements.coverPhoto.files?.[0] || null,
+
+coverPhotoUrl:
+  elements.coverPhotoUrl.value.trim()
 
 
 };
@@ -423,6 +508,13 @@ throw new Error(
 }
 
 validateCoverPhoto(values.coverPhoto);
+validateCoverPhotoUrl(values.coverPhotoUrl);
+
+if (values.coverPhoto && values.coverPhotoUrl) {
+throw new Error(
+"Choose either a local cover photo or an internet image URL, not both."
+);
+}
 }
 
 /* =========================================================
@@ -458,6 +550,10 @@ if (values.coverPhoto) {
     values.coverPhoto,
     values.projectName
   );
+} else if (values.coverPhotoUrl) {
+  coverMetadata = createLinkedCoverMetadata(
+    values.coverPhotoUrl
+  );
 }
 
 setMessage(
@@ -488,7 +584,7 @@ const record = await apiFetch(
 showQuickResult(record);
 
 setMessage(
-  values.coverPhoto
+  values.coverPhoto || values.coverPhotoUrl
     ? "Project intelligence and cover photo saved successfully."
     : "Project intelligence saved successfully.",
   "success"
@@ -670,6 +766,11 @@ updateCharacterCount
 elements.coverPhoto.addEventListener(
 "change",
 previewSelectedCover
+);
+
+elements.coverPhotoUrl.addEventListener(
+"change",
+previewCoverUrl
 );
 
 document
