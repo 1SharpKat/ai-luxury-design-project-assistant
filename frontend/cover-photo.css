@@ -25,14 +25,15 @@
 
 .cover-photo-controls {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 14px;
-  align-items: end;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: stretch;
   margin-bottom: 12px;
 }
 
 .cover-photo-picker {
   display: inline-grid;
+  width: fit-content;
   min-height: 34px;
   padding: 6px 14px;
   place-items: center;
