@@ -236,7 +236,10 @@ projectName
 ) {
 validateCoverPhoto(file);
 
-const uploadDetails = await apiFetch(
+let uploadDetails;
+
+try {
+uploadDetails = await apiFetch(
 "/project-cover-upload-url",
 {
 method: "POST",
@@ -250,6 +253,20 @@ contentType: file.type
 })
 }
 );
+} catch (error) {
+const isSetupError =
+error.message.includes("status 404") ||
+error.message.includes("status 503") ||
+error.message.toLowerCase().includes("cover-photo storage");
+
+if (isSetupError) {
+throw new Error(
+"Project cover-photo storage is not connected yet. Remove the cover photo to submit this note, or finish the S3 and API Gateway setup."
+);
+}
+
+throw error;
+}
 
 const {
 uploadUrl,
