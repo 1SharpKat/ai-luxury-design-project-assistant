@@ -1,7 +1,7 @@
 /* =========================================================
 LuxNote AI
-Academic Design House Theme
-Ferns, Corduroy, Cedar, Linen
+Trusted Advisor Design House Theme
+Cedar, Linen, Olive, Mauve
 ========================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap');
@@ -24,7 +24,6 @@ Ferns, Corduroy, Cedar, Linen
   --clockwork: #72583e;
   --weathered: #a08670;
   --mauve: #755151;
-  --mauve-deep: #684747;
 
   --surface: var(--linen);
   --surface-soft: var(--linen-soft);
@@ -34,7 +33,6 @@ Ferns, Corduroy, Cedar, Linen
   --sienna: var(--mauve);
   --warm-brown: var(--cedar);
   --chocolate: var(--deep-olive);
-
   --moon-rock: var(--cedar-dark);
   --soft-dove: #efe4d7;
   --muted-rose: var(--mauve);
@@ -73,6 +71,7 @@ html {
 }
 
 body {
+  min-height: 100vh;
   color: var(--body-text) !important;
   font-family: var(--font-ui) !important;
   background-color: var(--paper) !important;
@@ -111,7 +110,7 @@ main {
 }
 
 /* =========================================================
-TYPOGRAPHY SYSTEM
+TYPOGRAPHY
 ========================================================= */
 
 h1,
@@ -128,8 +127,7 @@ h3,
 .folder-copy strong,
 .report-heading h1,
 #report-project-name,
-.compact-hero h1,
-.compact-hero .hero-headline-cell h1 {
+.advisor-hero h1 {
   font-family: var(--font-display) !important;
   font-weight: 600 !important;
   letter-spacing: -0.035em !important;
@@ -138,17 +136,21 @@ h3,
   background: none !important;
 }
 
+.advisor-hero h1 {
+  margin: 0;
+  max-width: 760px;
+  color: var(--linen) !important;
+  -webkit-text-fill-color: var(--linen) !important;
+  font-size: clamp(2.45rem, 4.4vw, 4.65rem) !important;
+  line-height: 0.98 !important;
+  text-wrap: balance;
+}
+
 #project-note-heading,
 #results-heading,
 .section-heading h1,
 .section-heading h2 {
   color: var(--cafe-noir) !important;
-}
-
-.compact-hero h1,
-.compact-hero .hero-headline-cell h1 {
-  color: var(--linen) !important;
-  -webkit-text-fill-color: var(--linen) !important;
 }
 
 body,
@@ -192,7 +194,7 @@ button,
 .copy-button,
 .record-action {
   font-weight: 800 !important;
-  letter-spacing: 0.12em !important;
+  letter-spacing: 0.105em !important;
   text-transform: uppercase !important;
 }
 
@@ -226,74 +228,18 @@ button,
 }
 
 /* =========================================================
-SHAPE LANGUAGE
-Tailored, not pill-shaped.
-========================================================= */
-
-.glass-nav {
-  border-radius: var(--radius-page) !important;
-}
-
-.compact-hero,
-.hero-glass-card.compact-hero,
-.glass-panel,
-.form-panel,
-.results-panel,
-.subpage-panel,
-.report-panel {
-  border-radius: var(--radius-panel) !important;
-}
-
-.summary-card,
-.result-card,
-.project-folder-card,
-.project-note-row,
-.cover-photo-field,
-.cover-photo-preview,
-.records-message,
-.report-cover-card,
-.record-item,
-.project-cover-thumb,
-.folder-mark {
-  border-radius: var(--radius-card) !important;
-}
-
-input,
-select,
-textarea {
-  border-radius: var(--radius-field) !important;
-}
-
-button,
-.primary-button,
-.primary-link,
-.secondary-button,
-.secondary-link,
-.copy-button,
-.record-action,
-.cover-photo-picker,
-.compact-hero .hero-button-left,
-.compact-hero .hero-button-right,
-.results-panel .report-actions a,
-.report-toolbar a,
-.report-toolbar button {
-  border-radius: var(--radius-button) !important;
-}
-
-.status-badge,
-.note-priority,
-.tag {
-  border-radius: 4px !important;
-}
-
-/* =========================================================
 NAVIGATION
 ========================================================= */
+
+.site-header {
+  padding: 18px var(--page-gap) 26px !important;
+}
 
 .glass-nav {
   color: var(--text) !important;
   background: rgba(255, 249, 243, 0.94) !important;
   border: 1px solid var(--border) !important;
+  border-radius: var(--radius-page) !important;
   box-shadow: var(--shadow-soft) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -321,20 +267,105 @@ NAVIGATION
 }
 
 /* =========================================================
-HERO
+TRUSTED ADVISOR HERO
 ========================================================= */
 
+.dashboard-shell {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 28px !important;
+}
+
+.advisor-hero {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(520px, 1.28fr);
+  align-items: stretch;
+  min-height: 330px;
+  overflow: hidden;
+  color: var(--linen);
+  background: #87846a;
+  border: 1px solid rgba(255, 249, 243, 0.18);
+  border-radius: var(--radius-panel);
+  box-shadow: 0 8px 18px rgba(68, 50, 35, 0.07);
+}
+
+.advisor-brand-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 22px;
+  padding: clamp(34px, 5vw, 62px);
+  background: rgba(68, 66, 45, 0.12);
+  border-right: 1px solid rgba(255, 249, 243, 0.15);
+}
+
+.advisor-brand-logo {
+  display: block;
+  width: min(100%, 300px);
+  max-height: 140px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.advisor-brand-kicker {
+  max-width: 300px;
+  margin: 0;
+  color: rgba(255, 249, 243, 0.78);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.advisor-statement-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(40px, 5.5vw, 72px);
+}
+
+.advisor-statement-panel .eyebrow {
+  color: #fff6ec !important;
+  margin-bottom: 14px;
+}
+
+.advisor-hero-copy {
+  max-width: 690px;
+  margin: 20px 0 0;
+  color: rgba(255, 249, 243, 0.84);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.advisor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.advisor-actions .primary-link,
+.advisor-actions .secondary-link {
+  min-width: 190px;
+}
+
+/* retire the old hero class if any cached markup still renders */
 .compact-hero,
 .hero-glass-card.compact-hero {
   color: var(--linen) !important;
-  background: #88856b !important;
-  border: 1px solid rgba(255, 249, 243, 0.20) !important;
+  background: #87846a !important;
+  border: 1px solid rgba(255, 249, 243, 0.18) !important;
+  border-radius: var(--radius-panel) !important;
   box-shadow: 0 8px 18px rgba(68, 50, 35, 0.07) !important;
 }
 
 .compact-hero::before,
 .compact-hero::after {
-  opacity: 0.08 !important;
+  opacity: 0.04 !important;
 }
 
 .compact-hero .hero-logo-cell,
@@ -346,38 +377,8 @@ HERO
   filter: none !important;
 }
 
-.compact-hero .hero-headline-cell .eyebrow {
-  color: #fff6ec !important;
-}
-
-.compact-hero .hero-button-left,
-.compact-hero .hero-button-right {
-  min-height: 44px !important;
-  color: var(--linen) !important;
-  -webkit-text-fill-color: var(--linen) !important;
-  border: 1px solid rgba(255, 249, 243, 0.26) !important;
-  box-shadow: none !important;
-}
-
-.compact-hero .hero-button-left {
-  background: var(--mauve) !important;
-}
-
-.compact-hero .hero-button-right {
-  background: rgba(255, 249, 243, 0.13) !important;
-}
-
-.compact-hero .hero-button-left:hover,
-.compact-hero .hero-button-right:hover {
-  background: var(--cafe-noir) !important;
-  border-color: var(--cafe-noir) !important;
-  color: var(--linen) !important;
-  -webkit-text-fill-color: var(--linen) !important;
-  box-shadow: none !important;
-}
-
 /* =========================================================
-PANELS AND CARDS
+PANELS AND STATIC CARDS
 ========================================================= */
 
 .glass-panel,
@@ -388,6 +389,7 @@ PANELS AND CARDS
   color: var(--body-text) !important;
   background: rgba(255, 249, 243, 0.80) !important;
   border: 1px solid var(--border) !important;
+  border-radius: var(--radius-panel) !important;
   box-shadow: var(--shadow-soft) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -400,35 +402,55 @@ PANELS AND CARDS
 
 .summary-card,
 .result-card,
-.project-folder-card,
-.project-note-row,
 .cover-photo-field,
 .cover-photo-preview,
 .records-message,
-.report-cover-card,
-.record-item {
+.report-cover-card {
   color: var(--body-text) !important;
   background: rgba(255, 249, 243, 0.90) !important;
   border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
   box-shadow: var(--shadow-card) !important;
 }
 
 .summary-card {
-  border-top: 2px solid rgba(117, 81, 81, 0.42) !important;
+  border-top: 2px solid rgba(117, 81, 81, 0.36) !important;
 }
 
 .result-card {
-  border-left: 3px solid rgba(117, 81, 81, 0.46) !important;
+  border-left: 3px solid rgba(117, 81, 81, 0.40) !important;
+}
+
+/* Static information cards should not behave like clickable product tiles. */
+.summary-card:hover,
+.result-card:hover,
+.cover-photo-field:hover,
+.cover-photo-preview:hover,
+.report-cover-card:hover {
+  background: rgba(255, 249, 243, 0.90) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-card) !important;
+  transform: none !important;
+}
+
+/* Clickable rows/cards still get a quiet advisor hover. */
+.project-folder-card,
+.project-note-row,
+.record-item {
+  color: var(--body-text) !important;
+  background: rgba(255, 249, 243, 0.90) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: var(--shadow-card) !important;
 }
 
 .project-folder-card:hover,
 .project-note-row:hover,
-.record-item:hover,
-.result-card:hover,
-.summary-card:hover {
+.record-item:hover {
   background: rgba(255, 249, 243, 0.96) !important;
   border-color: var(--mauve-border) !important;
   box-shadow: var(--shadow-hover) !important;
+  transform: none !important;
 }
 
 /* =========================================================
@@ -441,6 +463,7 @@ textarea {
   color: var(--text) !important;
   background: rgba(255, 249, 243, 0.88) !important;
   border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-field) !important;
   box-shadow: inset 0 1px 2px rgba(68, 50, 35, 0.025) !important;
 }
 
@@ -471,8 +494,7 @@ select option {
 }
 
 /* =========================================================
-BUTTONS AND HOVERS
-One consistent design-house interaction language.
+BUTTONS
 ========================================================= */
 
 button,
@@ -485,9 +507,12 @@ button,
 .cover-photo-picker,
 .results-panel .report-actions a,
 .report-toolbar a,
-.report-toolbar button {
+.report-toolbar button,
+.compact-hero .hero-button-left,
+.compact-hero .hero-button-right {
   position: relative !important;
   overflow: hidden !important;
+  border-radius: var(--radius-button) !important;
   box-shadow: none !important;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
 }
@@ -496,7 +521,8 @@ button,
 .primary-link,
 .results-panel .report-actions .primary-link,
 .report-toolbar .secondary-button,
-.report-toolbar .secondary-link {
+.report-toolbar .secondary-link,
+.compact-hero .hero-button-left {
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
   background: var(--cafe-noir) !important;
@@ -507,12 +533,14 @@ button,
 .primary-link:hover,
 .results-panel .report-actions .primary-link:hover,
 .report-toolbar .secondary-button:hover,
-.report-toolbar .secondary-link:hover {
+.report-toolbar .secondary-link:hover,
+.compact-hero .hero-button-left:hover {
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
   background: var(--mauve) !important;
   border-color: var(--mauve) !important;
   box-shadow: none !important;
+  transform: none !important;
 }
 
 .secondary-button,
@@ -520,7 +548,8 @@ button,
 .copy-button,
 .record-action,
 .cover-photo-picker,
-.results-panel .report-actions .secondary-link {
+.results-panel .report-actions .secondary-link,
+.compact-hero .hero-button-right {
   color: var(--cafe-noir) !important;
   -webkit-text-fill-color: var(--cafe-noir) !important;
   background: rgba(255, 249, 243, 0.72) !important;
@@ -533,12 +562,14 @@ button,
 .record-action:hover,
 .cover-photo-picker:hover,
 .cover-photo-picker:focus-visible,
-.results-panel .report-actions .secondary-link:hover {
+.results-panel .report-actions .secondary-link:hover,
+.compact-hero .hero-button-right:hover {
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
   background: var(--mauve) !important;
   border-color: var(--mauve) !important;
   box-shadow: none !important;
+  transform: none !important;
 }
 
 .copy-button.is-copied {
@@ -566,7 +597,7 @@ button,
 }
 
 /* =========================================================
-PROJECTS AND REPORT PAGES
+PROJECTS, REPORT, STATES
 ========================================================= */
 
 .project-cover-thumb,
@@ -574,13 +605,15 @@ PROJECTS AND REPORT PAGES
   color: var(--cedar-dark) !important;
   background: rgba(248, 240, 230, 0.90) !important;
   border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
 }
 
 .folder-copy strong,
 .project-note-row strong,
 .report-summary-strip strong,
 .report-grid h2,
-.report-grid .result-card h2 {
+.report-grid .result-card h2,
+#report-project-name {
   color: var(--cafe-noir) !important;
   -webkit-text-fill-color: var(--cafe-noir) !important;
 }
@@ -590,21 +623,13 @@ PROJECTS AND REPORT PAGES
   color: var(--muted-text) !important;
 }
 
-.project-note-row:hover {
-  background: rgba(255, 249, 243, 0.96) !important;
-}
-
 .note-priority,
 .tag,
 .status-badge {
   color: var(--mauve) !important;
   background: var(--mauve-soft) !important;
   border: 1px solid var(--mauve-border) !important;
-}
-
-#report-project-name {
-  color: var(--cafe-noir) !important;
-  -webkit-text-fill-color: var(--cafe-noir) !important;
+  border-radius: 4px !important;
 }
 
 #report-client {
@@ -616,10 +641,6 @@ PROJECTS AND REPORT PAGES
   background: rgba(248, 240, 230, 0.80) !important;
   border: 1px solid var(--border) !important;
 }
-
-/* =========================================================
-MESSAGES, FOOTER, ACCESSIBILITY
-========================================================= */
 
 .form-message.success { color: var(--success) !important; }
 .form-message.error { color: var(--error) !important; }
@@ -690,6 +711,29 @@ MESSAGES, FOOTER, ACCESSIBILITY
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .advisor-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .advisor-brand-panel {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 249, 243, 0.15);
+  }
+
+  .advisor-brand-logo {
+    width: min(100%, 260px);
+  }
+
+  .advisor-hero h1 {
+    font-size: clamp(2.15rem, 8vw, 3.4rem) !important;
   }
 }
 
