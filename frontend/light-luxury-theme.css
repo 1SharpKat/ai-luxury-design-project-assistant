@@ -302,7 +302,7 @@ TRUSTED ADVISOR HERO
 
 .advisor-hero {
   display: grid;
-  grid-template-columns: minmax(300px, 0.68fr) minmax(560px, 1.32fr);
+  grid-template-columns: minmax(250px, 0.46fr) minmax(620px, 1.54fr);
   align-items: stretch;
   min-height: 360px;
   overflow: hidden;
@@ -318,25 +318,26 @@ TRUSTED ADVISOR HERO
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 28px;
+  gap: 34px;
   min-height: 360px;
-  padding: clamp(32px, 4.5vw, 58px);
+  padding: clamp(34px, 4.1vw, 52px) clamp(28px, 3.2vw, 44px);
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(68, 66, 45, 0.18), rgba(68, 66, 45, 0.08));
+  background:
+    linear-gradient(180deg, rgba(68, 66, 45, 0.20), rgba(68, 66, 45, 0.08)),
+    rgba(255, 249, 243, 0.025);
   border-right: 1px solid rgba(255, 249, 243, 0.15);
 }
 
 .advisor-brand-logo {
   display: block;
-  position: absolute;
-  z-index: 0;
-  top: clamp(42px, 6vw, 78px);
-  left: clamp(30px, 4.5vw, 58px);
-  width: min(88%, 430px);
-  max-height: 190px;
-  opacity: 0.34;
+  position: relative;
+  z-index: 1;
+  width: min(100%, 300px);
+  max-height: 150px;
+  margin-top: clamp(18px, 4.5vw, 58px);
+  opacity: 0.62;
   object-fit: contain;
   object-position: left center;
   pointer-events: none;
@@ -345,10 +346,10 @@ TRUSTED ADVISOR HERO
 .advisor-brand-kicker {
   position: relative;
   z-index: 1;
-  max-width: 280px;
+  max-width: 245px;
   margin: 0;
   padding-top: 18px;
-  color: rgba(255, 249, 243, 0.82);
+  color: rgba(255, 249, 243, 0.86);
   border-top: 1px solid rgba(255, 249, 243, 0.18);
   font-size: 0.72rem;
   font-weight: 800;
@@ -807,8 +808,9 @@ PROJECTS, REPORT, STATES
   }
 
   .advisor-brand-logo {
-    top: 34px;
+    top: auto;
     width: min(78%, 320px);
+    margin-top: 0;
   }
 
   .advisor-hero h1 {
@@ -828,7 +830,7 @@ PROJECTS, REPORT, STATES
   }
 
   .advisor-brand-logo {
-    left: 26px;
+    left: auto;
     width: min(82%, 300px);
   }
 
