@@ -313,26 +313,37 @@ TRUSTED ADVISOR HERO
 }
 
 .advisor-brand-panel {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-start;
   gap: 28px;
+  min-height: 360px;
   padding: clamp(32px, 4.5vw, 58px);
+  overflow: hidden;
   background: linear-gradient(180deg, rgba(68, 66, 45, 0.18), rgba(68, 66, 45, 0.08));
   border-right: 1px solid rgba(255, 249, 243, 0.15);
 }
 
 .advisor-brand-logo {
   display: block;
-  width: min(100%, 340px);
-  max-height: 150px;
-  margin-top: 4px;
+  position: absolute;
+  z-index: 0;
+  top: clamp(42px, 6vw, 78px);
+  left: clamp(30px, 4.5vw, 58px);
+  width: min(88%, 430px);
+  max-height: 190px;
+  opacity: 0.34;
   object-fit: contain;
   object-position: left center;
+  pointer-events: none;
 }
 
 .advisor-brand-kicker {
+  position: relative;
+  z-index: 1;
   max-width: 280px;
   margin: 0;
   padding-top: 18px;
@@ -343,6 +354,17 @@ TRUSTED ADVISOR HERO
   letter-spacing: 0.16em;
   line-height: 1.55;
   text-transform: uppercase;
+}
+
+.advisor-brand-subtext {
+  display: block;
+  margin-top: 13px;
+  color: rgba(255, 249, 243, 0.66);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
 }
 
 .advisor-statement-panel {
@@ -654,7 +676,7 @@ PROJECTS, REPORT, STATES
 }
 
 .note-priority,
-tag,
+.tag,
 .status-badge {
   color: var(--mauve) !important;
   background: var(--mauve-soft) !important;
@@ -776,12 +798,14 @@ tag,
   .advisor-brand-panel {
     justify-content: flex-start;
     gap: 18px;
+    min-height: 230px;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 249, 243, 0.15);
   }
 
   .advisor-brand-logo {
-    width: min(100%, 260px);
+    top: 34px;
+    width: min(78%, 320px);
   }
 
   .advisor-hero h1 {
@@ -794,6 +818,15 @@ tag,
   .advisor-brand-panel,
   .advisor-statement-panel {
     padding: 26px;
+  }
+
+  .advisor-brand-panel {
+    min-height: 210px;
+  }
+
+  .advisor-brand-logo {
+    left: 26px;
+    width: min(82%, 300px);
   }
 
   .advisor-actions {
