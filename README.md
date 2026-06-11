@@ -27,6 +27,8 @@ LuxNote AI turns raw project notes into organized project records with summaries
 ## Features
 
 * Project note intake form
+* Trusted advisor dashboard experience
+* Professional light luxury interface with restrained card styling
 * AI-generated project summaries
 * Priority and category assignment
 * Key phrase extraction
@@ -38,6 +40,14 @@ LuxNote AI turns raw project notes into organized project records with summaries
 * Optional project cover-photo workflow
 * Serverless backend using AWS Lambda and API Gateway
 * DynamoDB storage for processed project records
+
+---
+
+## Frontend Experience
+
+The final frontend was redesigned to feel like a calm, trusted advisor tool for luxury design project work. The dashboard uses an editorial masthead, a soft office-inspired palette, restrained card styling, and a subtle brand decal treatment to avoid a generic SaaS-template feel while keeping the workflow clean and professional.
+
+The visual direction emphasizes matte cedar, linen, olive, and soft mauve tones, with flatter cards, reduced hover effects, tailored controls, and clearer hierarchy for project intake and quick review.
 
 ---
 
