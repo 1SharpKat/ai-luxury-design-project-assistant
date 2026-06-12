@@ -10,19 +10,43 @@
 ![Python](https://img.shields.io/badge/Python-Backend-blue)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Frontend-yellow)
 
-A cloud-based project intelligence assistant for luxury design, architectural lighting, A/V integration, builder coordination, and client communication.
+LuxNote AI is a cloud-based project intelligence assistant for luxury design, architectural lighting, A/V integration, builder coordination, and client communication.
 
-LuxNote AI turns raw project notes into organized project records with summaries, priorities, next steps, key phrases, sentiment, and draft follow-up communication. It was built as a final AWS course project to demonstrate cloud infrastructure, serverless API development, database integration, AI/ML services, and generative AI using Amazon Bedrock.
+It turns raw project notes into structured records with summaries, priorities, categories, key phrases, sentiment, next steps, and draft follow-up communication. The project was built as a final AWS course submission to demonstrate cloud infrastructure, serverless backend development, database integration, AI/ML services, and generative AI.
 
 ## Live Application
 
 [Launch LuxNote AI](https://luxnote.ai)
 
-* Final working branch: `light-luxury-redesign`
 * Production hosting: AWS Amplify
+* Deployed branch: `main`
+* Final working branch: `light-luxury-redesign`
+* Demo mode: enabled for classroom presentation
 * Demo data: fictional project records only
 
----
+## Demo Mode
+
+The live site is configured for a safe course demonstration.
+
+* Authentication is disabled so the instructor can open the app without creating an account.
+* The public demo banner is enabled.
+* The frontend connects to the course project API endpoint.
+* All records used for the presentation should be fictional.
+* AI-generated content requires human review before it is used for client, builder, vendor, electrical, construction, or design decisions.
+
+The demo configuration lives in:
+
+```text
+frontend/config.js
+```
+
+Current demo settings:
+
+```js
+authEnabled: false
+demoNotice: true
+allowExternalCoverUrls: true
+```
 
 ## Features
 
@@ -43,15 +67,11 @@ LuxNote AI turns raw project notes into organized project records with summaries
 * Serverless backend using AWS Lambda and API Gateway
 * DynamoDB storage for processed project records
 
----
-
 ## Frontend Experience
 
 The final frontend was redesigned to feel like a calm, trusted advisor tool for luxury design project work. The dashboard uses an editorial masthead, a soft office-inspired palette, restrained card styling, and a subtle brand decal treatment to avoid a generic SaaS-template feel while keeping the workflow clean and professional.
 
 The visual direction emphasizes matte cedar, linen, olive, and soft mauve tones, with flatter cards, reduced hover effects, tailored controls, and clearer hierarchy for project intake and quick review.
-
----
 
 ## Tech Stack
 
@@ -85,15 +105,11 @@ The visual direction emphasizes matte cedar, linen, olive, and soft mauve tones,
 * CORS configuration
 * Environment variables for service configuration
 
----
-
 ## Project Overview
 
 Luxury design and integration projects create a lot of scattered information. Client preferences, builder updates, site walkthrough notes, lighting details, A/V decisions, vendor coordination, and deadlines can end up spread across conversations and documents.
 
-LuxNote AI was designed to help organize that information.
-
-A user can enter a client name, project name, note type, source, and project notes. The app processes the notes and returns a structured project record with:
+LuxNote AI organizes that information into a durable project record. A user can enter a client name, project name, note type, source, and project notes. The app processes the notes and returns:
 
 * Project category
 * Priority level
@@ -107,45 +123,47 @@ A user can enter a client name, project name, note type, source, and project not
 
 The goal is not to replace human review. The goal is to give a designer or project manager a cleaner starting point so important details are easier to find and follow up on.
 
----
+## Core Demo Flow
 
-## Core User Flow
+1. Open the LuxNote AI dashboard.
+2. Enter fictional client and project details.
+3. Paste fictional walkthrough notes or meeting notes.
+4. Submit the note for AI-assisted analysis.
+5. Review the quick result with summary, priority, and next steps.
+6. Open the full report.
+7. Open the project library to show saved project organization.
 
-1. The user opens the LuxNote AI dashboard.
-2. The user enters fictional project details and project notes.
-3. The frontend sends the request to Amazon API Gateway.
-4. API Gateway invokes AWS Lambda.
-5. Lambda validates and processes the request.
-6. Amazon Comprehend extracts key phrases and sentiment.
-7. Amazon Bedrock generates a summary, next steps, and draft communication.
-8. Amazon DynamoDB stores the completed project record.
-9. The frontend displays a quick result, project library, and printable report.
+## AWS Workflow
 
----
+1. The frontend sends a request to Amazon API Gateway.
+2. API Gateway invokes AWS Lambda.
+3. Lambda validates and processes the request.
+4. Amazon Comprehend extracts key phrases and sentiment.
+5. Amazon Bedrock generates a summary, next steps, and draft communication.
+6. Amazon DynamoDB stores the completed project record.
+7. The frontend displays a quick result, project library, and printable report.
 
 ## Application Pages
 
-| Page      | File                     | Purpose                                             |
-| --------- | ------------------------ | --------------------------------------------------- |
-| Dashboard | `frontend/index.html`    | Creates project records and displays a quick result |
-| Projects  | `frontend/projects.html` | Groups saved records into project folders           |
-| Report    | `frontend/report.html`   | Displays a complete project report                  |
-
----
+| Page | File | Purpose |
+| --- | --- | --- |
+| Dashboard | `frontend/index.html` | Creates project records and displays a quick result |
+| Projects | `frontend/projects.html` | Groups saved records into project folders |
+| Report | `frontend/report.html` | Displays a complete project report |
 
 ## AWS Architecture
 
-| AWS Service        | Purpose                                                |
-| ------------------ | ------------------------------------------------------ |
-| AWS Amplify        | Hosts and deploys the frontend                         |
-| Amazon API Gateway | Exposes the serverless HTTP API                        |
-| AWS Lambda         | Handles routing, validation, AI calls, and persistence |
-| Amazon DynamoDB    | Stores project records and generated fields            |
-| Amazon Comprehend  | Extracts key phrases and sentiment                     |
-| Amazon Bedrock     | Generates summaries, next steps, and draft messages    |
-| Amazon CloudWatch  | Stores Lambda logs and processing status               |
-| AWS IAM            | Controls service-to-service permissions                |
-| Amazon S3          | Optionally stores project cover photos                 |
+| AWS Service | Purpose |
+| --- | --- |
+| AWS Amplify | Hosts and deploys the frontend |
+| Amazon API Gateway | Exposes the serverless HTTP API |
+| AWS Lambda | Handles routing, validation, AI calls, and persistence |
+| Amazon DynamoDB | Stores project records and generated fields |
+| Amazon Comprehend | Extracts key phrases and sentiment |
+| Amazon Bedrock | Generates summaries, next steps, and draft messages |
+| Amazon CloudWatch | Stores Lambda logs and processing status |
+| AWS IAM | Controls service-to-service permissions |
+| Amazon S3 | Optionally stores project cover photos |
 
 The final architecture diagram is available at:
 
@@ -153,16 +171,14 @@ The final architecture diagram is available at:
 final-submission/architecture/luxnote-ai-architecture.png
 ```
 
----
-
 ## API Routes
 
 ```text
-POST /project-notes
-GET  /project-notes
-GET  /project-notes/{recordId}
+POST   /project-notes
+GET    /project-notes
+GET    /project-notes/{recordId}
 DELETE /project-notes/{recordId}
-POST /project-cover-upload-url
+POST   /project-cover-upload-url
 ```
 
 The S3 cover-photo route is optional and is not required for the core demonstration.
@@ -172,8 +188,6 @@ Private workspace setup notes are available at:
 ```text
 docs/private-workspace-setup.md
 ```
-
----
 
 ## AI Workflow
 
@@ -198,24 +212,20 @@ Amazon Bedrock is used for the generative AI portion of the project. It generate
 
 The Bedrock prompt is written to keep the output grounded in the original notes. It instructs the model not to invent dates, approvals, specifications, or commitments that were not included in the project notes.
 
-AI-generated content should always be reviewed by a person before being used for client, builder, vendor, electrical, construction, or design decisions.
-
----
-
 ## Repository Structure
 
 ```text
 ai-luxury-design-project-assistant/
 ├── frontend/
 │   ├── assets/
-│   │   ├── luxnote-logo-transparent.png
-│   │   └── luxnote-logo-vector.svg
 │   ├── index.html
 │   ├── projects.html
 │   ├── report.html
 │   ├── app.js
 │   ├── projects.js
 │   ├── report.js
+│   ├── auth.js
+│   ├── config.js
 │   ├── styles.css
 │   ├── pages.css
 │   ├── cover-photo.css
@@ -223,23 +233,11 @@ ai-luxury-design-project-assistant/
 ├── lambda/
 │   └── lambda_function.py
 ├── docs/
-│   ├── project-cover-photo-setup.md
-│   └── week-4-build-notes.md
 ├── sample-data/
-│   ├── README.md
-│   ├── demo-records.json
-│   └── lambda-test-event.json
 ├── final-submission/
-│   ├── architecture/
-│   ├── aws-evidence/
-│   ├── demo-video/
-│   ├── documentation/
-│   └── presentation/
 ├── .gitignore
 └── README.md
 ```
-
----
 
 ## Data Model
 
@@ -269,8 +267,6 @@ A stored project record can include:
 
 Optional cover-photo metadata may also be stored when S3 support is configured.
 
----
-
 ## Project Goals
 
 This project was designed to demonstrate:
@@ -287,8 +283,6 @@ This project was designed to demonstrate:
 * GitHub project organization
 * Final documentation and demo preparation
 
----
-
 ## Local Frontend Testing
 
 From the repository root:
@@ -304,8 +298,6 @@ Then open:
 http://localhost:8000
 ```
 
----
-
 ## Validation Checks
 
 Run JavaScript syntax checks:
@@ -315,6 +307,7 @@ cd frontend
 node --check app.js
 node --check projects.js
 node --check report.js
+node --check auth.js
 ```
 
 Run Python syntax validation:
@@ -330,8 +323,6 @@ git status --short
 git diff --check
 git diff --stat
 ```
-
----
 
 ## Final Submission Materials
 
@@ -351,23 +342,19 @@ The final course submission includes:
 * Demo video, 3 to 5 minutes
 * Documentation and README
 
----
-
 ## Current Limitations
 
-* Authentication and user-specific access are not yet implemented.
-* The frontend uses a public API endpoint for the course demonstration.
+* The live classroom demo uses a public API endpoint.
+* Authentication is disabled for the instructor-facing demo, but Cognito-ready frontend hooks and setup notes are included for private workspace mode.
 * Raw audio ingestion is not implemented.
 * Floor-plan and design-image analysis are not implemented.
 * Generated messages are not sent automatically.
 * Reports are printable but do not generate a downloadable PDF directly.
 * Optional S3 cover-photo support requires separate AWS configuration.
 
----
-
 ## Future Improvements
 
-* Add authentication and user-specific project access
+* Enable Cognito authentication for user-specific project access
 * Add Plaud or meeting-recorder transcript ingestion
 * Add project media and cover-photo library
 * Add floor-plan or marked-up drawing analysis
@@ -375,8 +362,6 @@ The final course submission includes:
 * Add role-based access for designers, project managers, and admins
 * Add client-ready communication approval workflow
 * Add stronger analytics across projects and categories
-
----
 
 ## Challenges and Learnings
 
@@ -386,13 +371,9 @@ I also had to balance the project as both a course requirement and a realistic b
 
 This project helped me better understand API Gateway, Lambda routing, DynamoDB records, IAM permissions, CloudWatch logs, Amazon Comprehend, Amazon Bedrock, and the importance of keeping AI output grounded in the original data.
 
----
-
 ## Privacy Notice
 
 All demonstration records are fictional. Submission materials must not contain AWS account numbers, credentials, secrets, environment-variable values, pre-signed URLs, or real client information.
-
----
 
 ## Author
 
