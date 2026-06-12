@@ -38,6 +38,8 @@ LuxNote AI turns raw project notes into organized project records with summaries
 * Project library view
 * Printable project report page
 * Optional project cover-photo workflow
+* Optional private workspace mode with Cognito-ready authentication hooks
+* Optional AI-off note tracking mode for real client workflows
 * Serverless backend using AWS Lambda and API Gateway
 * DynamoDB storage for processed project records
 
@@ -163,6 +165,12 @@ POST /project-cover-upload-url
 ```
 
 The S3 cover-photo route is optional and is not required for the core demonstration.
+
+Private workspace setup notes are available at:
+
+```text
+docs/private-workspace-setup.md
+```
 
 ---
 

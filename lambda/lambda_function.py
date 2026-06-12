@@ -9,6 +9,7 @@ from decimal import Decimal
 from typing import Any
 
 import boto3
+from boto3.dynamodb.conditions import Attr
 from botocore.exceptions import ClientError
 
 
@@ -20,6 +21,22 @@ TABLE_NAME = os.environ.get("TABLE_NAME", "LuxuryDesignProjectNotes")
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "").strip()
 COVER_PHOTO_BUCKET = os.environ.get("COVER_PHOTO_BUCKET", "").strip()
 COVER_PHOTO_URL_BASE = os.environ.get("COVER_PHOTO_URL_BASE", "").strip()
+
+
+def env_flag(name: str, default: bool = False) -> bool:
+    """Read a boolean feature flag from Lambda environment variables."""
+    value = os.environ.get(name)
+
+    if value is None:
+        return default
+
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+AI_ENABLED = env_flag("AI_ENABLED", True)
+REQUIRE_AUTH = env_flag("REQUIRE_AUTH", False)
+PRIVATE_COVER_PHOTOS = env_flag("PRIVATE_COVER_PHOTOS", REQUIRE_AUTH)
+ALLOW_EXTERNAL_COVER_URLS = env_flag("ALLOW_EXTERNAL_COVER_URLS", True)
 
 ALLOWED_COVER_TYPES = {"image/jpeg", "image/png"}
 
@@ -34,9 +51,13 @@ s3 = boto3.client("s3", region_name=AWS_REGION)
 RESPONSE_HEADERS = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Authorization,Content-Type",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
 }
+
+
+class AuthError(Exception):
+    """Raised when a request is missing valid authenticated-user context."""
 
 
 def json_default(value: Any) -> Any:
@@ -111,6 +132,103 @@ def safe_slug(value: str) -> str:
     return slug[:80] or "project"
 
 
+def get_auth_claims(event: dict[str, Any]) -> dict[str, Any]:
+    """Read JWT claims supplied by an API Gateway JWT authorizer."""
+    authorizer = event.get("requestContext", {}).get("authorizer", {})
+    jwt = authorizer.get("jwt", {})
+    claims = jwt.get("claims", {})
+
+    return claims if isinstance(claims, dict) else {}
+
+
+def get_owner_user_id(event: dict[str, Any]) -> str:
+    """Return the authenticated user's stable owner id when auth is required."""
+    claims = get_auth_claims(event)
+    owner_id = str(
+        claims.get("sub")
+        or claims.get("username")
+        or claims.get("cognito:username")
+        or ""
+    ).strip()
+
+    if REQUIRE_AUTH and not owner_id:
+        raise AuthError("Sign in is required before using private project data")
+
+    return owner_id
+
+
+def get_owner_label(event: dict[str, Any]) -> str:
+    """Return a human-readable user label for stored metadata."""
+    claims = get_auth_claims(event)
+
+    return str(
+        claims.get("email")
+        or claims.get("name")
+        or claims.get("cognito:username")
+        or ""
+    ).strip()
+
+
+def user_prefix(owner_user_id: str) -> str:
+    """Create a safe private S3 prefix for an authenticated user."""
+    return safe_slug(owner_user_id or "public")
+
+
+def verify_owner(item: dict[str, Any], owner_user_id: str) -> bool:
+    """Confirm a record belongs to the authenticated user in private mode."""
+    if not REQUIRE_AUTH:
+        return True
+
+    return item.get("ownerUserId") == owner_user_id
+
+
+def generate_cover_view_url(key: str) -> str:
+    """Create a short-lived private S3 view URL."""
+    return s3.generate_presigned_url(
+        ClientMethod="get_object",
+        Params={
+            "Bucket": COVER_PHOTO_BUCKET,
+            "Key": key,
+        },
+        ExpiresIn=900,
+    )
+
+
+def attach_cover_view_url(
+    item: dict[str, Any],
+    owner_user_id: str = "",
+) -> dict[str, Any]:
+    """Return a copy of an item with a secure cover-photo view URL when needed."""
+    if not PRIVATE_COVER_PHOTOS:
+        return item
+
+    key = str(item.get("coverPhotoKey", "")).strip()
+    if not key or not COVER_PHOTO_BUCKET:
+        return item
+
+    if REQUIRE_AUTH:
+        expected_prefix = f"private/{user_prefix(owner_user_id)}/"
+        if not key.startswith(expected_prefix):
+            sanitized = dict(item)
+            sanitized.pop("coverPhotoUrl", None)
+            return sanitized
+
+    item_with_url = dict(item)
+    item_with_url["coverPhotoUrl"] = generate_cover_view_url(key)
+    return item_with_url
+
+
+def prepare_item_for_response(
+    item: dict[str, Any],
+    owner_user_id: str = "",
+) -> dict[str, Any]:
+    """Remove internal ownership metadata before returning a project record."""
+    prepared = attach_cover_view_url(item, owner_user_id)
+    prepared.pop("ownerUserId", None)
+    prepared.pop("ownerLabel", None)
+    return prepared
+
+
 def file_extension(content_type: str, file_name: str) -> str:
     """Choose a safe extension for an allowed image type."""
     if content_type == "image/png":
@@ -131,6 +249,8 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
             {"error": "Project cover-photo storage is not configured"},
         )
 
+    owner_user_id = get_owner_user_id(event)
+
     try:
         body = parse_request_body(event)
     except json.JSONDecodeError:
@@ -149,10 +269,17 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
         )
 
     extension = file_extension(content_type, file_name)
-    key = (
-        f"project-covers/{safe_slug(project_name)}/"
-        f"{uuid.uuid4()}.{extension}"
-    )
+
+    if PRIVATE_COVER_PHOTOS:
+        key = (
+            f"private/{user_prefix(owner_user_id)}/project-covers/"
+            f"{safe_slug(project_name)}/{uuid.uuid4()}.{extension}"
+        )
+    else:
+        key = (
+            f"project-covers/{safe_slug(project_name)}/"
+            f"{uuid.uuid4()}.{extension}"
+        )
 
     upload_url = s3.generate_presigned_url(
         ClientMethod="put_object",
@@ -164,7 +291,9 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
         ExpiresIn=900,
     )
 
-    if COVER_PHOTO_URL_BASE:
+    if PRIVATE_COVER_PHOTOS:
+        file_url = ""
+    elif COVER_PHOTO_URL_BASE:
         file_url = f"{COVER_PHOTO_URL_BASE.rstrip('/')}/{key}"
     else:
         file_url = (
@@ -492,6 +621,9 @@ Project notes:
 
 def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     """Handle POST /project-notes."""
+    owner_user_id = get_owner_user_id(event)
+    owner_label = get_owner_label(event)
+
     try:
         body = parse_request_body(event)
     except json.JSONDecodeError:
@@ -508,20 +640,47 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     if not project_notes:
         return create_response(400, {"error": "projectNotes is required"})
 
+    if (
+        not ALLOW_EXTERNAL_COVER_URLS
+        and str(body.get("coverPhotoType", "")).strip() == "image/url"
+    ):
+        return create_response(
+            400,
+            {"error": "External cover-photo URLs are disabled for this workspace"},
+        )
+
     record_id = str(uuid.uuid4())
     created_at = datetime.now(timezone.utc).isoformat()
 
     category = classify_category(project_notes)
     priority = assign_priority(project_notes)
     fallback_next_steps = create_next_steps(project_notes)
-    comprehend_analysis = analyze_notes_with_comprehend(project_notes)
-    bedrock_generation = generate_project_content_with_bedrock(
-        project_name=project_name,
-        project_notes=project_notes,
-        category=category,
-        priority=priority,
-        fallback_next_steps=fallback_next_steps,
-    )
+
+    if AI_ENABLED:
+        comprehend_analysis = analyze_notes_with_comprehend(project_notes)
+        bedrock_generation = generate_project_content_with_bedrock(
+            project_name=project_name,
+            project_notes=project_notes,
+            category=category,
+            priority=priority,
+            fallback_next_steps=fallback_next_steps,
+        )
+    else:
+        comprehend_analysis = {
+            "keyPhrases": [],
+            "sentiment": "NOT_ANALYZED",
+            "sentimentScores": {},
+            "analysisStatus": "AI_DISABLED",
+        }
+        bedrock_generation = {
+            "summary": create_fallback_summary(project_name, category, priority),
+            "nextSteps": fallback_next_steps,
+            "draftMessage": (
+                "AI draft generation is turned off for this private workspace. "
+                "Use the saved notes and next steps for manual follow-up."
+            ),
+            "generationStatus": "AI_DISABLED",
+        }
 
     item = {
         "recordId": record_id,
@@ -542,6 +701,12 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         "generationStatus": bedrock_generation["generationStatus"],
         "createdAt": created_at,
     }
+
+    if owner_user_id:
+        item["ownerUserId"] = owner_user_id
+
+    if owner_label:
+        item["ownerLabel"] = owner_label
 
     for key in [
         "coverPhotoUrl",
@@ -564,17 +729,27 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         item["analysisStatus"],
         item["generationStatus"],
     )
-    return create_response(201, item)
+    return create_response(
+        201,
+        prepare_item_for_response(item, owner_user_id),
+    )
 
 
-def get_project_notes() -> dict[str, Any]:
+def get_project_notes(event: dict[str, Any]) -> dict[str, Any]:
     """Handle GET /project-notes."""
+    owner_user_id = get_owner_user_id(event)
     items: list[dict[str, Any]] = []
     scan_arguments: dict[str, Any] = {}
 
+    if REQUIRE_AUTH:
+        scan_arguments["FilterExpression"] = Attr("ownerUserId").eq(owner_user_id)
+
     while True:
         response = table.scan(**scan_arguments)
-        items.extend(response.get("Items", []))
+        items.extend(
+            prepare_item_for_response(item, owner_user_id)
+            for item in response.get("Items", [])
+        )
 
         last_evaluated_key = response.get("LastEvaluatedKey")
         if not last_evaluated_key:
@@ -588,6 +763,7 @@ def get_project_notes() -> dict[str, Any]:
 
 def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     """Handle GET /project-notes/{recordId}."""
+    owner_user_id = get_owner_user_id(event)
     path_parameters = event.get("pathParameters") or {}
     record_id = path_parameters.get("recordId")
 
@@ -604,7 +780,13 @@ def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     if not item:
         return create_response(404, {"error": "Project note not found"})
 
-    return create_response(200, item)
+    if not verify_owner(item, owner_user_id):
+        return create_response(404, {"error": "Project note not found"})
+
+    return create_response(
+        200,
+        prepare_item_for_response(item, owner_user_id),
+    )
 
 
 def get_http_method(event: dict[str, Any]) -> str:
@@ -652,12 +834,15 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
             return create_project_note(event)
 
         if method == "GET" and path == "/project-notes":
-            return get_project_notes()
+            return get_project_notes(event)
 
         if method == "GET" and path.startswith("/project-notes/"):
             return get_project_note_by_id(event)
 
         return create_response(404, {"error": "Route not found"})
+
+    except AuthError as error:
+        return create_response(401, {"error": str(error)})
 
     except ClientError as error:
         LOGGER.exception("AWS service error for request %s", request_id)

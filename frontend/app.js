@@ -4,6 +4,7 @@ Dashboard Form and Quick Result Logic
 ========================================================= */
 
 const API_BASE_URL =
+window.LUXNOTE_CONFIG?.apiBaseUrl ||
 "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
 
 const MAX_COVER_PHOTO_BYTES = 5 * 1024 * 1024;
@@ -11,6 +12,8 @@ const ALLOWED_COVER_TYPES = new Set([
 "image/jpeg",
 "image/png"
 ]);
+const ALLOW_EXTERNAL_COVER_URLS =
+window.LUXNOTE_CONFIG?.allowExternalCoverUrls !== false;
 
 const getElement = (id) => document.getElementById(id);
 
@@ -57,7 +60,8 @@ function setLoading(isLoading) {
 elements.submitButton.disabled = isLoading;
 elements.clearButton.disabled = isLoading;
 elements.coverPhoto.disabled = isLoading;
-elements.coverPhotoUrl.disabled = isLoading;
+elements.coverPhotoUrl.disabled =
+isLoading || !ALLOW_EXTERNAL_COVER_URLS;
 
 elements.form.setAttribute(
 "aria-busy",
@@ -141,11 +145,22 @@ return data;
 
 async function apiFetch(path, options = {}) {
 let response;
+const authHeaders =
+window.luxnoteAuth
+? await window.luxnoteAuth.getAuthHeaders()
+: {};
+const headers = {
+...authHeaders,
+...(options.headers || {})
+};
 
 try {
 response = await fetch(
 `${API_BASE_URL}${path}`,
-options
+{
+...options,
+headers
+}
 );
 } catch {
 throw new Error(
@@ -356,7 +371,7 @@ fileUrl,
 s3Key
 } = uploadDetails;
 
-if (!uploadUrl || !fileUrl || !s3Key) {
+if (!uploadUrl || !s3Key) {
 throw new Error(
 "The cover photo service returned incomplete upload information."
 );
@@ -385,7 +400,7 @@ throw new Error(
 }
 
 return {
-coverPhotoUrl: fileUrl,
+coverPhotoUrl: fileUrl || "",
 coverPhotoKey: s3Key,
 coverPhotoName: file.name,
 coverPhotoType: file.type
@@ -509,6 +524,12 @@ throw new Error(
 
 validateCoverPhoto(values.coverPhoto);
 validateCoverPhotoUrl(values.coverPhotoUrl);
+
+if (!ALLOW_EXTERNAL_COVER_URLS && values.coverPhotoUrl) {
+throw new Error(
+"Internet cover-photo URLs are disabled for this private workspace."
+);
+}
 
 if (values.coverPhoto && values.coverPhotoUrl) {
 throw new Error(
@@ -747,7 +768,16 @@ setMessage(
 INITIALIZATION
 ========================================================= */
 
-function initializeApp() {
+async function initializeApp() {
+await window.luxnoteAuth?.initialize();
+
+if (!ALLOW_EXTERNAL_COVER_URLS) {
+elements.coverPhotoUrl.value = "";
+elements.coverPhotoUrl.placeholder =
+"Disabled for private workspaces";
+elements.coverPhotoUrl.disabled = true;
+}
+
 elements.form.addEventListener(
 "submit",
 submitProjectNote

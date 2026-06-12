@@ -110,3 +110,13 @@ When a cover photo is included, a project record may contain:
 ## Current Scope
 
 The application supports one optional cover photo per project note. Multiple attachments, walkthrough galleries, document uploads, and private authenticated media access are future enhancements.
+
+## Private Workspace Mode
+
+For real client work, keep S3 Block Public Access enabled and use private authenticated media access. In private mode, uploaded cover photos are stored under a per-user S3 prefix and the API returns short-lived view URLs only after the signed-in user is authorized to see the project record.
+
+See:
+
+```text
+docs/private-workspace-setup.md
+```

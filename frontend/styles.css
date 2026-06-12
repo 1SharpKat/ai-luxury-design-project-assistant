@@ -245,6 +245,43 @@ h3 {
   transform: scaleX(1);
 }
 
+.workspace-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: min(100%, var(--max-width));
+  margin: 12px auto 0;
+  color: var(--muted-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.workspace-action {
+  min-height: 34px;
+  padding: 0 14px;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.workspace-action:hover,
+.workspace-action:focus-visible {
+  color: var(--info);
+  border-color: currentColor;
+  outline: none;
+  transform: translateY(-1px);
+}
+
 /* =========================================================
    HERO
    ========================================================= */

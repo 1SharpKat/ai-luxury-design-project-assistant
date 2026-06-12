@@ -5,6 +5,7 @@
    ========================================================= */
 
 const API_BASE_URL =
+window.LUXNOTE_CONFIG?.apiBaseUrl ||
   "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
 
 const elements = {
@@ -110,10 +111,15 @@ async function readApiResponse(response) {
 
 async function getJson(path) {
   let response;
+  const authHeaders =
+    window.luxnoteAuth
+      ? await window.luxnoteAuth.getAuthHeaders()
+      : {};
 
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       headers: {
+        ...authHeaders,
         Accept: "application/json"
       }
     });
@@ -418,9 +424,15 @@ async function loadProjects() {
    INITIALIZATION
    ========================================================= */
 
-elements.refreshButton.addEventListener(
-  "click",
-  loadProjects
-);
+async function initializeProjectsPage() {
+  await window.luxnoteAuth?.initialize();
 
-loadProjects();
+  elements.refreshButton.addEventListener(
+    "click",
+    loadProjects
+  );
+
+  loadProjects();
+}
+
+initializeProjectsPage();
