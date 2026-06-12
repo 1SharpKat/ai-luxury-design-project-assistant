@@ -640,6 +640,22 @@ button,
   transform: none !important;
 }
 
+.report-toolbar .secondary-link {
+  color: var(--cafe-noir) !important;
+  -webkit-text-fill-color: var(--cafe-noir) !important;
+  background: rgba(255, 249, 243, 0.92) !important;
+  border-color: rgba(57, 18, 20, 0.34) !important;
+}
+
+.report-toolbar .secondary-link:hover,
+.report-toolbar .secondary-link:focus-visible {
+  color: var(--linen) !important;
+  -webkit-text-fill-color: var(--linen) !important;
+  background: var(--cafe-noir) !important;
+  border-color: var(--cafe-noir) !important;
+  box-shadow: 0 0 0 3px rgba(57, 18, 20, 0.12) !important;
+}
+
 .copy-button.is-copied {
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
