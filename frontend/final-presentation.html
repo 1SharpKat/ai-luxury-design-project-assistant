@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LuxNote AI final AWS project presentation slides.">
+  <title>LuxNote AI | Final AWS Presentation</title>
+  <style>
+    :root {
+      --linen: #f7f1eb;
+      --cream: #fffdfa;
+      --ink: #391214;
+      --cedar: #6c4a3d;
+      --rose: #ba7f69;
+      --olive: #696f53;
+      --line: #ddcfc2;
+      --shadow: 0 24px 80px rgba(57, 18, 20, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--linen);
+      font-family: Aptos, Calibri, Arial, sans-serif;
+    }
+
+    .topbar {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 253, 250, 0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .topbar nav {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 0.85rem;
+    }
+
+    a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(57, 18, 20, 0.35);
+    }
+
+    .slide {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 5.2rem 4vw 3rem;
+      scroll-snap-align: start;
+    }
+
+    .canvas {
+      width: min(1180px, 94vw);
+      min-height: min(680px, 84vh);
+      background: linear-gradient(135deg, var(--cream), #f5ede5);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: clamp(2rem, 4vw, 4rem);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .canvas::after {
+      content: "LuxNote AI";
+      position: absolute;
+      right: 2rem;
+      bottom: 1.35rem;
+      color: rgba(57, 18, 20, 0.14);
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kicker {
+      margin: 0 0 0.7rem;
+      color: var(--olive);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0;
+      font-family: Georgia, serif;
+      line-height: 1.04;
+      color: var(--ink);
+    }
+
+    h1 { font-size: clamp(3.3rem, 7vw, 6.5rem); }
+    h2 { font-size: clamp(2.1rem, 4.5vw, 4.1rem); }
+
+    .subtitle {
+      max-width: 900px;
+      margin: 1rem 0 0;
+      color: var(--cedar);
+      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 253, 250, 0.72);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--olive);
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.45;
+      font-size: 1.05rem;
+    }
+
+    ul, ol {
+      margin: 2rem 0 0;
+      padding-left: 1.2rem;
+      max-width: 980px;
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      line-height: 1.5;
+    }
+
+    li { margin: 0.75rem 0; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    .flow .card { min-height: 140px; }
+
+    .note {
+      margin-top: 2rem;
+      padding: 1rem 1.2rem;
+      background: rgba(186, 127, 105, 0.13);
+      border-left: 5px solid var(--rose);
+      border-radius: 14px;
+      font-size: 1.08rem;
+      line-height: 1.45;
+    }
+
+    .cover-title {
+      display: grid;
+      align-content: center;
+      min-height: 520px;
+    }
+
+    .cover-title .subtitle {
+      color: var(--rose);
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+    }
+
+    .speaker-notes {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--line);
+      color: var(--cedar);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .speaker-notes strong {
+      color: var(--olive);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 820px) {
+      .topbar { position: sticky; }
+      .grid, .grid.two, .grid.four, .flow { grid-template-columns: 1fr; }
+      .canvas { min-height: auto; }
+      .slide { padding-top: 1rem; }
+    }
+
+    @media print {
+      html { scroll-snap-type: none; }
+      body { background: white; }
+      .topbar { display: none; }
+      .slide {
+        min-height: auto;
+        page-break-after: always;
+        padding: 0;
+      }
+      .canvas {
+        width: 100%;
+        min-height: 7.1in;
+        border-radius: 0;
+        box-shadow: none;
+        border: 0;
+      }
+      .speaker-notes { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">LuxNote AI Final AWS Presentation</div>
+    <nav aria-label="Presentation navigation">
+      <a href="index.html">App</a>
+      <a href="#slide-1">Start</a>
+      <a href="#slide-7">Demo Script</a>
+      <a href="javascript:window.print()">Print or Save PDF</a>
+    </nav>
+  </header>
+
+  <section class="slide" id="slide-1">
+    <div class="canvas cover-title">
+      <p class="kicker">Final AWS Course Project</p>
+      <h1>LuxNote AI</h1>
+      <p class="subtitle">Luxury Design Project Assistant</p>
+      <div class="grid two">
+        <div class="card"><strong>Project</strong><p>A serverless AI application that organizes raw project notes into structured design project intelligence.</p></div>
+        <div class="card"><strong>Live Demo</strong><p>Frontend hosted with AWS Amplify. Backend powered by API Gateway, Lambda, DynamoDB, Comprehend, and Bedrock.</p></div>
+      </div>
+      <div class="speaker-notes"><strong>Speaker note</strong><br>Introduce LuxNote AI as a polished AWS final project built around a realistic luxury design workflow.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-2">
+    <div class="canvas">
+      <p class="kicker">Problem</p>
+      <h2>Luxury design work creates scattered project information.</h2>
+      <ul>
+        <li>Walkthrough notes, client preferences, builder updates, and vendor details are easy to lose.</li>
+        <li>Project managers need faster ways to identify priorities, next steps, and follow-up communication.</li>
+        <li>AI can help organize raw notes, while still requiring professional human review.</li>
+      </ul>
+      <div class="note">Project goal: build a cloud-based assistant that turns raw project notes into structured, review-ready project records.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-3">
+    <div class="canvas">
+      <p class="kicker">Solution</p>
+      <h2>LuxNote AI captures notes and returns organized project intelligence.</h2>
+      <div class="grid">
+        <div class="card"><strong>Input</strong><p>Client name, project name, note type, source, and project notes.</p></div>
+        <div class="card"><strong>AI Processing</strong><p>Category, priority, key phrases, sentiment, summary, next steps, and draft message.</p></div>
+        <div class="card"><strong>Output</strong><p>Saved project record, project library, and printable report.</p></div>
+      </div>
+      <ul>
+        <li>Designed for design studios, A/V integrators, lighting teams, and builder coordination.</li>
+        <li>Uses fictional records for the classroom demo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-4">
+    <div class="canvas">
+      <p class="kicker">Architecture</p>
+      <h2>Serverless AWS workflow</h2>
+      <div class="flow">
+        <div class="card"><strong>User</strong><p>Designer or PM enters project notes.</p></div>
+        <div class="card"><strong>Amplify</strong><p>Hosts the frontend.</p></div>
+        <div class="card"><strong>API Gateway</strong><p>Receives HTTP requests.</p></div>
+        <div class="card"><strong>Lambda</strong><p>Validates, routes, and processes.</p></div>
+        <div class="card"><strong>Comprehend</strong><p>Extracts key phrases and sentiment.</p></div>
+        <div class="card"><strong>Bedrock</strong><p>Generates summary and next steps.</p></div>
+        <div class="card"><strong>DynamoDB</strong><p>Stores the final record.</p></div>
+        <div class="card"><strong>CloudWatch/IAM</strong><p>Supports logs and permissions.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-5">
+    <div class="canvas">
+      <p class="kicker">AWS Services</p>
+      <h2>Each service has a clear role.</h2>
+      <ul>
+        <li>AWS Amplify hosts and deploys the frontend.</li>
+        <li>Amazon API Gateway exposes the backend HTTP API.</li>
+        <li>AWS Lambda handles validation, AI calls, routing, and persistence.</li>
+        <li>Amazon DynamoDB stores saved project records.</li>
+        <li>Amazon Comprehend provides key phrase and sentiment analysis.</li>
+        <li>Amazon Bedrock generates summaries, next steps, and draft messages.</li>
+        <li>CloudWatch and IAM support logging, monitoring, and permissions.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-6">
+    <div class="canvas">
+      <p class="kicker">AI Workflow</p>
+      <h2>Combining AI/ML with generative AI</h2>
+      <div class="grid">
+        <div class="card"><strong>Amazon Comprehend</strong><p>Extracts key phrases and sentiment from submitted project notes.</p></div>
+        <div class="card"><strong>Amazon Bedrock</strong><p>Generates a concise summary, specific next steps, and a draft follow-up message.</p></div>
+        <div class="card"><strong>Human Review</strong><p>AI output is reviewed before use in client, builder, vendor, electrical, construction, or design decisions.</p></div>
+      </div>
+      <div class="note">The Bedrock prompt is grounded in the original notes and should not invent dates, approvals, specifications, or commitments.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-7">
+    <div class="canvas">
+      <p class="kicker">Live Demo</p>
+      <h2>Planned walkthrough</h2>
+      <ol>
+        <li>Open the live LuxNote AI dashboard.</li>
+        <li>Enter fictional client and project details.</li>
+        <li>Paste fictional walkthrough or meeting notes.</li>
+        <li>Submit the note for AI-assisted analysis.</li>
+        <li>Review the generated summary, priority, and next steps.</li>
+        <li>Open the full report and project library.</li>
+      </ol>
+      <div class="speaker-notes"><strong>Speaker note</strong><br>This slide can stay on screen while switching to the live app demo.</div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-8">
+    <div class="canvas">
+      <p class="kicker">Data</p>
+      <h2>The app saves structured records in DynamoDB.</h2>
+      <div class="grid two">
+        <div>
+          <ul>
+            <li>recordId and createdAt timestamp</li>
+            <li>clientName and projectName</li>
+            <li>noteType, source, and original notes</li>
+            <li>category and priority</li>
+            <li>keyPhrases and sentiment</li>
+            <li>summary, nextSteps, and draftMessage</li>
+          </ul>
+        </div>
+        <div class="card"><strong>Why this matters</strong><p>The design team gets searchable project memory instead of scattered notes. Each record can support follow-up, review, and project coordination.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-9">
+    <div class="canvas">
+      <p class="kicker">Results</p>
+      <h2>What the project demonstrates</h2>
+      <ul>
+        <li>A working cloud-hosted web application.</li>
+        <li>A serverless API connected to Lambda and DynamoDB.</li>
+        <li>AI/ML integration with Amazon Comprehend.</li>
+        <li>Generative AI integration with Amazon Bedrock.</li>
+        <li>A polished frontend experience for a realistic business workflow.</li>
+        <li>Final documentation, README, architecture, and demo materials.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-10">
+    <div class="canvas">
+      <p class="kicker">Limits and Next Steps</p>
+      <h2>Credible roadmap after the MVP</h2>
+      <div class="grid two">
+        <div class="card"><strong>Current Limitations</strong><p>The live classroom demo uses fictional data and a public API endpoint. Raw audio ingestion, floor-plan analysis, automatic message sending, and downloadable PDFs are not implemented yet.</p></div>
+        <div class="card"><strong>Future Improvements</strong><p>Enable Cognito private workspaces, add Plaud transcript ingestion, support project media libraries, generate PDFs, add role-based access, and create a client-ready approval workflow.</p></div>
+      </div>
+      <div class="note">Closing statement: LuxNote AI proves how AWS serverless services and AI can support a real design-project workflow.</div>
+    </div>
+  </section>
+</body>
+</html>
