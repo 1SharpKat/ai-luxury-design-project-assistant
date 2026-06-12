@@ -260,14 +260,14 @@ h3 {
 }
 
 .workspace-action {
-  min-height: 34px;
-  padding: 0 14px;
+  min-height: 30px;
+  padding: 0 10px;
   color: var(--text);
   font: inherit;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.52);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 6px;
   transition:
     border-color var(--transition-fast),
     color var(--transition-fast),
@@ -357,12 +357,12 @@ h3 {
   align-items: center;
   justify-content: center;
 
-  min-height: 46px;
-  padding: 0 20px;
+  min-height: 38px;
+  padding: 0 14px;
 
-  border-radius: 10px;
+  border-radius: 6px;
 
-  font-size: 0.86rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-align: center;
 

@@ -579,8 +579,8 @@ button,
   overflow: hidden !important;
   border-radius: var(--radius-button) !important;
   box-shadow: none !important;
-  font-size: 0.8rem !important;
-  letter-spacing: 0.08em !important;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.07em !important;
   line-height: 1.1 !important;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
 }
@@ -714,6 +714,20 @@ PROJECTS, REPORT, STATES
   background: var(--mauve-soft) !important;
   border: 1px solid var(--mauve-border) !important;
   border-radius: 4px !important;
+}
+
+.project-note-delete {
+  color: var(--mauve) !important;
+  background: rgba(255, 249, 243, 0.72) !important;
+  border-color: rgba(117, 81, 81, 0.20) !important;
+}
+
+.project-note-delete:hover,
+.project-note-delete:focus-visible {
+  color: var(--linen) !important;
+  -webkit-text-fill-color: var(--linen) !important;
+  background: var(--cafe-noir) !important;
+  border-color: var(--cafe-noir) !important;
 }
 
 #report-client {

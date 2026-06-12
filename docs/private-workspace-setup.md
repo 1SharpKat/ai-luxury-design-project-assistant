@@ -105,10 +105,13 @@ YOUR_COGNITO_APP_CLIENT_ID
 GET  /project-notes
 POST /project-notes
 GET  /project-notes/{recordId}
+DELETE /project-notes/{recordId}
 POST /project-cover-upload-url
 ```
 
 Leave `OPTIONS` preflight unauthenticated.
+
+Confirm API Gateway CORS allows `GET`, `POST`, `DELETE`, `OPTIONS`, and the `Authorization` and `Content-Type` headers from the deployed frontend origin.
 
 ## Lambda IAM For Private Cover Photos
 

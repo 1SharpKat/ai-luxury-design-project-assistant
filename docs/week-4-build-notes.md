@@ -22,6 +22,7 @@ It supports:
 POST /project-notes
 GET  /project-notes
 GET  /project-notes/{recordId}
+DELETE /project-notes/{recordId}
 POST /project-cover-upload-url
 ```
 

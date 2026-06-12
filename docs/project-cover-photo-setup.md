@@ -75,11 +75,12 @@ The core API routes remain:
 POST /project-notes
 GET  /project-notes
 GET  /project-notes/{recordId}
+DELETE /project-notes/{recordId}
 ```
 
 ## CORS
 
-API Gateway must allow the frontend origin to use `POST` and `Content-Type`.
+API Gateway must allow the frontend origin to use `GET`, `POST`, `DELETE`, `OPTIONS`, and the `Content-Type` header. Private workspace mode also needs the `Authorization` header.
 
 The S3 bucket must allow browser `PUT` requests from the deployed frontend origin. Use the specific production and development origins rather than `*` for a production deployment.
 

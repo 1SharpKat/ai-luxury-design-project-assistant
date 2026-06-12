@@ -52,7 +52,7 @@ RESPONSE_HEADERS = {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Authorization,Content-Type",
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Methods": "DELETE,GET,POST,OPTIONS",
 }
 
 
@@ -789,6 +789,40 @@ def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     )
 
 
+def delete_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
+    """Handle DELETE /project-notes/{recordId}."""
+    owner_user_id = get_owner_user_id(event)
+    path_parameters = event.get("pathParameters") or {}
+    record_id = path_parameters.get("recordId")
+
+    if not record_id:
+        path = get_request_path(event)
+        record_id = path.rsplit("/", 1)[-1]
+
+    if not record_id:
+        return create_response(400, {"error": "recordId is required"})
+
+    response = table.get_item(Key={"recordId": record_id})
+    item = response.get("Item")
+
+    if not item or not verify_owner(item, owner_user_id):
+        return create_response(404, {"error": "Project note not found"})
+
+    table.delete_item(
+        Key={"recordId": record_id},
+        ConditionExpression="attribute_exists(recordId)",
+    )
+
+    LOGGER.info("Deleted project note record %s", record_id)
+    return create_response(
+        200,
+        {
+            "deleted": True,
+            "recordId": record_id,
+        },
+    )
+
+
 def get_http_method(event: dict[str, Any]) -> str:
     """Read the HTTP method from API Gateway."""
     method = event.get("requestContext", {}).get("http", {}).get("method")
@@ -838,6 +872,9 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
 
         if method == "GET" and path.startswith("/project-notes/"):
             return get_project_note_by_id(event)
+
+        if method == "DELETE" and path.startswith("/project-notes/"):
+            return delete_project_note_by_id(event)
 
         return create_response(404, {"error": "Route not found"})
 

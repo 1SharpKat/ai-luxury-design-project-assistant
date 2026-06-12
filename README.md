@@ -161,6 +161,7 @@ final-submission/architecture/luxnote-ai-architecture.png
 POST /project-notes
 GET  /project-notes
 GET  /project-notes/{recordId}
+DELETE /project-notes/{recordId}
 POST /project-cover-upload-url
 ```
 

@@ -109,20 +109,25 @@ async function readApiResponse(response) {
   return data;
 }
 
-async function getJson(path) {
+async function apiFetch(path, options = {}) {
   let response;
   const authHeaders =
     window.luxnoteAuth
       ? await window.luxnoteAuth.getAuthHeaders()
       : {};
+  const headers = {
+    ...authHeaders,
+    ...(options.headers || {})
+  };
 
   try {
-    response = await fetch(`${API_BASE_URL}${path}`, {
-      headers: {
-        ...authHeaders,
-        Accept: "application/json"
+    response = await fetch(
+      `${API_BASE_URL}${path}`,
+      {
+        ...options,
+        headers
       }
-    });
+    );
   } catch {
     throw new Error(
       "LuxNote AI could not connect to the project service. Check your connection and try again."
@@ -130,6 +135,14 @@ async function getJson(path) {
   }
 
   return readApiResponse(response);
+}
+
+function getJson(path) {
+  return apiFetch(path, {
+    headers: {
+      Accept: "application/json"
+    }
+  });
 }
 
 /* =========================================================
@@ -178,16 +191,83 @@ function sortNotesByNewest(notes) {
    PROJECT NOTE ROW
    ========================================================= */
 
+async function deleteProjectNote(record) {
+  if (!record.recordId) {
+    return;
+  }
+
+  const noteName = formatNoteType(record.noteType);
+  const confirmed = window.confirm(
+    `Delete this ${noteName} note? This cannot be undone.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await apiFetch(
+      `/project-notes/${encodeURIComponent(record.recordId)}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json"
+        }
+      }
+    );
+
+    showStatus("Project note deleted.", "success-state");
+    loadProjects();
+  } catch (error) {
+    console.error("Project note could not be deleted:", error);
+    showStatus(
+      error.message || "Project note could not be deleted.",
+      "error-state"
+    );
+  }
+}
+
+function createTrashIcon() {
+  const icon = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "svg"
+  );
+  icon.setAttribute("class", "trash-icon");
+  icon.setAttribute("viewBox", "0 0 24 24");
+  icon.setAttribute("aria-hidden", "true");
+  icon.setAttribute("focusable", "false");
+
+  const path = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+  );
+  path.setAttribute(
+    "d",
+    "M3 6h18M9 6V4h6v2m-8 0 1 14h8l1-14"
+  );
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  path.setAttribute("stroke-width", "1.8");
+  icon.appendChild(path);
+
+  return icon;
+}
+
 function createNoteRow(record) {
-  const row = document.createElement("a");
+  const row = document.createElement("div");
   row.className = "project-note-row";
 
+  const reportLink = document.createElement("a");
+  reportLink.className = "project-note-link";
+
   if (record.recordId) {
-    row.href =
+    reportLink.href =
       `report.html?id=${encodeURIComponent(record.recordId)}`;
   } else {
-    row.href = "projects.html";
-    row.setAttribute("aria-disabled", "true");
+    reportLink.href = "projects.html";
+    reportLink.setAttribute("aria-disabled", "true");
   }
 
   const noteDetails = document.createElement("span");
@@ -197,7 +277,7 @@ function createNoteRow(record) {
 
   const noteMeta = document.createElement("small");
   noteMeta.textContent =
-    `${record.category || "General"} · ${formatDate(record.createdAt)}`;
+    `${record.category || "General"} - ${formatDate(record.createdAt)}`;
 
   noteDetails.append(noteTitle, noteMeta);
 
@@ -210,7 +290,22 @@ function createNoteRow(record) {
       String(record.priority).toLowerCase();
   }
 
-  row.append(noteDetails, priority);
+  reportLink.append(noteDetails, priority);
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "project-note-delete";
+  deleteButton.type = "button";
+  deleteButton.title = "Delete project note";
+  deleteButton.setAttribute(
+    "aria-label",
+    `Delete ${formatNoteType(record.noteType)} note`
+  );
+  deleteButton.appendChild(createTrashIcon());
+  deleteButton.addEventListener("click", () => {
+    deleteProjectNote(record);
+  });
+
+  row.append(reportLink, deleteButton);
 
   return row;
 }
@@ -228,7 +323,7 @@ function createProjectCover(projectName, notes) {
     : "project-cover-thumb no-cover";
 
   if (!coverUrl) {
-    cover.textContent = "▰";
+    cover.textContent = "Photo";
     cover.setAttribute("aria-hidden", "true");
     return cover;
   }
@@ -241,7 +336,7 @@ function createProjectCover(projectName, notes) {
   image.addEventListener("error", () => {
     cover.classList.add("no-cover");
     cover.replaceChildren();
-    cover.textContent = "▰";
+    cover.textContent = "Photo";
     cover.setAttribute("aria-hidden", "true");
   });
 
@@ -271,15 +366,15 @@ function createProjectFolder(projectName, projectNotes) {
   const noteLabel = notes.length === 1 ? "note" : "notes";
 
   projectMeta.textContent =
-    `${latestNote.clientName || "Private Client"} · ` +
-    `${notes.length} saved ${noteLabel} · ` +
+    `${latestNote.clientName || "Private Client"} - ` +
+    `${notes.length} saved ${noteLabel} - ` +
     `Updated ${formatDate(latestNote.createdAt)}`;
 
   folderCopy.append(projectTitle, projectMeta);
 
   const arrow = document.createElement("span");
   arrow.className = "folder-arrow";
-  arrow.textContent = "›";
+  arrow.textContent = ">";
   arrow.setAttribute("aria-hidden", "true");
 
   summary.append(cover, folderCopy, arrow);
