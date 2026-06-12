@@ -233,7 +233,7 @@ NAVIGATION
 ========================================================= */
 
 .site-header {
-  padding: 18px var(--page-gap) 26px !important;
+  padding: 14px var(--page-gap) 18px !important;
 }
 
 .glass-nav {
@@ -246,15 +246,21 @@ NAVIGATION
   -webkit-backdrop-filter: none !important;
 }
 
+.nav-links {
+  gap: 18px !important;
+}
+
 .nav-wordmark {
   color: var(--cedar-dark) !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
+  font-size: 1rem !important;
   letter-spacing: 0 !important;
 }
 
 .nav-links a {
   color: var(--deep-olive) !important;
+  font-size: 0.76rem !important;
 }
 
 .nav-links a:hover,
@@ -467,6 +473,12 @@ PANELS AND STATIC CARDS
 
 .summary-card {
   border-top: 2px solid rgba(117, 81, 81, 0.36) !important;
+}
+
+.report-summary-strip .summary-card {
+  border-top-width: 1px !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
 }
 
 .result-card {
