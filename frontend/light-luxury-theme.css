@@ -1318,3 +1318,45 @@ textarea {
     border-top: 1px solid var(--gallery-line);
   }
 }
+
+/* Final dashboard placement guard for deployed builds. */
+.dashboard-shell {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.06fr) minmax(360px, 0.84fr) !important;
+  grid-template-areas:
+    "advisor advisor"
+    "form results" !important;
+  align-items: start !important;
+}
+
+.dashboard-shell .advisor-hero {
+  grid-area: advisor !important;
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+}
+
+.dashboard-shell .form-panel {
+  grid-area: form !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  position: relative !important;
+  z-index: 1;
+}
+
+.dashboard-shell .results-panel {
+  grid-area: results !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  position: relative !important;
+  z-index: 1;
+}
+
+@media (max-width: 1050px) {
+  .dashboard-shell {
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "advisor"
+      "form"
+      "results" !important;
+  }
+}
