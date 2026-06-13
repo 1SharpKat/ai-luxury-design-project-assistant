@@ -7,6 +7,12 @@
 const API_BASE_URL =
 window.LUXNOTE_CONFIG?.apiBaseUrl ||
   "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
+const API_PATH_PREFIX =
+window.LUXNOTE_CONFIG?.apiPathPrefix || "";
+const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
+const NEW_NOTE_PAGE = APP_ROUTES.newNote || "index.html#new-note";
+const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
+const REPORT_PAGE = APP_ROUTES.report || "report.html";
 
 const elements = {
   folders: document.getElementById("project-folders"),
@@ -122,7 +128,7 @@ async function apiFetch(path, options = {}) {
 
   try {
     response = await fetch(
-      `${API_BASE_URL}${path}`,
+      `${API_BASE_URL}${API_PATH_PREFIX}${path}`,
       {
         ...options,
         headers
@@ -264,9 +270,9 @@ function createNoteRow(record) {
 
   if (record.recordId) {
     reportLink.href =
-      `report.html?id=${encodeURIComponent(record.recordId)}`;
+      `${REPORT_PAGE}?id=${encodeURIComponent(record.recordId)}`;
   } else {
-    reportLink.href = "projects.html";
+    reportLink.href = PROJECTS_PAGE;
     reportLink.setAttribute("aria-disabled", "true");
   }
 
@@ -411,7 +417,7 @@ function renderEmptyState() {
 
   const link = document.createElement("a");
   link.className = "primary-link";
-  link.href = "index.html#new-note";
+  link.href = NEW_NOTE_PAGE;
   link.textContent = "Create Project Note";
 
   elements.status.append(heading, description, link);
@@ -526,6 +532,13 @@ async function initializeProjectsPage() {
     "click",
     loadProjects
   );
+
+  if (
+    window.luxnoteAuth?.getAccessState &&
+    !window.luxnoteAuth.getAccessState().canAccess
+  ) {
+    return;
+  }
 
   loadProjects();
 }

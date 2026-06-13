@@ -34,9 +34,11 @@ def env_flag(name: str, default: bool = False) -> bool:
 
 
 AI_ENABLED = env_flag("AI_ENABLED", True)
+PRIVATE_AI_ENABLED = env_flag("PRIVATE_AI_ENABLED", False)
 REQUIRE_AUTH = env_flag("REQUIRE_AUTH", False)
 PRIVATE_COVER_PHOTOS = env_flag("PRIVATE_COVER_PHOTOS", REQUIRE_AUTH)
 ALLOW_EXTERNAL_COVER_URLS = env_flag("ALLOW_EXTERNAL_COVER_URLS", True)
+PRIVATE_PATH_PREFIX = os.environ.get("PRIVATE_PATH_PREFIX", "/private").rstrip("/")
 
 ALLOWED_COVER_TYPES = {"image/jpeg", "image/png"}
 
@@ -151,7 +153,7 @@ def get_owner_user_id(event: dict[str, Any]) -> str:
         or ""
     ).strip()
 
-    if REQUIRE_AUTH and not owner_id:
+    if request_requires_auth(event) and not owner_id:
         raise AuthError("Sign in is required before using private project data")
 
     return owner_id
@@ -174,10 +176,14 @@ def user_prefix(owner_user_id: str) -> str:
     return safe_slug(owner_user_id or "public")
 
 
-def verify_owner(item: dict[str, Any], owner_user_id: str) -> bool:
+def verify_owner(
+    item: dict[str, Any],
+    owner_user_id: str,
+    require_owner: bool,
+) -> bool:
     """Confirm a record belongs to the authenticated user in private mode."""
-    if not REQUIRE_AUTH:
-        return True
+    if not require_owner:
+        return "ownerUserId" not in item
 
     return item.get("ownerUserId") == owner_user_id
 
@@ -197,6 +203,7 @@ def generate_cover_view_url(key: str) -> str:
 def attach_cover_view_url(
     item: dict[str, Any],
     owner_user_id: str = "",
+    require_owner: bool = False,
 ) -> dict[str, Any]:
     """Return a copy of an item with a secure cover-photo view URL when needed."""
     if not PRIVATE_COVER_PHOTOS:
@@ -206,7 +213,7 @@ def attach_cover_view_url(
     if not key or not COVER_PHOTO_BUCKET:
         return item
 
-    if REQUIRE_AUTH:
+    if require_owner:
         expected_prefix = f"private/{user_prefix(owner_user_id)}/"
         if not key.startswith(expected_prefix):
             sanitized = dict(item)
@@ -221,9 +228,10 @@ def attach_cover_view_url(
 def prepare_item_for_response(
     item: dict[str, Any],
     owner_user_id: str = "",
+    require_owner: bool = False,
 ) -> dict[str, Any]:
     """Remove internal ownership metadata before returning a project record."""
-    prepared = attach_cover_view_url(item, owner_user_id)
+    prepared = attach_cover_view_url(item, owner_user_id, require_owner)
     prepared.pop("ownerUserId", None)
     prepared.pop("ownerLabel", None)
     return prepared
@@ -249,6 +257,7 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
             {"error": "Project cover-photo storage is not configured"},
         )
 
+    private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
 
     try:
@@ -270,7 +279,7 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
 
     extension = file_extension(content_type, file_name)
 
-    if PRIVATE_COVER_PHOTOS:
+    if private_request and PRIVATE_COVER_PHOTOS:
         key = (
             f"private/{user_prefix(owner_user_id)}/project-covers/"
             f"{safe_slug(project_name)}/{uuid.uuid4()}.{extension}"
@@ -291,7 +300,7 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
         ExpiresIn=900,
     )
 
-    if PRIVATE_COVER_PHOTOS:
+    if private_request and PRIVATE_COVER_PHOTOS:
         file_url = ""
     elif COVER_PHOTO_URL_BASE:
         file_url = f"{COVER_PHOTO_URL_BASE.rstrip('/')}/{key}"
@@ -621,6 +630,7 @@ Project notes:
 
 def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     """Handle POST /project-notes."""
+    private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
     owner_label = get_owner_label(event)
 
@@ -641,7 +651,8 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         return create_response(400, {"error": "projectNotes is required"})
 
     if (
-        not ALLOW_EXTERNAL_COVER_URLS
+        private_request
+        and not ALLOW_EXTERNAL_COVER_URLS
         and str(body.get("coverPhotoType", "")).strip() == "image/url"
     ):
         return create_response(
@@ -656,7 +667,9 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     priority = assign_priority(project_notes)
     fallback_next_steps = create_next_steps(project_notes)
 
-    if AI_ENABLED:
+    ai_enabled_for_request = PRIVATE_AI_ENABLED if private_request else AI_ENABLED
+
+    if ai_enabled_for_request:
         comprehend_analysis = analyze_notes_with_comprehend(project_notes)
         bedrock_generation = generate_project_content_with_bedrock(
             project_name=project_name,
@@ -731,23 +744,26 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     )
     return create_response(
         201,
-        prepare_item_for_response(item, owner_user_id),
+        prepare_item_for_response(item, owner_user_id, private_request),
     )
 
 
 def get_project_notes(event: dict[str, Any]) -> dict[str, Any]:
     """Handle GET /project-notes."""
+    private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
     items: list[dict[str, Any]] = []
     scan_arguments: dict[str, Any] = {}
 
-    if REQUIRE_AUTH:
+    if private_request:
         scan_arguments["FilterExpression"] = Attr("ownerUserId").eq(owner_user_id)
+    else:
+        scan_arguments["FilterExpression"] = Attr("ownerUserId").not_exists()
 
     while True:
         response = table.scan(**scan_arguments)
         items.extend(
-            prepare_item_for_response(item, owner_user_id)
+            prepare_item_for_response(item, owner_user_id, private_request)
             for item in response.get("Items", [])
         )
 
@@ -763,6 +779,7 @@ def get_project_notes(event: dict[str, Any]) -> dict[str, Any]:
 
 def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     """Handle GET /project-notes/{recordId}."""
+    private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
     path_parameters = event.get("pathParameters") or {}
     record_id = path_parameters.get("recordId")
@@ -780,17 +797,18 @@ def get_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     if not item:
         return create_response(404, {"error": "Project note not found"})
 
-    if not verify_owner(item, owner_user_id):
+    if not verify_owner(item, owner_user_id, private_request):
         return create_response(404, {"error": "Project note not found"})
 
     return create_response(
         200,
-        prepare_item_for_response(item, owner_user_id),
+        prepare_item_for_response(item, owner_user_id, private_request),
     )
 
 
 def delete_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     """Handle DELETE /project-notes/{recordId}."""
+    private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
     path_parameters = event.get("pathParameters") or {}
     record_id = path_parameters.get("recordId")
@@ -805,7 +823,7 @@ def delete_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     response = table.get_item(Key={"recordId": record_id})
     item = response.get("Item")
 
-    if not item or not verify_owner(item, owner_user_id):
+    if not item or not verify_owner(item, owner_user_id, private_request):
         return create_response(404, {"error": "Project note not found"})
 
     table.delete_item(
@@ -843,19 +861,39 @@ def get_request_path(event: dict[str, Any]) -> str:
     return str(event.get("path", ""))
 
 
+def is_private_request(event: dict[str, Any]) -> bool:
+    """Return True when the request is for the signed-in private workspace."""
+    path = get_request_path(event)
+    return bool(PRIVATE_PATH_PREFIX and path.startswith(f"{PRIVATE_PATH_PREFIX}/"))
+
+
+def request_requires_auth(event: dict[str, Any]) -> bool:
+    """Private routes always require auth; REQUIRE_AUTH can lock all routes."""
+    return REQUIRE_AUTH or is_private_request(event)
+
+
+def normalize_request_path(path: str) -> str:
+    """Strip the private route prefix before route matching."""
+    if PRIVATE_PATH_PREFIX and path.startswith(f"{PRIVATE_PATH_PREFIX}/"):
+        return path[len(PRIVATE_PATH_PREFIX) :]
+
+    return path
+
+
 def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     """Main Lambda entry point."""
     request_id = getattr(context, "aws_request_id", "unknown")
 
     try:
         method = get_http_method(event)
-        path = get_request_path(event)
+        raw_path = get_request_path(event)
+        path = normalize_request_path(raw_path)
 
         LOGGER.info(
             "Request %s. Method: %s. Path: %s",
             request_id,
             method,
-            path,
+            raw_path,
         )
 
         if method == "OPTIONS":

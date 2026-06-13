@@ -6,6 +6,11 @@ Dashboard Form and Quick Result Logic
 const API_BASE_URL =
 window.LUXNOTE_CONFIG?.apiBaseUrl ||
 "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
+const API_PATH_PREFIX =
+window.LUXNOTE_CONFIG?.apiPathPrefix || "";
+const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
+const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
+const REPORT_PAGE = APP_ROUTES.report || "report.html";
 
 const MAX_COVER_PHOTO_BYTES = 5 * 1024 * 1024;
 const ALLOWED_COVER_TYPES = new Set([
@@ -42,6 +47,22 @@ openReportLink: getElement("open-report-link")
 
 const submitLabel =
 elements.submitButton?.querySelector(".button-label") || null;
+const defaultSubmitText =
+submitLabel?.textContent.trim() || "Generate Demo Report";
+const initialResultText = {
+projectName:
+elements.resultProjectName?.textContent.trim() || "Demo project",
+priority:
+elements.resultPriority?.textContent.trim() || "Not assigned",
+summary:
+elements.resultSummary?.textContent.trim() ||
+"Your generated project summary will appear here after analysis.",
+status:
+elements.generationStatus?.textContent.trim() || "Preview",
+nextStep:
+elements.resultNextSteps?.querySelector("li")?.textContent.trim() ||
+"Generated next steps will appear here after analysis."
+};
 
 let coverPreviewUrl = "";
 
@@ -76,7 +97,7 @@ isLoading
 if (submitLabel) {
 submitLabel.textContent = isLoading
 ? "Analyzing Project Notes..."
-: "Analyze Project Notes";
+: defaultSubmitText;
 }
 }
 
@@ -156,7 +177,7 @@ const headers = {
 
 try {
 response = await fetch(
-`${API_BASE_URL}${path}`,
+`${API_BASE_URL}${API_PATH_PREFIX}${path}`,
 {
 ...options,
 headers
@@ -453,8 +474,8 @@ normalizeStatus(record.generationStatus);
 renderNextSteps(record.nextSteps);
 
 elements.openReportLink.href = record.recordId
-? `report.html?id=${encodeURIComponent(record.recordId)}`
-: "projects.html";
+? `${REPORT_PAGE}?id=${encodeURIComponent(record.recordId)}`
+: PROJECTS_PAGE;
 
 elements.resultsSection.classList.remove(
 "is-hidden"
@@ -614,7 +635,7 @@ setMessage(
 
 } catch (error) {
 console.error(
-"Project note submission failed:",
+"Project note request failed:",
 error
 );
 
@@ -633,23 +654,23 @@ FORM RESET
 
 function resetQuickResult() {
 elements.resultProjectName.textContent =
-"Project name";
+initialResultText.projectName;
 
 elements.resultPriority.textContent =
-"Not assigned";
+initialResultText.priority;
 
 elements.resultSummary.textContent =
-"The AI-generated summary will appear here.";
+initialResultText.summary;
 
 elements.generationStatus.textContent =
-"Ready";
+initialResultText.status;
 
 renderNextSteps([
-"Generated next steps will appear here."
+initialResultText.nextStep
 ]);
 
 elements.openReportLink.href =
-"projects.html";
+PROJECTS_PAGE;
 
 elements.resultsSection.classList.add(
 "is-hidden"

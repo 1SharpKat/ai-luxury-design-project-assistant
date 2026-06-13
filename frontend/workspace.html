@@ -9,11 +9,11 @@
   >
   <meta
     name="description"
-    content="LuxNote AI is a polished project intelligence demo for organizing luxury design notes, walkthrough transcripts, action items, and professional follow-up communication."
+    content="Private LuxNote AI workspace for organizing real luxury design project notes, walkthrough transcripts, action items, and professional follow-up communication behind sign-in."
   >
   <meta name="theme-color" content="#f7f1eb">
 
-  <title>LuxNote AI | Luxury Design Project Assistant</title>
+  <title>Private Workspace | LuxNote AI</title>
 
   <link
     rel="icon"
@@ -31,16 +31,16 @@
     <nav class="glass-nav" aria-label="Primary navigation">
       <a
         class="nav-wordmark"
-        href="index.html"
+        href="workspace.html"
         aria-current="page"
       >
         LuxNote AI
       </a>
 
       <div class="nav-links">
-        <a href="#new-note">Try Demo</a>
-        <a href="projects.html">Project Library</a>
-        <a href="workspace.html">Private Workspace</a>
+        <a href="#new-note">New Note</a>
+        <a href="workspace-projects.html">Private Library</a>
+        <a href="index.html">Public Demo</a>
       </div>
     </nav>
   </header>
@@ -59,24 +59,24 @@
         >
 
         <p class="advisor-brand-kicker">
-          Luxury Design Project Assistant
+          Private Project Workspace
           <span class="advisor-brand-subtext">
-            A polished workspace for walkthroughs, decisions, and follow-up.
+            Job-ready records for walkthroughs, decisions, and follow-up.
           </span>
         </p>
       </div>
 
       <div class="advisor-statement-panel">
-        <p class="eyebrow">Portfolio Demo</p>
+        <p class="eyebrow">Sign-In Workspace</p>
 
         <h1 id="hero-heading">
-          Project intelligence for luxury design teams.
+          Private project intelligence for real design work.
         </h1>
 
         <p class="advisor-hero-copy">
-          LuxNote AI turns walkthrough notes, client priorities,
-          builder coordination, and follow-up details into a structured
-          project record that is ready for professional review.
+          LuxNote AI organizes job notes, client priorities,
+          builder coordination, and follow-up details into a private
+          project record for professional review.
         </p>
 
         <div class="hero-system-row" aria-label="Demo workflow">
@@ -90,14 +90,14 @@
             class="primary-link hero-button-left"
             href="#new-note"
           >
-            Try the Demo
+            Create Private Note
           </a>
 
           <a
             class="secondary-link hero-button-right"
-            href="projects.html"
+            href="workspace-projects.html"
           >
-            View Project Library
+            Open Private Library
           </a>
         </div>
       </div>
@@ -110,19 +110,19 @@
     >
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Demo Workbench</p>
+          <p class="eyebrow">Private Workbench</p>
 
           <h2 id="project-note-heading">
-            Create a polished project record
+            Save a private project record
           </h2>
 
           <p class="section-description">
-            Use fictional notes to preview how LuxNote AI organizes
-            project context, priorities, next steps, and follow-up.
+            Use this workspace for job notes only after sign-in,
+            owner-scoped records, and private storage are configured.
           </p>
         </div>
 
-        <span class="status-badge">Live Demo</span>
+        <span class="status-badge">Sign-In Required</span>
       </div>
 
       <form id="project-note-form" novalidate>
@@ -134,7 +134,7 @@
               id="client-name"
               name="clientName"
               type="text"
-              placeholder="Fictional Client"
+              placeholder="Client or project alias"
               autocomplete="organization"
             >
           </div>
@@ -149,13 +149,13 @@
               id="project-name"
               name="projectName"
               type="text"
-              placeholder="Alder Ridge Residence"
+              placeholder="Residence project name"
               autocomplete="off"
               required
             >
 
             <small class="field-hint">
-              Reuse a project name to group related demo notes.
+              Reuse a project name to group related job notes.
             </small>
           </div>
 
@@ -188,8 +188,8 @@
             <label for="source">Source</label>
 
             <select id="source" name="source">
-              <option value="fictional demo transcript">
-                Fictional demo transcript
+              <option value="job walkthrough notes">
+                Job walkthrough notes
               </option>
               <option value="Plaud transcript">
                 Plaud transcript
@@ -230,7 +230,7 @@
             name="projectNotes"
             rows="10"
             maxlength="10000"
-            placeholder="Paste fictional meeting notes, transcripts, or walkthrough details here."
+            placeholder="Paste meeting notes, transcripts, or walkthrough details here after sign-in is verified."
             required
           ></textarea>
         </div>
@@ -247,8 +247,8 @@
             </h3>
 
             <p>
-              Optional. Choose a local JPEG or PNG, up to 5 MB, or
-              paste a direct HTTPS image URL for the demo project.
+              Optional. Choose a local JPEG or PNG, up to 5 MB.
+              External image URLs are disabled for private workspaces.
             </p>
           </div>
 
@@ -299,7 +299,7 @@
             type="submit"
           >
             <span class="button-label">
-              Generate Demo Report
+              Save Private Project Note
             </span>
 
             <span
@@ -334,15 +334,15 @@
     >
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Output Preview</p>
+          <p class="eyebrow">Private Review</p>
 
           <h2 id="results-heading">
-            Structured review packet
+            Structured project packet
           </h2>
 
           <p class="section-description">
-            A completed analysis appears here with the essentials
-            organized for fast review.
+            Saved project intelligence appears here with the essentials
+            organized for professional review.
           </p>
         </div>
 
@@ -350,7 +350,7 @@
           id="generation-status"
           class="status-badge"
         >
-          Preview
+          Private
         </span>
       </div>
 
@@ -358,7 +358,7 @@
         <article class="summary-card">
           <span class="summary-label">Project</span>
           <strong id="result-project-name">
-            Demo project
+            Project
           </strong>
         </article>
 
@@ -387,7 +387,7 @@
         </div>
 
         <p id="result-summary">
-          Your generated project summary will appear here after analysis.
+          The project summary will appear here after the note is saved.
         </p>
       </article>
 
@@ -408,7 +408,7 @@
         </div>
 
         <ol id="result-next-steps">
-          <li>Generated next steps will appear here after analysis.</li>
+          <li>Next steps will appear here after the note is saved.</li>
         </ol>
       </article>
 
@@ -416,16 +416,16 @@
         <a
           id="open-report-link"
           class="primary-link"
-          href="projects.html"
+          href="workspace-projects.html"
         >
-          Open Report
+          Open Private Report
         </a>
 
         <a
           class="secondary-link"
-          href="projects.html"
+          href="workspace-projects.html"
         >
-          Project Library
+          Private Library
         </a>
       </div>
     </section>
@@ -434,17 +434,18 @@
   <footer class="site-footer">
     <div class="footer-brand">
       <strong>LuxNote AI</strong>
-      <span>Luxury Design Project Assistant</span>
+      <span>Private Project Workspace</span>
     </div>
 
     <p>
-      Portfolio demo. Use fictional information only. AI-generated content
-      requires human review before it is used for client, builder, vendor,
-      electrical, construction, or design decisions.
+      Private job workspace. Confirm sign-in, owner-scoped API access,
+      and private storage before entering real client or project details.
+      AI-generated content requires human review before use.
     </p>
   </footer>
 
-  <script src="config.js"></script>
+  <script src="config-private.js"></script>
+  <script src="auth.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

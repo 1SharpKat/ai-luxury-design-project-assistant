@@ -9,11 +9,11 @@
   >
   <meta
     name="description"
-    content="Browse saved LuxNote AI projects, project notes, priorities, and generated reports."
+    content="Browse private LuxNote AI job projects, project notes, priorities, and generated reports behind sign-in."
   >
   <meta name="theme-color" content="#f7f1eb">
 
-  <title>Projects | LuxNote AI</title>
+  <title>Private Library | LuxNote AI</title>
 
   <link
     rel="icon"
@@ -29,24 +29,24 @@
 <body>
   <header class="site-header">
     <nav class="glass-nav" aria-label="Primary navigation">
-      <a class="nav-wordmark" href="index.html">
+      <a class="nav-wordmark" href="workspace.html">
         LuxNote AI
       </a>
 
   <div class="nav-links">
-    <a href="index.html#new-note">
+    <a href="workspace.html#new-note">
       New Note
     </a>
 
     <a
-      href="projects.html"
+      href="workspace-projects.html"
       aria-current="page"
     >
-      Projects
+      Private Library
     </a>
 
-    <a href="workspace.html">
-      Private Workspace
+    <a href="index.html">
+      Public Demo
     </a>
   </div>
 </nav>
@@ -60,15 +60,15 @@
     >
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Project Library</p>
+          <p class="eyebrow">Private Library</p>
 
       <h1 id="projects-heading">
-        Saved projects
+        Private projects
       </h1>
 
       <p class="section-description">
-        Open a project folder to review saved notes, priorities,
-        project details, and complete reports.
+        Open a signed-in project folder to review saved notes,
+        priorities, project details, and complete reports.
       </p>
     </div>
 
@@ -87,7 +87,7 @@
     role="status"
     aria-live="polite"
   >
-    Loading saved projects...
+    Loading private projects...
   </div>
 
   <div
@@ -102,18 +102,18 @@
   <footer class="site-footer">
     <div class="footer-brand">
       <strong>LuxNote AI</strong>
-      <span>Luxury Design Project Assistant</span>
+      <span>Private Project Workspace</span>
     </div>
 
 <p>
-  AI-generated content requires human review before it is used
-  for client, builder, vendor, electrical, construction, or
-  design decisions.
+  Private job workspace. Confirm sign-in, owner-scoped API access,
+  and private storage before entering real client or project details.
+  AI-generated content requires human review before use.
 </p>
 
   </footer>
 
-  <script src="config.js"></script>
+  <script src="config-private.js"></script>
   <script src="auth.js"></script>
   <script src="projects.js"></script>
 

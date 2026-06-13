@@ -3,7 +3,9 @@
 LuxNote AI can run in two modes:
 
 - Public portfolio demo: fictional data only, auth disabled.
-- Private work workspace: sign-in required, records scoped to the signed-in user, private S3 cover photos, and optional AI processing.
+- Private work workspace: separate `/private/...` API routes, sign-in required,
+  records scoped to the signed-in user, private S3 cover photos, and optional
+  AI processing.
 
 Do not enter real client data until private mode is enabled and verified.
 
@@ -23,14 +25,17 @@ allowExternalCoverUrls: true,
 demoNotice: true
 ```
 
-For private work, change the public Cognito values:
+For private work, use the dedicated private config:
 
 ```js
+// frontend/config-private.js
+apiPathPrefix: "/private",
 authEnabled: true,
+authRequired: true,
 cognitoDomain: "https://your-cognito-domain.auth.us-west-2.amazoncognito.com",
 cognitoClientId: "your-public-app-client-id",
-cognitoRedirectUri: "https://luxnote.ai/index.html",
-cognitoLogoutUri: "https://luxnote.ai/index.html",
+cognitoRedirectUri: "https://luxnote.ai/workspace.html",
+cognitoLogoutUri: "https://luxnote.ai/workspace.html",
 allowExternalCoverUrls: false,
 demoNotice: false
 ```
@@ -44,10 +49,11 @@ The public demo still serves the static website, but the visible banner tells vi
 Set these on the Lambda function for private work:
 
 ```text
-REQUIRE_AUTH=true
+REQUIRE_AUTH=false
+PRIVATE_PATH_PREFIX=/private
 PRIVATE_COVER_PHOTOS=true
 ALLOW_EXTERNAL_COVER_URLS=false
-AI_ENABLED=false
+PRIVATE_AI_ENABLED=false
 ```
 
 Keep the existing storage value:
@@ -56,7 +62,9 @@ Keep the existing storage value:
 COVER_PHOTO_BUCKET=your-cover-photo-bucket-name
 ```
 
-Use `AI_ENABLED=true` only when you intentionally want project notes sent to Amazon Comprehend and Amazon Bedrock. With `AI_ENABLED=false`, LuxNote still stores notes, folders, priority, category, and rule-based next steps.
+Use `PRIVATE_AI_ENABLED=true` only when you intentionally want private job notes
+sent to Amazon Comprehend and Amazon Bedrock. Keep public `AI_ENABLED` separate
+so the public demo can continue working.
 
 ## Cognito Setup
 
@@ -69,16 +77,17 @@ Use `AI_ENABLED=true` only when you intentionally want project notes sent to Ama
 7. Add this callback URL:
 
 ```text
-https://luxnote.ai/index.html
+https://luxnote.ai/workspace.html
 ```
 
 8. Add this sign-out URL:
 
 ```text
-https://luxnote.ai/index.html
+https://luxnote.ai/workspace.html
 ```
 
-9. Copy the Cognito hosted UI domain and app client ID into `frontend/config.js`.
+9. Copy the Cognito hosted UI domain and app client ID into
+   `frontend/config-private.js`.
 
 ## API Gateway Setup
 
@@ -99,17 +108,21 @@ https://cognito-idp.us-west-2.amazonaws.com/YOUR_USER_POOL_ID
 YOUR_COGNITO_APP_CLIENT_ID
 ```
 
-6. Attach the authorizer to:
+6. Create private routes that reuse the existing Lambda integration, then attach
+   the authorizer to:
 
 ```text
-GET  /project-notes
-POST /project-notes
-GET  /project-notes/{recordId}
-DELETE /project-notes/{recordId}
-POST /project-cover-upload-url
+GET    /private/project-notes
+POST   /private/project-notes
+GET    /private/project-notes/{recordId}
+DELETE /private/project-notes/{recordId}
+POST   /private/project-cover-upload-url
 ```
 
 Leave `OPTIONS` preflight unauthenticated.
+
+Do not attach the authorizer to the public `/project-notes` routes if the
+LinkedIn demo should keep working.
 
 Confirm API Gateway CORS allows `GET`, `POST`, `DELETE`, `OPTIONS`, and the `Authorization` and `Content-Type` headers from the deployed frontend origin.
 
@@ -156,7 +169,7 @@ Add a Codespace or local preview origin only while testing, then remove it.
 
 ## Verification Checklist
 
-1. Open `https://luxnote.ai`.
+1. Open `https://luxnote.ai/workspace.html`.
 2. Confirm the private workspace sign-in bar appears.
 3. Sign in with a test user.
 4. Create a fictional project note with a local cover photo.
@@ -166,4 +179,5 @@ Add a Codespace or local preview origin only while testing, then remove it.
 8. Sign out and confirm project records are no longer accessible.
 9. Sign in as a second test user and confirm the first user's records do not appear.
 
-Existing public-demo records do not have an owner id. After `REQUIRE_AUTH=true`, they will stop appearing in the private workspace, but they are not deleted.
+Existing public-demo records do not have an owner id. Private workspace records
+do have an owner id and are hidden from public demo routes.

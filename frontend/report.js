@@ -7,6 +7,10 @@
 const API_BASE_URL =
 window.LUXNOTE_CONFIG?.apiBaseUrl ||
   "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
+const API_PATH_PREFIX =
+window.LUXNOTE_CONFIG?.apiPathPrefix || "";
+const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
+const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
 
 const elements = {
   status: document.getElementById("report-status"),
@@ -121,7 +125,7 @@ async function getJson(path) {
       : {};
 
   try {
-    response = await fetch(`${API_BASE_URL}${path}`, {
+    response = await fetch(`${API_BASE_URL}${API_PATH_PREFIX}${path}`, {
       headers: {
         ...authHeaders,
         Accept: "application/json"
@@ -292,7 +296,7 @@ function renderMissingReportState() {
 
   const link = document.createElement("a");
   link.className = "primary-link";
-  link.href = "projects.html";
+  link.href = PROJECTS_PAGE;
   link.textContent = "View Projects";
 
   elements.status.append(
@@ -333,7 +337,7 @@ function renderErrorState(error, recordId) {
 
   const projectsLink = document.createElement("a");
   projectsLink.className = "secondary-link";
-  projectsLink.href = "projects.html";
+  projectsLink.href = PROJECTS_PAGE;
   projectsLink.textContent = "Back to Projects";
 
   actions.append(retryButton, projectsLink);
@@ -380,6 +384,14 @@ async function loadReport(recordId = null) {
 
 async function initializeReportPage() {
   await window.luxnoteAuth?.initialize();
+
+  if (
+    window.luxnoteAuth?.getAccessState &&
+    !window.luxnoteAuth.getAccessState().canAccess
+  ) {
+    return;
+  }
+
   loadReport();
 }
 
