@@ -2,13 +2,18 @@ param(
   [string]$Region = "us-west-2",
   [Parameter(Mandatory = $true)]
   [string]$LambdaFunctionName,
-  [string]$SourcePath = "ai-luxury-design-project-assistant\lambda\lambda_function.py"
+  [string]$SourcePath = ""
 )
 
 $ErrorActionPreference = "Stop"
 
 if (-not (Get-Command aws -ErrorAction SilentlyContinue)) {
   throw "AWS CLI was not found. Install AWS CLI v2 and run 'aws configure' or 'aws sso login' first."
+}
+
+if (-not $SourcePath) {
+  $repoRoot = Split-Path -Parent $PSScriptRoot
+  $SourcePath = Join-Path $repoRoot "lambda\lambda_function.py"
 }
 
 if (-not (Test-Path -LiteralPath $SourcePath)) {

@@ -195,7 +195,7 @@ the public `/project-notes` routes.
 Confirm CORS allows:
 
 ```text
-Origins: https://luxnote.ai
+Origins: https://luxnote.ai, https://www.luxnote.ai
 Methods: GET, POST, DELETE, OPTIONS
 Headers: Authorization, Content-Type
 ```

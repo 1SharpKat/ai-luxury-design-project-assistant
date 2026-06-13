@@ -124,7 +124,13 @@ Leave `OPTIONS` preflight unauthenticated.
 Do not attach the authorizer to the public `/project-notes` routes if the
 LinkedIn demo should keep working.
 
-Confirm API Gateway CORS allows `GET`, `POST`, `DELETE`, `OPTIONS`, and the `Authorization` and `Content-Type` headers from the deployed frontend origin.
+Confirm API Gateway CORS allows `GET`, `POST`, `DELETE`, `OPTIONS`, and the
+`Authorization` and `Content-Type` headers from the deployed frontend origins:
+
+```text
+https://luxnote.ai
+https://www.luxnote.ai
+```
 
 ## Lambda IAM For Private Cover Photos
 
@@ -158,7 +164,10 @@ The bucket still needs browser `PUT` permission for uploads:
   {
     "AllowedHeaders": ["Content-Type"],
     "AllowedMethods": ["PUT"],
-    "AllowedOrigins": ["https://luxnote.ai"],
+    "AllowedOrigins": [
+      "https://luxnote.ai",
+      "https://www.luxnote.ai"
+    ],
     "ExposeHeaders": ["ETag"],
     "MaxAgeSeconds": 3000
   }

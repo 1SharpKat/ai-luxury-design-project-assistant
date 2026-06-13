@@ -10,7 +10,8 @@ param(
   [string]$CoverPhotoBucket = "",
   [ValidateSet("true", "false")]
   [string]$PrivateAiEnabled = "false",
-  [string]$AuthorizerName = "LuxNotePrivateWorkspaceAuthorizer"
+  [string]$AuthorizerName = "LuxNotePrivateWorkspaceAuthorizer",
+  [string[]]$AllowedOrigins = @("https://luxnote.ai", "https://www.luxnote.ai")
 )
 
 $ErrorActionPreference = "Stop"
@@ -102,12 +103,6 @@ foreach ($pair in $routePairs) {
     --authorizer-id $authorizerId | Out-Null
 }
 
-aws apigatewayv2 update-api `
-  --region $Region `
-  --api-id $ApiId `
-  --cors-configuration "AllowOrigins=https://luxnote.ai,AllowMethods=GET,POST,DELETE,OPTIONS,AllowHeaders=Authorization,Content-Type" |
-  Out-Null
-
 $lambdaConfig = aws lambda get-function-configuration `
   --region $Region `
   --function-name $LambdaFunctionName |
@@ -133,8 +128,22 @@ if ($CoverPhotoBucket) {
 }
 
 $environmentFile = New-TemporaryFile
+$corsFile = New-TemporaryFile
 
 try {
+  @{
+    AllowOrigins = $AllowedOrigins
+    AllowMethods = @("GET", "POST", "DELETE", "OPTIONS")
+    AllowHeaders = @("Authorization", "Content-Type")
+  } | ConvertTo-Json -Depth 10 |
+    Set-Content -LiteralPath $corsFile -Encoding UTF8
+
+  aws apigatewayv2 update-api `
+    --region $Region `
+    --api-id $ApiId `
+    --cors-configuration "file://$corsFile" |
+    Out-Null
+
   @{
     Variables = $variables
   } | ConvertTo-Json -Depth 10 |
@@ -148,6 +157,7 @@ try {
 }
 finally {
   Remove-Item -LiteralPath $environmentFile -Force -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath $corsFile -Force -ErrorAction SilentlyContinue
 }
 
 Write-Host ""

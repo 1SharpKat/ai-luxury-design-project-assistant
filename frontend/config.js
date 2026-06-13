@@ -10,7 +10,7 @@ window.LUXNOTE_CONFIG = {
   cognitoLogoutUri: "",
   cognitoScopes: "openid email profile",
   allowExternalCoverUrls: true,
-  demoNotice: false,
+  demoNotice: true,
   routes: {
     newNote: "index.html#new-note",
     projects: "projects.html",
