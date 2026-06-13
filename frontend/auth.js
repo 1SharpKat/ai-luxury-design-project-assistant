@@ -9,6 +9,7 @@
   const verifierKey = "luxnote.auth.pkceVerifier";
   const stateKey = "luxnote.auth.state";
   const returnToKey = "luxnote.auth.returnTo";
+  const errorKey = "luxnote.auth.lastError";
 
   function storageCandidates() {
     return [
@@ -51,6 +52,23 @@
         // Ignore storage cleanup errors.
       }
     });
+  }
+
+  function setAuthError(message) {
+    if (!message) {
+      removeStoredItem(errorKey);
+      return;
+    }
+
+    setStoredItem(errorKey, message);
+  }
+
+  function getAuthError() {
+    return getStoredItem(errorKey);
+  }
+
+  function clearAuthError() {
+    removeStoredItem(errorKey);
   }
 
   function isAuthRequired() {
@@ -224,7 +242,21 @@
     });
 
     if (!response.ok) {
-      throw new Error("Sign-in could not be completed. Please try again.");
+      let details = "";
+
+      try {
+        details = await response.text();
+      } catch {
+        details = "";
+      }
+
+      throw new Error(
+        [
+          "Sign-in could not be completed.",
+          `Token request status: ${response.status}.`,
+          details ? `Details: ${details.slice(0, 220)}` : ""
+        ].filter(Boolean).join(" ")
+      );
     }
 
     const tokens = await response.json();
@@ -239,6 +271,16 @@
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const state = params.get("state");
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+
+    if (error) {
+      setAuthError(
+        `Cognito returned ${error}: ${errorDescription || "No details provided."}`
+      );
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return;
+    }
 
     if (!code) {
       return;
@@ -251,6 +293,7 @@
     }
 
     await exchangeCodeForTokens(code);
+    clearAuthError();
 
     removeStoredItem(verifierKey);
     removeStoredItem(stateKey);
@@ -271,6 +314,8 @@
     if (!isEnabled()) {
       return;
     }
+
+    clearAuthError();
 
     const verifier = randomString();
     const state = randomString(32);
@@ -372,6 +417,27 @@
     button.addEventListener("click", signIn);
 
     return button;
+  }
+
+  function createAuthErrorNotice() {
+    const message = getAuthError();
+
+    if (!message || document.querySelector(".auth-error-notice")) {
+      return;
+    }
+
+    const main = document.querySelector("main");
+
+    if (!main) {
+      return;
+    }
+
+    const notice = document.createElement("section");
+    notice.className = "auth-error-notice form-message error";
+    notice.setAttribute("role", "alert");
+    notice.textContent = message;
+
+    main.parentNode.insertBefore(notice, main);
   }
 
   function createAccessGate() {
@@ -497,6 +563,7 @@
     }
 
     createWorkspaceBar();
+    createAuthErrorNotice();
     createAccessGate();
     disablePrivateControls();
   }
@@ -510,6 +577,7 @@
     isSignedIn: () => Boolean(readTokens()),
     getAccessState,
     getAuthHeaders,
+    getAuthError,
     signIn,
     signOut
   };
