@@ -10,6 +10,49 @@
   const stateKey = "luxnote.auth.state";
   const returnToKey = "luxnote.auth.returnTo";
 
+  function storageCandidates() {
+    return [
+      window.localStorage,
+      window.sessionStorage
+    ].filter(Boolean);
+  }
+
+  function getStoredItem(key) {
+    for (const storage of storageCandidates()) {
+      try {
+        const value = storage.getItem(key);
+
+        if (value) {
+          return value;
+        }
+      } catch {
+        // Ignore storage access errors and try the next available store.
+      }
+    }
+
+    return null;
+  }
+
+  function setStoredItem(key, value) {
+    storageCandidates().forEach((storage) => {
+      try {
+        storage.setItem(key, value);
+      } catch {
+        // Some browser privacy modes can block one storage type.
+      }
+    });
+  }
+
+  function removeStoredItem(key) {
+    storageCandidates().forEach((storage) => {
+      try {
+        storage.removeItem(key);
+      } catch {
+        // Ignore storage cleanup errors.
+      }
+    });
+  }
+
   function isAuthRequired() {
     return Boolean(config.authRequired);
   }
@@ -85,7 +128,7 @@
   }
 
   function readTokens() {
-    const raw = window.sessionStorage.getItem(tokenKey);
+    const raw = getStoredItem(tokenKey);
 
     if (!raw) {
       return null;
@@ -110,7 +153,7 @@
   function saveTokens(tokens) {
     const expiresIn = Number(tokens.expires_in || 3600);
 
-    window.sessionStorage.setItem(
+    setStoredItem(
       tokenKey,
       JSON.stringify({
         access_token: tokens.access_token || "",
@@ -122,7 +165,7 @@
   }
 
   function clearTokens() {
-    window.sessionStorage.removeItem(tokenKey);
+    removeStoredItem(tokenKey);
   }
 
   function decodeTokenPayload(token) {
@@ -158,7 +201,7 @@
   }
 
   async function exchangeCodeForTokens(code) {
-    const verifier = window.sessionStorage.getItem(verifierKey);
+    const verifier = getStoredItem(verifierKey);
 
     if (!verifier) {
       throw new Error("Missing sign-in verifier. Please start sign-in again.");
@@ -201,22 +244,22 @@
       return;
     }
 
-    const expectedState = window.sessionStorage.getItem(stateKey);
+    const storedState = getStoredItem(stateKey);
 
-    if (!expectedState || expectedState !== state) {
+    if (!storedState || storedState !== state) {
       throw new Error("Sign-in state did not match. Please try again.");
     }
 
     await exchangeCodeForTokens(code);
 
-    window.sessionStorage.removeItem(verifierKey);
-    window.sessionStorage.removeItem(stateKey);
+    removeStoredItem(verifierKey);
+    removeStoredItem(stateKey);
 
     const returnTo =
-      window.sessionStorage.getItem(returnToKey) ||
+      getStoredItem(returnToKey) ||
       `${window.location.pathname}${window.location.hash || ""}`;
 
-    window.sessionStorage.removeItem(returnToKey);
+    removeStoredItem(returnToKey);
     window.history.replaceState({}, document.title, window.location.pathname);
 
     if (returnTo && returnTo !== window.location.pathname) {
@@ -235,9 +278,9 @@
     const returnTo =
       `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
-    window.sessionStorage.setItem(verifierKey, verifier);
-    window.sessionStorage.setItem(stateKey, state);
-    window.sessionStorage.setItem(returnToKey, returnTo);
+    setStoredItem(verifierKey, verifier);
+    setStoredItem(stateKey, state);
+    setStoredItem(returnToKey, returnTo);
 
     const params = new URLSearchParams({
       client_id: config.cognitoClientId,
