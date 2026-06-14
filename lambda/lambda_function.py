@@ -33,6 +33,29 @@ def env_flag(name: str, default: bool = False) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def request_flag(
+    body: dict[str, Any],
+    names: list[str],
+    default: bool = False,
+) -> bool:
+    """Read a boolean request flag from a JSON body."""
+    for name in names:
+        if name not in body:
+            continue
+
+        value = body.get(name)
+
+        if isinstance(value, bool):
+            return value
+
+        if isinstance(value, (int, float)):
+            return bool(value)
+
+        return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+    return default
+
+
 AI_ENABLED = env_flag("AI_ENABLED", True)
 PRIVATE_AI_ENABLED = env_flag("PRIVATE_AI_ENABLED", False)
 REQUIRE_AUTH = env_flag("REQUIRE_AUTH", False)
@@ -667,7 +690,13 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     priority = assign_priority(project_notes)
     fallback_next_steps = create_next_steps(project_notes)
 
-    ai_enabled_for_request = PRIVATE_AI_ENABLED if private_request else AI_ENABLED
+    ai_allowed_for_route = PRIVATE_AI_ENABLED if private_request else AI_ENABLED
+    ai_requested = request_flag(
+        body,
+        ["aiProcessingEnabled", "aiEnabled"],
+        ai_allowed_for_route,
+    )
+    ai_enabled_for_request = ai_allowed_for_route and ai_requested
 
     if ai_enabled_for_request:
         comprehend_analysis = analyze_notes_with_comprehend(project_notes)
@@ -689,7 +718,7 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
             "summary": create_fallback_summary(project_name, category, priority),
             "nextSteps": fallback_next_steps,
             "draftMessage": (
-                "AI draft generation is turned off for this private workspace. "
+                "AI draft generation is turned off for this project note. "
                 "Use the saved notes and next steps for manual follow-up."
             ),
             "generationStatus": "AI_DISABLED",
@@ -702,6 +731,8 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
         "noteType": note_type,
         "source": source,
         "projectNotes": project_notes,
+        "aiProcessingRequested": ai_requested,
+        "aiProcessingEnabled": ai_enabled_for_request,
         "category": category,
         "priority": priority,
         "keyPhrases": comprehend_analysis["keyPhrases"],

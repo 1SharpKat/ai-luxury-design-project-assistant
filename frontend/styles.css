@@ -514,6 +514,119 @@ label span {
   line-height: 1.4;
 }
 
+.ai-toggle-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+
+  margin-top: 20px;
+  padding: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+
+  background: var(--surface-soft);
+}
+
+.ai-toggle-copy {
+  max-width: 640px;
+}
+
+.ai-toggle-copy h3 {
+  margin: 6px 0 8px;
+}
+
+.ai-toggle-copy p {
+  margin: 0;
+  color: var(--muted-text);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.toggle-switch {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  box-shadow: none;
+}
+
+.toggle-slider {
+  position: relative;
+
+  width: 52px;
+  height: 30px;
+
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+
+  background: rgba(82, 66, 61, 0.18);
+
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+
+  transition: transform var(--transition-fast);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  border-color: rgba(86, 112, 87, 0.56);
+  background: rgba(86, 112, 87, 0.78);
+}
+
+.toggle-switch input:checked + .toggle-slider::after {
+  transform: translateX(22px);
+}
+
+.toggle-switch input:focus-visible + .toggle-slider {
+  box-shadow:
+    0 0 0 3px rgba(117, 81, 81, 0.18),
+    var(--shadow-soft);
+}
+
+.toggle-label {
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.toggle-switch input:disabled + .toggle-slider,
+.toggle-switch input:disabled ~ .toggle-label {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
 .label-row {
   display: flex;
   align-items: center;
@@ -1009,6 +1122,11 @@ textarea:focus {
   .result-content-grid,
   .record-details dl {
     grid-template-columns: 1fr;
+  }
+
+  .ai-toggle-field {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .result-card-wide {

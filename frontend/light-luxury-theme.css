@@ -453,6 +453,7 @@ PANELS AND STATIC CARDS
 
 .summary-card,
 .result-card,
+.ai-toggle-field,
 .cover-photo-field,
 .cover-photo-preview,
 .records-message,
@@ -476,6 +477,7 @@ PANELS AND STATIC CARDS
 /* Static information cards should not behave like clickable product tiles. */
 .summary-card:hover,
 .result-card:hover,
+.ai-toggle-field:hover,
 .cover-photo-field:hover,
 .cover-photo-preview:hover,
 .report-cover-card:hover {
@@ -1014,6 +1016,7 @@ body {
 .dashboard-shell .results-panel,
 .dashboard-shell .summary-card,
 .dashboard-shell .result-card,
+.dashboard-shell .ai-toggle-field,
 .dashboard-shell .cover-photo-field,
 .dashboard-shell .cover-photo-preview {
   box-shadow: none !important;
@@ -1069,6 +1072,7 @@ textarea {
   min-height: 260px !important;
 }
 
+.dashboard-shell .ai-toggle-field,
 .dashboard-shell .cover-photo-field {
   padding: 20px !important;
   background: rgba(248, 241, 232, 0.58) !important;

@@ -236,6 +236,37 @@
         </div>
 
         <section
+          class="ai-toggle-field"
+          aria-labelledby="ai-toggle-heading"
+        >
+          <div class="ai-toggle-copy">
+            <span class="card-kicker">AI Processing</span>
+
+            <h3 id="ai-toggle-heading">
+              AI analysis and draft follow-up
+            </h3>
+
+            <p id="ai-toggle-copy">
+              Keep AI on for the fictional demo, or turn it off to save
+              a project record with rule-based categories and next steps only.
+            </p>
+          </div>
+
+          <label class="toggle-switch" for="ai-processing-enabled">
+            <input
+              id="ai-processing-enabled"
+              name="aiProcessingEnabled"
+              type="checkbox"
+              checked
+              aria-describedby="ai-toggle-copy"
+            >
+
+            <span class="toggle-slider" aria-hidden="true"></span>
+            <span class="toggle-label">Use AI for this note</span>
+          </label>
+        </section>
+
+        <section
           class="cover-photo-field"
           aria-labelledby="cover-photo-heading"
         >

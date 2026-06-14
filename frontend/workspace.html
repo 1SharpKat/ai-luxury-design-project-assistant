@@ -236,6 +236,37 @@
         </div>
 
         <section
+          class="ai-toggle-field"
+          aria-labelledby="ai-toggle-heading"
+        >
+          <div class="ai-toggle-copy">
+            <span class="card-kicker">AI Processing</span>
+
+            <h3 id="ai-toggle-heading">
+              AI analysis and draft follow-up
+            </h3>
+
+            <p id="ai-toggle-copy">
+              Off by default for private job notes. Turn AI on only when
+              you intentionally want this note sent to Amazon Comprehend
+              and Amazon Bedrock.
+            </p>
+          </div>
+
+          <label class="toggle-switch" for="ai-processing-enabled">
+            <input
+              id="ai-processing-enabled"
+              name="aiProcessingEnabled"
+              type="checkbox"
+              aria-describedby="ai-toggle-copy"
+            >
+
+            <span class="toggle-slider" aria-hidden="true"></span>
+            <span class="toggle-label">Use AI for this note</span>
+          </label>
+        </section>
+
+        <section
           class="cover-photo-field"
           aria-labelledby="cover-photo-heading"
         >

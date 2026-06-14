@@ -250,8 +250,10 @@ Run:
 ```
 
 Use `-PrivateAiEnabled true` only when you intentionally want real job notes
-sent to Amazon Comprehend and Amazon Bedrock. The public demo still uses the
-existing public `/project-notes` routes.
+eligible to be sent to Amazon Comprehend and Amazon Bedrock. The private
+workspace now has a per-note AI toggle that defaults off, but
+`PRIVATE_AI_ENABLED=true` must be set before the toggle can run AI. The public
+demo still uses the existing public `/project-notes` routes.
 
 ## 5. Verify
 

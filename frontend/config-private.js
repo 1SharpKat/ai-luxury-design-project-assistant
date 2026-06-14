@@ -10,6 +10,8 @@ window.LUXNOTE_CONFIG = {
   cognitoLogoutUri: "https://www.luxnote.ai/workspace.html",
   cognitoScopes: "openid email",
   allowExternalCoverUrls: false,
+  aiDefaultEnabled: false,
+  aiToggleEnabled: true,
   demoNotice: false,
   routes: {
     newNote: "workspace.html#new-note",

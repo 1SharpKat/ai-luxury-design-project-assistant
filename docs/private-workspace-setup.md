@@ -63,8 +63,11 @@ COVER_PHOTO_BUCKET=your-cover-photo-bucket-name
 ```
 
 Use `PRIVATE_AI_ENABLED=true` only when you intentionally want private job notes
-sent to Amazon Comprehend and Amazon Bedrock. Keep public `AI_ENABLED` separate
-so the public demo can continue working.
+eligible to be sent to Amazon Comprehend and Amazon Bedrock. The private
+workspace has a per-note AI toggle that defaults off, but the Lambda
+environment variable is still the safety gate: if `PRIVATE_AI_ENABLED=false`,
+the toggle cannot run AI. Keep public `AI_ENABLED` separate so the public demo
+can continue working.
 
 ## Cognito Setup
 

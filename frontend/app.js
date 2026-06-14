@@ -19,6 +19,10 @@ const ALLOWED_COVER_TYPES = new Set([
 ]);
 const ALLOW_EXTERNAL_COVER_URLS =
 window.LUXNOTE_CONFIG?.allowExternalCoverUrls !== false;
+const AI_DEFAULT_ENABLED =
+window.LUXNOTE_CONFIG?.aiDefaultEnabled !== false;
+const AI_TOGGLE_ENABLED =
+window.LUXNOTE_CONFIG?.aiToggleEnabled !== false;
 
 const getElement = (id) => document.getElementById(id);
 
@@ -29,6 +33,7 @@ projectName: getElement("project-name"),
 noteType: getElement("note-type"),
 source: getElement("source"),
 projectNotes: getElement("project-notes"),
+aiProcessing: getElement("ai-processing-enabled"),
 coverPhoto: getElement("cover-photo"),
 coverPhotoUrl: getElement("cover-photo-url"),
 coverPhotoPreview: getElement("cover-photo-preview"),
@@ -77,9 +82,24 @@ elements.formMessage.className = type
 : "form-message";
 }
 
-function setLoading(isLoading) {
+function getAiProcessingEnabled() {
+if (!elements.aiProcessing) {
+return AI_DEFAULT_ENABLED;
+}
+
+return Boolean(elements.aiProcessing.checked);
+}
+
+function setLoading(
+isLoading,
+isAiProcessing = getAiProcessingEnabled()
+) {
 elements.submitButton.disabled = isLoading;
 elements.clearButton.disabled = isLoading;
+if (elements.aiProcessing) {
+elements.aiProcessing.disabled =
+isLoading || !AI_TOGGLE_ENABLED;
+}
 elements.coverPhoto.disabled = isLoading;
 elements.coverPhotoUrl.disabled =
 isLoading || !ALLOW_EXTERNAL_COVER_URLS;
@@ -96,9 +116,22 @@ isLoading
 
 if (submitLabel) {
 submitLabel.textContent = isLoading
-? "Analyzing Project Notes..."
+? (
+  isAiProcessing
+    ? "Analyzing Project Notes..."
+    : "Saving Project Note..."
+)
 : defaultSubmitText;
 }
+}
+
+function syncAiToggleDefault() {
+if (!elements.aiProcessing) {
+return;
+}
+
+elements.aiProcessing.checked = AI_DEFAULT_ENABLED;
+elements.aiProcessing.disabled = !AI_TOGGLE_ENABLED;
 }
 
 function updateCharacterCount() {
@@ -510,6 +543,9 @@ source:
 projectNotes:
   elements.projectNotes.value.trim(),
 
+aiProcessingEnabled:
+  getAiProcessingEnabled(),
+
 coverPhoto:
   elements.coverPhoto.files?.[0] || null,
 
@@ -576,7 +612,10 @@ setMessage(error.message, "error");
 return;
 }
 
-setLoading(true);
+setLoading(
+true,
+values.aiProcessingEnabled
+);
 
 try {
 let coverMetadata = {};
@@ -599,7 +638,9 @@ if (values.coverPhoto) {
 }
 
 setMessage(
-  "Organizing the project details and generating your summary...",
+  values.aiProcessingEnabled
+    ? "Organizing the project details and generating your summary..."
+    : "Saving the project details without AI analysis...",
   "info"
 );
 
@@ -609,6 +650,7 @@ const payload = {
   noteType: values.noteType,
   source: values.source,
   projectNotes: values.projectNotes,
+  aiProcessingEnabled: values.aiProcessingEnabled,
   ...coverMetadata
 };
 
@@ -679,6 +721,7 @@ elements.resultsSection.classList.add(
 
 function clearForm() {
 elements.form.reset();
+syncAiToggleDefault();
 
 resetCoverPreview();
 resetQuickResult();
@@ -798,6 +841,8 @@ elements.coverPhotoUrl.placeholder =
 "Disabled for private workspaces";
 elements.coverPhotoUrl.disabled = true;
 }
+
+syncAiToggleDefault();
 
 elements.form.addEventListener(
 "submit",
