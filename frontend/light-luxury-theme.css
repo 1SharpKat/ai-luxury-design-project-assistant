@@ -1228,14 +1228,14 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
   min-width: 0;
-  padding: 14px 16px;
+  padding: 8px 10px;
 }
 
 .project-note-delete {
   display: grid;
-  width: 46px;
+  width: 36px;
   min-height: 100%;
   place-items: center;
   border: 0;
@@ -1250,8 +1250,8 @@ textarea {
 }
 
 .trash-icon {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
 }
 
 @media (max-width: 1050px) {
@@ -1316,18 +1316,18 @@ textarea {
   }
 
   .project-note-row {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
   }
 
   .project-note-link {
-    display: grid;
+    display: flex;
   }
 
   .project-note-delete {
-    width: 100%;
-    min-height: 42px;
-    border-left: 0;
-    border-top: 1px solid var(--gallery-line);
+    width: 38px;
+    min-height: 100%;
+    border-left: 1px solid var(--gallery-line);
+    border-top: 0;
   }
 }
 

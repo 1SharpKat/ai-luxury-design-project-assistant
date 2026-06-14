@@ -283,7 +283,7 @@ function createNoteRow(record) {
 
   const noteMeta = document.createElement("small");
   noteMeta.textContent =
-    `${record.category || "General"} - ${formatDate(record.createdAt)}`;
+    `${record.category || "General"} | ${formatDate(record.createdAt)}`;
 
   noteDetails.append(noteTitle, noteMeta);
 

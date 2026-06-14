@@ -341,12 +341,31 @@ def create_project_cover_upload_url(event: dict[str, Any]) -> dict[str, Any]:
         },
     )
 
-def classify_category(notes: str) -> str:
+def classify_category(notes: str, note_type: str = "") -> str:
     """Assign project categories using keyword matching."""
-    text = notes.lower()
+    text = f"{note_type} {notes}".lower()
     categories: list[str] = []
 
     category_keywords = {
+        "Electrical Rough-In": [
+            "electrical_rough_in_notes",
+            "electrical rough",
+            "electrical rough in",
+            "electrician rough",
+            "rough-in",
+            "rough in",
+            "rough_in",
+            "wire pulled",
+            "wire drop",
+            "home run",
+            "back box",
+            "junction box",
+            "j-box",
+            "switch leg",
+            "receptacle",
+            "outlet",
+            "low voltage",
+        ],
         "Lighting Design": [
             "lighting",
             "keypad",
@@ -368,7 +387,6 @@ def classify_category(notes: str) -> str:
         "Security": ["camera", "surveillance", "security", "alarm"],
         "Builder / Vendor Coordination": [
             "builder",
-            "electrician",
             "vendor",
             "deadline",
             "walkthrough",
@@ -382,9 +400,9 @@ def classify_category(notes: str) -> str:
     return " / ".join(categories) if categories else "General Project Notes"
 
 
-def assign_priority(notes: str) -> str:
+def assign_priority(notes: str, note_type: str = "") -> str:
     """Assign Low, Medium, or High priority."""
-    text = notes.lower()
+    text = f"{note_type} {notes}".lower()
 
     high_priority_words = [
         "urgent",
@@ -396,6 +414,9 @@ def assign_priority(notes: str) -> str:
         "walkthrough",
         "builder needs",
         "electrician needs",
+        "rough-in incomplete",
+        "rough in incomplete",
+        "rough_in incomplete",
     ]
 
     medium_priority_words = [
@@ -405,6 +426,10 @@ def assign_priority(notes: str) -> str:
         "review",
         "needs",
         "requested",
+        "rough-in",
+        "rough in",
+        "rough_in",
+        "electrician",
     ]
 
     if any(word in text for word in high_priority_words):
@@ -416,9 +441,9 @@ def assign_priority(notes: str) -> str:
     return "Low"
 
 
-def create_next_steps(notes: str) -> list[str]:
+def create_next_steps(notes: str, note_type: str = "") -> list[str]:
     """Create fallback action items from project-note keywords."""
-    text = notes.lower()
+    text = f"{note_type} {notes}".lower()
     steps: list[str] = []
 
     if "keypad" in text:
@@ -430,8 +455,13 @@ def create_next_steps(notes: str) -> list[str]:
     if "builder" in text:
         steps.append("Coordinate details with builder")
 
-    if "electric" in text:
+    has_rough_in = "rough-in" in text or "rough in" in text or "rough_in" in text
+
+    if "electric" in text or has_rough_in:
         steps.append("Prepare information for the electrical walkthrough")
+
+    if has_rough_in:
+        steps.append("Track completed rough-in by room and remaining openings")
 
     if "client" in text:
         steps.append("Update client preference notes")
@@ -686,9 +716,9 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     record_id = str(uuid.uuid4())
     created_at = datetime.now(timezone.utc).isoformat()
 
-    category = classify_category(project_notes)
-    priority = assign_priority(project_notes)
-    fallback_next_steps = create_next_steps(project_notes)
+    category = classify_category(project_notes, note_type)
+    priority = assign_priority(project_notes, note_type)
+    fallback_next_steps = create_next_steps(project_notes, note_type)
 
     ai_allowed_for_route = PRIVATE_AI_ENABLED if private_request else AI_ENABLED
     ai_requested = request_flag(
