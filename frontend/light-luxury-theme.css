@@ -470,6 +470,14 @@ PANELS AND STATIC CARDS
   border-top: 2px solid rgba(117, 81, 81, 0.36) !important;
 }
 
+.report-summary-strip .summary-card {
+  border-top: 0 !important;
+  background: rgba(117, 81, 81, 0.055) !important;
+  border-color: rgba(117, 81, 81, 0.16) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
 .result-card {
   border-left: 3px solid rgba(117, 81, 81, 0.40) !important;
 }
@@ -668,7 +676,6 @@ PROJECTS, REPORT, STATES
 
 .folder-copy strong,
 .project-note-row strong,
-.report-summary-strip strong,
 .report-grid h2,
 .report-grid .result-card h2,
 #report-project-name {
@@ -683,7 +690,8 @@ PROJECTS, REPORT, STATES
 
 .note-priority,
 .tag,
-.status-badge {
+.status-badge,
+.report-summary-strip .summary-card {
   color: var(--mauve) !important;
   background: var(--mauve-soft) !important;
   border: 1px solid var(--mauve-border) !important;
