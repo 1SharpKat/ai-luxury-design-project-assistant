@@ -8,7 +8,7 @@ window.LUXNOTE_CONFIG = {
   cognitoClientId: "73c1ikm2ihli328mv7sdmj3vuu",
   cognitoRedirectUri: "https://www.luxnote.ai/workspace.html",
   cognitoLogoutUri: "https://www.luxnote.ai/workspace.html",
-  cognitoScopes: "openid email profile",
+  cognitoScopes: "openid email",
   allowExternalCoverUrls: false,
   demoNotice: false,
   routes: {
