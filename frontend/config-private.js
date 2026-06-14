@@ -5,7 +5,7 @@ window.LUXNOTE_CONFIG = {
   authEnabled: true,
   authRequired: true,
   cognitoDomain: "https://us-west-2roh0twsiv.auth.us-west-2.amazoncognito.com",
-  cognitoClientId: "6kj516bc71etdei9mqvdqciq17",
+  cognitoClientId: "73c1ikm2ihli328mv7sdmj3vuu",
   cognitoRedirectUri: "https://www.luxnote.ai/workspace.html",
   cognitoLogoutUri: "https://www.luxnote.ai/workspace.html",
   cognitoScopes: "openid email profile",
