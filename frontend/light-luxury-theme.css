@@ -142,8 +142,8 @@ h3,
   max-width: 700px;
   color: var(--linen) !important;
   -webkit-text-fill-color: var(--linen) !important;
-  font-size: clamp(2.35rem, 3.7vw, 4.15rem) !important;
-  line-height: 1.05 !important;
+  font-size: clamp(1.85rem, 2.9vw, 3.15rem) !important;
+  line-height: 1.08 !important;
   text-wrap: balance;
 }
 
@@ -233,7 +233,7 @@ NAVIGATION
 ========================================================= */
 
 .site-header {
-  padding: 18px var(--page-gap) 26px !important;
+  padding: 12px var(--page-gap) 18px !important;
 }
 
 .glass-nav {
@@ -278,7 +278,7 @@ TRUSTED ADVISOR HERO
     "advisor advisor"
     "form results" !important;
   align-items: start !important;
-  gap: 28px !important;
+  gap: 18px !important;
 }
 
 .dashboard-shell .advisor-hero {
@@ -304,7 +304,7 @@ TRUSTED ADVISOR HERO
   display: grid;
   grid-template-columns: minmax(250px, 0.46fr) minmax(620px, 1.54fr);
   align-items: stretch;
-  min-height: 360px;
+  min-height: 240px;
   overflow: hidden;
   color: var(--linen);
   background: linear-gradient(135deg, #77755c 0%, #87846a 52%, #756258 100%);
@@ -320,9 +320,9 @@ TRUSTED ADVISOR HERO
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 34px;
-  min-height: 360px;
-  padding: clamp(34px, 4.1vw, 52px) clamp(28px, 3.2vw, 44px);
+  gap: 18px;
+  min-height: 240px;
+  padding: clamp(22px, 2.8vw, 34px) clamp(20px, 2.4vw, 30px);
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(68, 66, 45, 0.20), rgba(68, 66, 45, 0.08)),
@@ -334,9 +334,9 @@ TRUSTED ADVISOR HERO
   display: block;
   position: relative;
   z-index: 1;
-  width: min(100%, 300px);
-  max-height: 150px;
-  margin-top: clamp(18px, 4.5vw, 58px);
+  width: min(100%, 230px);
+  max-height: 92px;
+  margin-top: clamp(8px, 2.4vw, 22px);
   opacity: 0.62;
   object-fit: contain;
   object-position: left center;
@@ -348,21 +348,21 @@ TRUSTED ADVISOR HERO
   z-index: 1;
   max-width: 245px;
   margin: 0;
-  padding-top: 18px;
+  padding-top: 12px;
   color: rgba(255, 249, 243, 0.86);
   border-top: 1px solid rgba(255, 249, 243, 0.18);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.16em;
-  line-height: 1.55;
+  line-height: 1.42;
   text-transform: uppercase;
 }
 
 .advisor-brand-subtext {
   display: block;
-  margin-top: 13px;
+  margin-top: 8px;
   color: rgba(255, 249, 243, 0.66);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0;
   line-height: 1.5;
@@ -374,34 +374,34 @@ TRUSTED ADVISOR HERO
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: clamp(46px, 6vw, 82px);
+  padding: clamp(28px, 4vw, 46px);
 }
 
 .advisor-statement-panel .eyebrow {
   color: #fff6ec !important;
-  margin-bottom: 14px;
+  margin-bottom: 9px;
 }
 
 .advisor-hero-copy {
   max-width: 650px;
-  margin: 24px 0 0;
+  margin: 14px 0 0;
   color: rgba(255, 249, 243, 0.84);
-  font-size: 1rem;
-  line-height: 1.72;
+  font-size: 0.86rem;
+  line-height: 1.5;
 }
 
 .advisor-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 34px;
+  gap: 8px;
+  margin-top: 20px;
 }
 
 .advisor-actions .primary-link,
 .advisor-actions .secondary-link {
-  min-width: 184px;
-  min-height: 42px !important;
-  padding-inline: 18px !important;
+  min-width: 148px;
+  min-height: 34px !important;
+  padding-inline: 13px !important;
 }
 
 /* retire the old hero class if any cached markup still renders */
@@ -528,6 +528,7 @@ textarea {
   border: 1px solid var(--border-strong) !important;
   border-radius: var(--radius-field) !important;
   box-shadow: inset 0 1px 2px rgba(68, 50, 35, 0.025) !important;
+  font-size: 0.84rem !important;
 }
 
 input::placeholder,
@@ -577,9 +578,11 @@ button,
   overflow: hidden !important;
   border-radius: var(--radius-button) !important;
   box-shadow: none !important;
-  font-size: 0.8rem !important;
+  font-size: 0.7rem !important;
   letter-spacing: 0.08em !important;
   line-height: 1.1 !important;
+  min-height: 32px !important;
+  padding-block: 5px !important;
   transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
 }
 
@@ -811,20 +814,20 @@ PROJECTS, REPORT, STATES
 
   .advisor-brand-panel {
     justify-content: flex-start;
-    gap: 18px;
-    min-height: 230px;
+    gap: 12px;
+    min-height: 160px;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 249, 243, 0.15);
   }
 
   .advisor-brand-logo {
     top: auto;
-    width: min(78%, 320px);
+    width: min(70%, 220px);
     margin-top: 0;
   }
 
   .advisor-hero h1 {
-    font-size: clamp(2.15rem, 8vw, 3.4rem) !important;
+    font-size: clamp(1.65rem, 6.6vw, 2.55rem) !important;
     line-height: 1.07 !important;
   }
 }
@@ -832,16 +835,16 @@ PROJECTS, REPORT, STATES
 @media (max-width: 720px) {
   .advisor-brand-panel,
   .advisor-statement-panel {
-    padding: 26px;
+    padding: 18px;
   }
 
   .advisor-brand-panel {
-    min-height: 210px;
+    min-height: 140px;
   }
 
   .advisor-brand-logo {
     left: auto;
-    width: min(82%, 300px);
+    width: min(76%, 210px);
   }
 
   .advisor-actions {
@@ -894,28 +897,28 @@ body {
 }
 
 .site-header {
-  padding: 18px var(--page-gap) 24px !important;
+  padding: 10px var(--page-gap) 14px !important;
 }
 
 .glass-nav {
-  min-height: 58px !important;
-  padding: 8px 16px !important;
+  min-height: 44px !important;
+  padding: 5px 12px !important;
   background: rgba(255, 250, 243, 0.86) !important;
   border-color: var(--gallery-line) !important;
   box-shadow: none !important;
 }
 
 .nav-wordmark {
-  font-size: 1.2rem !important;
+  font-size: 1rem !important;
 }
 
 .nav-links {
-  gap: clamp(18px, 3vw, 38px) !important;
+  gap: clamp(12px, 2vw, 24px) !important;
 }
 
 .nav-links a {
-  font-size: 0.76rem !important;
-  letter-spacing: 0.14em !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.1em !important;
 }
 
 .dashboard-shell {
@@ -925,8 +928,8 @@ body {
 }
 
 .advisor-hero {
-  min-height: 430px !important;
-  grid-template-columns: minmax(270px, 0.42fr) minmax(0, 1fr) !important;
+  min-height: 250px !important;
+  grid-template-columns: minmax(210px, 0.36fr) minmax(0, 1fr) !important;
   background:
     linear-gradient(110deg, rgba(42, 42, 30, 0.18), rgba(42, 42, 30, 0)),
     linear-gradient(118deg, #55563d 0%, #7f7b5f 48%, #725d54 100%) !important;
@@ -936,38 +939,41 @@ body {
 }
 
 .advisor-brand-panel {
-  padding: clamp(34px, 4vw, 56px) clamp(28px, 3.2vw, 48px) !important;
+  padding: clamp(20px, 2.8vw, 32px) clamp(18px, 2.4vw, 30px) !important;
   background:
     linear-gradient(180deg, rgba(255, 250, 243, 0.045), rgba(255, 250, 243, 0.02)) !important;
   border-right: 1px solid rgba(255, 250, 243, 0.18) !important;
 }
 
 .advisor-brand-logo {
-  width: min(100%, 330px) !important;
-  max-height: 170px !important;
+  width: min(100%, 230px) !important;
+  max-height: 96px !important;
   opacity: 0.78 !important;
 }
 
 .advisor-brand-kicker {
-  max-width: 300px !important;
+  max-width: 240px !important;
   color: rgba(255, 250, 243, 0.90) !important;
-  letter-spacing: 0.18em !important;
+  font-size: 0.62rem !important;
+  letter-spacing: 0.13em !important;
+  line-height: 1.4 !important;
 }
 
 .advisor-brand-subtext {
   color: rgba(255, 250, 243, 0.70) !important;
+  font-size: 0.68rem !important;
 }
 
 .advisor-statement-panel {
   position: relative !important;
-  padding: clamp(48px, 6vw, 88px) clamp(44px, 7vw, 104px) !important;
+  padding: clamp(26px, 3.5vw, 44px) clamp(28px, 4vw, 54px) !important;
 }
 
 .advisor-statement-panel::before {
   position: absolute;
-  top: clamp(42px, 5vw, 66px);
-  right: clamp(42px, 6vw, 88px);
-  width: min(16vw, 180px);
+  top: clamp(28px, 4vw, 42px);
+  right: clamp(28px, 4vw, 50px);
+  width: min(12vw, 110px);
   height: 1px;
   content: "";
   background: rgba(255, 250, 243, 0.30);
@@ -978,33 +984,34 @@ body {
 }
 
 .advisor-hero h1 {
-  max-width: 780px !important;
-  font-size: clamp(2.7rem, 4.6vw, 5.4rem) !important;
-  line-height: 0.96 !important;
+  max-width: 680px !important;
+  font-size: clamp(1.85rem, 3vw, 3.25rem) !important;
+  line-height: 1.06 !important;
 }
 
 .advisor-hero-copy {
-  max-width: 690px !important;
+  max-width: 640px !important;
   color: rgba(255, 250, 243, 0.86) !important;
-  font-size: 1.03rem !important;
+  font-size: 0.86rem !important;
+  line-height: 1.5 !important;
 }
 
 .hero-system-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
-  margin-top: 28px;
+  margin-top: 16px;
   border-top: 1px solid rgba(255, 250, 243, 0.24);
   border-bottom: 1px solid rgba(255, 250, 243, 0.24);
 }
 
 .hero-system-row span {
-  min-width: 116px;
-  padding: 11px 22px 11px 0;
-  margin-right: 22px;
+  min-width: 88px;
+  padding: 7px 14px 7px 0;
+  margin-right: 14px;
   border-right: 1px solid rgba(255, 250, 243, 0.20);
   color: rgba(255, 250, 243, 0.76);
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1016,7 +1023,7 @@ body {
 }
 
 .advisor-actions {
-  margin-top: 30px !important;
+  margin-top: 18px !important;
 }
 
 .dashboard-shell .glass-panel,
@@ -1032,8 +1039,8 @@ body {
 
 .dashboard-shell .form-panel,
 .dashboard-shell .results-panel {
-  min-height: 760px;
-  padding: clamp(28px, 3.2vw, 44px) !important;
+  min-height: 0;
+  padding: clamp(18px, 2.4vw, 26px) !important;
   border-color: var(--gallery-line) !important;
   border-radius: var(--radius-panel) !important;
 }
@@ -1050,39 +1057,40 @@ body {
 
 .dashboard-shell .section-heading {
   align-items: flex-start !important;
-  padding-bottom: 22px !important;
-  margin-bottom: 26px !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 14px !important;
   border-bottom: 1px solid var(--gallery-line) !important;
 }
 
 .dashboard-shell .section-heading h2 {
   max-width: 560px !important;
-  font-size: clamp(2.05rem, 3vw, 3.05rem) !important;
-  line-height: 1 !important;
+  font-size: clamp(1.35rem, 2vw, 1.85rem) !important;
+  line-height: 1.08 !important;
 }
 
 .dashboard-shell .section-description {
   max-width: 590px !important;
-  font-size: 0.94rem !important;
+  font-size: 0.78rem !important;
 }
 
 .form-grid {
-  gap: 17px 20px !important;
+  gap: 10px 12px !important;
 }
 
 input,
 select,
 textarea {
   background: rgba(255, 250, 243, 0.62) !important;
+  font-size: 0.82rem !important;
 }
 
 textarea {
-  min-height: 260px !important;
+  min-height: 190px !important;
 }
 
 .dashboard-shell .ai-toggle-field,
 .dashboard-shell .cover-photo-field {
-  padding: 20px !important;
+  padding: 12px !important;
   background: rgba(248, 241, 232, 0.58) !important;
   border-left: 3px solid rgba(117, 81, 81, 0.34) !important;
 }
@@ -1094,7 +1102,7 @@ textarea {
 }
 
 .dashboard-shell .summary-card {
-  min-height: 96px !important;
+  min-height: 68px !important;
   border-top: 0 !important;
 }
 
@@ -1104,19 +1112,19 @@ textarea {
 
 .dashboard-shell .quick-result-meta {
   grid-template-columns: minmax(0, 1fr) minmax(150px, 0.42fr) !important;
-  gap: 10px !important;
+  gap: 8px !important;
 }
 
 .dashboard-shell .quick-summary-card {
-  min-height: 156px !important;
+  min-height: 104px !important;
 }
 
 .dashboard-shell .quick-actions-card {
-  min-height: 168px !important;
+  min-height: 112px !important;
 }
 
 .result-card-heading {
-  padding-bottom: 14px !important;
+  padding-bottom: 8px !important;
   border-bottom: 1px solid rgba(68, 50, 35, 0.12) !important;
 }
 
@@ -1188,7 +1196,7 @@ textarea {
 .private-access-gate {
   width: min(calc(100% - (var(--page-gap) * 2)), var(--max-width));
   margin: 0 auto 18px;
-  padding: clamp(28px, 4vw, 46px);
+  padding: clamp(18px, 3vw, 28px);
   color: var(--body-text) !important;
   background: rgba(255, 249, 243, 0.88) !important;
   border: 1px solid var(--gallery-line-strong) !important;
@@ -1201,8 +1209,8 @@ textarea {
   max-width: 760px;
   margin: 0;
   color: var(--cafe-noir) !important;
-  font-size: clamp(2rem, 3.3vw, 3.2rem) !important;
-  line-height: 1.02 !important;
+  font-size: clamp(1.55rem, 2.4vw, 2.2rem) !important;
+  line-height: 1.08 !important;
 }
 
 .private-access-gate .section-description {
@@ -1212,8 +1220,8 @@ textarea {
 .auth-gate-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
+  gap: 8px;
+  margin-top: 16px;
 }
 
 .project-note-row {
@@ -1228,9 +1236,9 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  padding: 8px 10px;
+  padding: 6px 8px;
 }
 
 .project-note-delete {
@@ -1276,7 +1284,7 @@ textarea {
   }
 
   .advisor-brand-panel {
-    min-height: 220px !important;
+    min-height: 150px !important;
     border-right: 0 !important;
     border-bottom: 1px solid rgba(255, 250, 243, 0.18) !important;
   }
@@ -1286,7 +1294,7 @@ textarea {
   }
 
   .advisor-hero h1 {
-    font-size: clamp(2.3rem, 10vw, 3.8rem) !important;
+    font-size: clamp(1.75rem, 7vw, 2.7rem) !important;
   }
 }
 

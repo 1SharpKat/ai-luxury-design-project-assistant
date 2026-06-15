@@ -57,7 +57,7 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 button,
@@ -103,22 +103,22 @@ h2 {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.9rem, 3.6vw, 3.3rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
 h2 {
   margin-bottom: 0;
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
   line-height: 1.12;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 h3 {
   margin-bottom: 0;
-  font-size: 1.05rem;
+  font-size: 0.96rem;
 }
 
 ::selection {
@@ -167,7 +167,7 @@ h3 {
 
 .site-header {
   position: relative;
-  padding: 18px var(--page-gap) 32px;
+  padding: 12px var(--page-gap) 20px;
 }
 
 .glass-nav {
@@ -180,9 +180,9 @@ h3 {
   align-items: center;
 
   width: min(100%, var(--max-width));
-  min-height: 52px;
+  min-height: 44px;
   margin: 0 auto;
-  padding: 7px 14px;
+  padding: 5px 12px;
 
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -200,7 +200,7 @@ h3 {
     Georgia,
     "Times New Roman",
     serif;
-  font-size: 1.08rem;
+  font-size: 0.98rem;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -432,7 +432,7 @@ h3 {
   position: relative;
   overflow: hidden;
 
-  padding: clamp(26px, 4vw, 42px);
+  padding: clamp(18px, 2.4vw, 28px);
 
   border-radius: var(--radius-large);
 }
@@ -445,16 +445,16 @@ h3 {
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 24px;
-  margin-bottom: 30px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .section-description {
   max-width: 700px;
-  margin: 10px 0 0;
+  margin: 7px 0 0;
 
   color: var(--muted-text);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .status-badge {
@@ -462,8 +462,8 @@ h3 {
   align-items: center;
   justify-content: center;
 
-  min-height: 34px;
-  padding: 7px 12px;
+  min-height: 26px;
+  padding: 4px 8px;
 
   border: 1px solid var(--border-strong);
   border-radius: 999px;
@@ -471,7 +471,7 @@ h3 {
   color: var(--text);
   background: var(--surface-soft);
 
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.07em;
   white-space: nowrap;
@@ -485,22 +485,22 @@ h3 {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .full-width {
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 label {
   color: var(--text);
-  font-size: 0.84rem;
+  font-size: 0.76rem;
   font-weight: 800;
 }
 
@@ -510,18 +510,18 @@ label span {
 
 .field-hint {
   color: var(--muted-text);
-  font-size: 0.74rem;
-  line-height: 1.4;
+  font-size: 0.68rem;
+  line-height: 1.35;
 }
 
 .ai-toggle-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 22px;
+  gap: 14px;
 
-  margin-top: 20px;
-  padding: 18px;
+  margin-top: 12px;
+  padding: 12px;
 
   border: 1px solid var(--border);
   border-radius: var(--radius-medium);
@@ -534,14 +534,14 @@ label span {
 }
 
 .ai-toggle-copy h3 {
-  margin: 6px 0 8px;
+  margin: 3px 0 5px;
 }
 
 .ai-toggle-copy p {
   margin: 0;
   color: var(--muted-text);
-  font-size: 0.82rem;
-  line-height: 1.55;
+  font-size: 0.74rem;
+  line-height: 1.45;
 }
 
 .toggle-switch {
@@ -549,7 +549,7 @@ label span {
 
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex: 0 0 auto;
 
   cursor: pointer;
@@ -570,8 +570,8 @@ label span {
 .toggle-slider {
   position: relative;
 
-  width: 52px;
-  height: 30px;
+  width: 42px;
+  height: 24px;
 
   border: 1px solid var(--border-strong);
   border-radius: 999px;
@@ -586,11 +586,11 @@ label span {
 .toggle-slider::after {
   content: "";
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 3px;
+  left: 3px;
 
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 
   border-radius: 50%;
   background: var(--surface);
@@ -605,7 +605,7 @@ label span {
 }
 
 .toggle-switch input:checked + .toggle-slider::after {
-  transform: translateX(22px);
+  transform: translateX(18px);
 }
 
 .toggle-switch input:focus-visible + .toggle-slider {
@@ -616,7 +616,7 @@ label span {
 
 .toggle-label {
   color: var(--text);
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -631,12 +631,12 @@ label span {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 10px;
 }
 
 #character-count {
   color: var(--muted-text);
-  font-size: 0.74rem;
+  font-size: 0.68rem;
 }
 
 input,
@@ -661,14 +661,16 @@ textarea {
 
 input,
 select {
-  min-height: 50px;
-  padding: 0 15px;
+  min-height: 38px;
+  padding: 0 11px;
+  font-size: 0.84rem;
 }
 
 textarea {
-  min-height: 230px;
-  padding: 15px;
-  line-height: 1.65;
+  min-height: 170px;
+  padding: 11px;
+  font-size: 0.84rem;
+  line-height: 1.5;
   resize: vertical;
 }
 
@@ -700,20 +702,20 @@ textarea:focus {
 .field-help {
   margin: 0;
   color: var(--muted-text);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
 }
 
 .form-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
+  gap: 8px;
+  margin-top: 18px;
 }
 
 .form-message {
-  min-height: 24px;
-  margin-top: 16px;
-  font-size: 0.86rem;
+  min-height: 20px;
+  margin-top: 10px;
+  font-size: 0.78rem;
 }
 
 .form-message.success {
@@ -735,8 +737,8 @@ textarea:focus {
 .result-summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .summary-card,
@@ -748,18 +750,18 @@ textarea:focus {
 }
 
 .summary-card {
-  min-height: 116px;
-  padding: 18px;
+  min-height: 78px;
+  padding: 12px;
   border-radius: var(--radius-medium);
 }
 
 .summary-label {
   display: block;
-  margin-bottom: 9px;
+  margin-bottom: 5px;
 
   color: var(--muted-text);
 
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -768,19 +770,19 @@ textarea:focus {
 .summary-card strong {
   display: block;
   color: var(--text);
-  font-size: 0.93rem;
-  line-height: 1.45;
+  font-size: 0.8rem;
+  line-height: 1.3;
 }
 
 .result-content-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
 }
 
 .result-card {
   min-width: 0;
-  padding: 23px;
+  padding: 16px;
   border-radius: var(--radius-medium);
 }
 
@@ -793,8 +795,8 @@ textarea:focus {
   align-items: center;
   justify-content: space-between;
 
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .card-kicker {
@@ -803,7 +805,7 @@ textarea:focus {
 
   color: var(--muted-text);
 
-  font-size: 0.64rem;
+  font-size: 0.56rem;
   font-weight: 800;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -826,21 +828,21 @@ textarea:focus {
 }
 
 .result-card li + li {
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 5px;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
 
-  min-height: 30px;
-  padding: 5px 10px;
+  min-height: 22px;
+  padding: 3px 7px;
 
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -848,7 +850,7 @@ textarea:focus {
   color: var(--text);
   background: var(--surface-soft);
 
-  font-size: 0.74rem;
+  font-size: 0.66rem;
   font-weight: 700;
 }
 
@@ -859,8 +861,8 @@ textarea:focus {
   background: transparent;
 
   font-family: inherit;
-  font-size: 0.9rem;
-  line-height: 1.72;
+  font-size: 0.82rem;
+  line-height: 1.5;
   white-space: pre-wrap;
 }
 
@@ -870,8 +872,8 @@ textarea:focus {
 
 .copy-button,
 .record-action {
-  min-height: 38px;
-  padding: 7px 12px;
+  min-height: 32px;
+  padding: 5px 10px;
 
   border: 1px solid var(--border-strong);
   border-radius: 9px;
@@ -879,7 +881,7 @@ textarea:focus {
   color: var(--text);
   background: var(--surface-soft);
 
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 800;
 
   transition:
@@ -907,7 +909,7 @@ textarea:focus {
    ========================================================= */
 
 .record-details {
-  margin-top: 20px;
+  margin-top: 12px;
   overflow: hidden;
 
   border: 1px solid var(--border);
@@ -917,7 +919,7 @@ textarea:focus {
 }
 
 .record-details summary {
-  padding: 15px 18px;
+  padding: 10px 12px;
 
   color: var(--text);
   font-weight: 800;
@@ -929,14 +931,14 @@ textarea:focus {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 10px;
   margin: 0;
-  padding: 0 18px 18px;
+  padding: 0 12px 12px;
 }
 
 .record-details dt {
   color: var(--muted-text);
-  font-size: 0.67rem;
+  font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -947,16 +949,16 @@ textarea:focus {
   overflow-wrap: anywhere;
 
   color: var(--body-text);
-  font-size: 0.84rem;
+  font-size: 0.74rem;
 }
 
 .records-list {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .records-message {
-  padding: 22px;
+  padding: 14px;
 
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-medium);
@@ -972,8 +974,8 @@ textarea:focus {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
 
-  gap: 18px;
-  padding: 19px;
+  gap: 12px;
+  padding: 13px;
 
   border-radius: var(--radius-medium);
 
@@ -999,10 +1001,10 @@ textarea:focus {
   display: flex;
   flex-wrap: wrap;
 
-  gap: 8px 14px;
+  gap: 5px 10px;
 
   color: var(--muted-text);
-  font-size: 0.77rem;
+  font-size: 0.68rem;
 }
 
 /* =========================================================
