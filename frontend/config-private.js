@@ -1,7 +1,7 @@
 window.LUXNOTE_CONFIG = {
   apiBaseUrl: "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com",
   apiPathPrefix: "/private",
-  mode: "private",
+  mode: "production",
   authEnabled: true,
   authRequired: true,
   cognitoDomain: "https://us-west-2roh0twsiv.auth.us-west-2.amazoncognito.com",

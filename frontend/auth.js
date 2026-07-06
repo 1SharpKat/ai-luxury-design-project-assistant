@@ -377,7 +377,7 @@
   async function getAuthHeaders() {
     if (isAuthRequired() && !isConfigured()) {
       throw new Error(
-        "Private workspace sign-in is not configured yet. Add the Cognito domain and app client ID before using job data."
+        "Production sign-in is not configured yet. Add the Cognito domain and app client ID before using project data."
       );
     }
 
@@ -491,11 +491,11 @@
     if (state.reason === "not_configured") {
       heading.textContent = "Sign-in setup required";
       description.textContent =
-        "This workspace is reserved for private job use. Add your Cognito hosted UI domain and app client ID in config-private.js before storing real project information.";
+        "This production workspace is reserved for signed-in project use. Add your Cognito hosted UI domain and app client ID before storing real project information.";
     } else {
       heading.textContent = "Sign in to continue";
       description.textContent =
-        "Use the private workspace for real project records after signing in. The public demo remains available for fictional LinkedIn walkthroughs.";
+        "Sign in to create, review, and manage production project records.";
     }
 
     gate.append(eyebrow, heading, description);
@@ -546,16 +546,16 @@
 
       status.textContent =
         isAuthRequired()
-          ? "Private workspace: sign-in setup required."
-          : "Portfolio demo: use fictional data only.";
+          ? "Production workspace: sign-in setup required."
+          : "Production workspace.";
       bar.appendChild(status);
       header.appendChild(bar);
       return;
     }
 
     status.textContent = readTokens()
-      ? `Private workspace: ${getUserLabel()}`
-      : "Private workspace: sign in required";
+      ? `Production workspace: ${getUserLabel()}`
+      : "Production workspace: sign in required";
 
     const button = document.createElement("button");
     button.type = "button";
@@ -575,7 +575,7 @@
 
   function syncAuthStatusBadges() {
     const state = getAccessState();
-    let label = "Public Demo";
+    let label = "Production Workspace";
 
     if (isAuthRequired()) {
       label = state.canAccess

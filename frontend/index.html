@@ -9,7 +9,7 @@
   >
   <meta
     name="description"
-    content="LuxNote AI is a polished project intelligence demo for organizing luxury design notes, walkthrough transcripts, action items, and professional follow-up communication."
+    content="LuxNote AI is a private production workspace for organizing luxury design notes, walkthrough transcripts, action items, and professional follow-up communication."
   >
   <meta name="theme-color" content="#f7f1eb">
 
@@ -38,9 +38,8 @@
       </a>
 
       <div class="nav-links">
-        <a href="#new-note">Try Demo</a>
-        <a href="projects.html">Project Library</a>
-        <a href="workspace.html">Private Workspace</a>
+        <a href="#new-note">New Note</a>
+        <a href="projects.html">Projects</a>
       </div>
     </nav>
   </header>
@@ -67,7 +66,7 @@
       </div>
 
       <div class="advisor-statement-panel">
-        <p class="eyebrow">Portfolio Demo</p>
+        <p class="eyebrow">Production Workspace</p>
 
         <h1 id="hero-heading">
           Project intelligence for luxury design teams.
@@ -79,7 +78,7 @@
           project record that is ready for professional review.
         </p>
 
-        <div class="hero-system-row" aria-label="Demo workflow">
+        <div class="hero-system-row" aria-label="Project workflow">
           <span>Capture</span>
           <span>Analyze</span>
           <span>Report</span>
@@ -90,14 +89,14 @@
             class="primary-link hero-button-left"
             href="#new-note"
           >
-            Try the Demo
+            Create Project Note
           </a>
 
           <a
             class="secondary-link hero-button-right"
             href="projects.html"
           >
-            View Project Library
+            View Projects
           </a>
         </div>
       </div>
@@ -110,19 +109,24 @@
     >
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Demo Workbench</p>
+          <p class="eyebrow">Production Workbench</p>
 
           <h2 id="project-note-heading">
             Create a polished project record
           </h2>
 
           <p class="section-description">
-            Use fictional notes to preview how LuxNote AI organizes
-            project context, priorities, next steps, and follow-up.
+            Use this signed-in workspace to organize project context,
+            priorities, next steps, and follow-up.
           </p>
         </div>
 
-        <span class="status-badge">Live Demo</span>
+        <span
+          class="status-badge"
+          data-auth-status-badge
+        >
+          Sign-In Required
+        </span>
       </div>
 
       <form id="project-note-form" novalidate>
@@ -134,7 +138,7 @@
               id="client-name"
               name="clientName"
               type="text"
-              placeholder="Fictional Client"
+              placeholder="Client or project alias"
               autocomplete="organization"
               maxlength="120"
             >
@@ -157,7 +161,7 @@
             >
 
             <small class="field-hint">
-              Reuse a project name to group related demo notes.
+              Reuse a project name to group related job notes.
             </small>
           </div>
 
@@ -193,8 +197,8 @@
             <label for="source">Source</label>
 
             <select id="source" name="source">
-              <option value="fictional demo transcript">
-                Fictional demo transcript
+              <option value="job walkthrough notes">
+                Job walkthrough notes
               </option>
               <option value="Plaud transcript">
                 Plaud transcript
@@ -238,7 +242,7 @@
             name="projectNotes"
             rows="10"
             maxlength="10000"
-            placeholder="Paste fictional meeting notes, transcripts, or walkthrough details here."
+            placeholder="Paste meeting notes, transcripts, or walkthrough details here after sign-in is verified."
             required
           ></textarea>
         </div>
@@ -255,8 +259,9 @@
             </h3>
 
             <p id="ai-toggle-copy">
-              Keep AI on for the fictional demo, or turn it off to save
-              a project record with rule-based categories and next steps only.
+              Off by default for production notes. Turn AI on only when
+              you intentionally want this note sent to Amazon Comprehend
+              and Amazon Bedrock.
             </p>
           </div>
 
@@ -265,7 +270,6 @@
               id="ai-processing-enabled"
               name="aiProcessingEnabled"
               type="checkbox"
-              checked
               aria-describedby="ai-toggle-copy"
             >
 
@@ -286,8 +290,8 @@
             </h3>
 
             <p>
-              Optional. Choose a local JPEG or PNG, up to 5 MB, or
-              paste a direct HTTPS image URL for the demo project.
+              Optional. Choose a local JPEG or PNG, up to 5 MB.
+              External image URLs are disabled in production.
             </p>
           </div>
 
@@ -338,7 +342,7 @@
             type="submit"
           >
             <span class="button-label">
-              Generate Demo Report
+              Save Project Note
             </span>
 
             <span
@@ -373,7 +377,7 @@
     >
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Output Preview</p>
+          <p class="eyebrow">Project Review</p>
 
           <h2 id="results-heading">
             Structured review packet
@@ -397,7 +401,7 @@
         <article class="summary-card">
           <span class="summary-label">Project</span>
           <strong id="result-project-name">
-            Demo project
+            Project
           </strong>
         </article>
 
@@ -477,13 +481,14 @@
     </div>
 
     <p>
-      Portfolio demo. Use fictional information only. AI-generated content
-      requires human review before it is used for client, builder, vendor,
-      electrical, construction, or design decisions.
+      Signed-in production workspace. AI-generated content requires human
+      review before it is used for client, builder, vendor, electrical,
+      construction, or design decisions.
     </p>
   </footer>
 
-  <script src="config.js?v=20260614-ai-toggle"></script>
-  <script src="app.js?v=20260614-ai-toggle"></script>
+  <script src="config.js?v=20260706-production"></script>
+  <script src="auth.js?v=20260706-production"></script>
+  <script src="app.js?v=20260706-production"></script>
 </body>
 </html>

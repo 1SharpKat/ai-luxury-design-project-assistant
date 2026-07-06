@@ -117,10 +117,11 @@ if ($lambdaConfig.Environment -and $lambdaConfig.Environment.Variables) {
     }
 }
 
-$variables["REQUIRE_AUTH"] = "false"
+$variables["REQUIRE_AUTH"] = "true"
 $variables["PRIVATE_PATH_PREFIX"] = "/private"
 $variables["PRIVATE_COVER_PHOTOS"] = "true"
 $variables["ALLOW_EXTERNAL_COVER_URLS"] = "false"
+$variables["ALLOW_PUBLIC_DELETE"] = "false"
 $variables["PRIVATE_AI_ENABLED"] = $PrivateAiEnabled
 
 if ($CoverPhotoBucket) {
@@ -171,5 +172,5 @@ Write-Host ""
 Write-Host "Protected routes:"
 $routePairs | ForEach-Object { Write-Host "  $($_.Private)" }
 Write-Host ""
-Write-Host "Public demo routes remain unauthenticated."
+Write-Host "Unauthenticated public data routes are locked by Lambda auth."
 Write-Host "Leave OPTIONS unauthenticated for CORS preflight."

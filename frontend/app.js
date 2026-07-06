@@ -57,10 +57,10 @@ openReportLink: getElement("open-report-link")
 const submitLabel =
 elements.submitButton?.querySelector(".button-label") || null;
 const defaultSubmitText =
-submitLabel?.textContent.trim() || "Generate Demo Report";
+submitLabel?.textContent.trim() || "Save Project Note";
 const initialResultText = {
 projectName:
-elements.resultProjectName?.textContent.trim() || "Demo project",
+elements.resultProjectName?.textContent.trim() || "Project",
 priority:
 elements.resultPriority?.textContent.trim() || "Not assigned",
 summary:

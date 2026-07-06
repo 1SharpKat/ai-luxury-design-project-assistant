@@ -77,9 +77,9 @@ def validate_https_url(value: str, field_name: str) -> None:
 
 AI_ENABLED = env_flag("AI_ENABLED", True)
 PRIVATE_AI_ENABLED = env_flag("PRIVATE_AI_ENABLED", False)
-REQUIRE_AUTH = env_flag("REQUIRE_AUTH", False)
+REQUIRE_AUTH = env_flag("REQUIRE_AUTH", True)
 PRIVATE_COVER_PHOTOS = env_flag("PRIVATE_COVER_PHOTOS", REQUIRE_AUTH)
-ALLOW_EXTERNAL_COVER_URLS = env_flag("ALLOW_EXTERNAL_COVER_URLS", True)
+ALLOW_EXTERNAL_COVER_URLS = env_flag("ALLOW_EXTERNAL_COVER_URLS", False)
 ALLOW_PUBLIC_DELETE = env_flag("ALLOW_PUBLIC_DELETE", False)
 PRIVATE_PATH_PREFIX = os.environ.get("PRIVATE_PATH_PREFIX", "/private").rstrip("/")
 
@@ -946,7 +946,7 @@ def delete_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     if not private_request and not ALLOW_PUBLIC_DELETE:
         return create_response(
             403,
-            {"error": "Deleting public demo records is disabled"},
+            {"error": "Deleting unauthenticated records is disabled"},
         )
 
     path_parameters = event.get("pathParameters") or {}
