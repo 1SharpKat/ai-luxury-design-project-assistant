@@ -13,6 +13,10 @@ const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
 const NEW_NOTE_PAGE = APP_ROUTES.newNote || "index.html#new-note";
 const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
 const REPORT_PAGE = APP_ROUTES.report || "report.html";
+const ALLOW_DELETE =
+  window.LUXNOTE_CONFIG?.allowDelete === true;
+const REQUEST_TIMEOUT_MS =
+  Number(window.LUXNOTE_CONFIG?.requestTimeoutMs) || 30000;
 
 const elements = {
   folders: document.getElementById("project-folders"),
@@ -125,19 +129,33 @@ async function apiFetch(path, options = {}) {
     ...authHeaders,
     ...(options.headers || {})
   };
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(
+    () => controller.abort(),
+    REQUEST_TIMEOUT_MS
+  );
 
   try {
     response = await fetch(
       `${API_BASE_URL}${API_PATH_PREFIX}${path}`,
       {
         ...options,
+        signal: controller.signal,
         headers
       }
     );
-  } catch {
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        "The project service took too long to respond. Please try again."
+      );
+    }
+
     throw new Error(
       "LuxNote AI could not connect to the project service. Check your connection and try again."
     );
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 
   return readApiResponse(response);
@@ -197,7 +215,7 @@ function sortNotesByNewest(notes) {
    PROJECT NOTE ROW
    ========================================================= */
 
-async function deleteProjectNote(record) {
+async function deleteProjectNote(record, button) {
   if (!record.recordId) {
     return;
   }
@@ -210,6 +228,9 @@ async function deleteProjectNote(record) {
   if (!confirmed) {
     return;
   }
+
+  button.disabled = true;
+  button.setAttribute("aria-busy", "true");
 
   try {
     await apiFetch(
@@ -230,6 +251,8 @@ async function deleteProjectNote(record) {
       error.message || "Project note could not be deleted.",
       "error-state"
     );
+    button.disabled = false;
+    button.removeAttribute("aria-busy");
   }
 }
 
@@ -298,20 +321,25 @@ function createNoteRow(record) {
 
   reportLink.append(noteDetails, priority);
 
-  const deleteButton = document.createElement("button");
-  deleteButton.className = "project-note-delete";
-  deleteButton.type = "button";
-  deleteButton.title = "Delete project note";
-  deleteButton.setAttribute(
-    "aria-label",
-    `Delete ${formatNoteType(record.noteType)} note`
-  );
-  deleteButton.appendChild(createTrashIcon());
-  deleteButton.addEventListener("click", () => {
-    deleteProjectNote(record);
-  });
+  row.appendChild(reportLink);
 
-  row.append(reportLink, deleteButton);
+  if (ALLOW_DELETE) {
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "project-note-delete";
+    deleteButton.type = "button";
+    deleteButton.title = "Delete project note";
+    deleteButton.setAttribute(
+      "aria-label",
+      `Delete ${formatNoteType(record.noteType)} note`
+    );
+    deleteButton.appendChild(createTrashIcon());
+    deleteButton.addEventListener("click", () => {
+      deleteProjectNote(record, deleteButton);
+    });
+    row.appendChild(deleteButton);
+  } else {
+    row.classList.add("is-read-only");
+  }
 
   return row;
 }

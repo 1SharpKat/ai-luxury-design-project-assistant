@@ -189,6 +189,13 @@ Private workspace setup notes are available at:
 docs/private-workspace-setup.md
 ```
 
+The invite checklist, tester smoke test, feedback prompts, and stop-ship checks
+are available at:
+
+```text
+docs/beta-testing.md
+```
+
 ## AI Workflow
 
 ### Amazon Comprehend

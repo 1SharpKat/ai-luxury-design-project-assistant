@@ -23,6 +23,10 @@ const AI_DEFAULT_ENABLED =
 window.LUXNOTE_CONFIG?.aiDefaultEnabled !== false;
 const AI_TOGGLE_ENABLED =
 window.LUXNOTE_CONFIG?.aiToggleEnabled !== false;
+const REQUEST_TIMEOUT_MS =
+Number(window.LUXNOTE_CONFIG?.requestTimeoutMs) || 30000;
+const UPLOAD_TIMEOUT_MS =
+Number(window.LUXNOTE_CONFIG?.uploadTimeoutMs) || 60000;
 
 const getElement = (id) => document.getElementById(id);
 
@@ -207,19 +211,33 @@ const headers = {
 ...authHeaders,
 ...(options.headers || {})
 };
+const controller = new AbortController();
+const timeoutId = window.setTimeout(
+() => controller.abort(),
+REQUEST_TIMEOUT_MS
+);
 
 try {
 response = await fetch(
 `${API_BASE_URL}${API_PATH_PREFIX}${path}`,
 {
 ...options,
+signal: controller.signal,
 headers
 }
 );
-} catch {
+} catch (error) {
+if (error.name === "AbortError") {
+throw new Error(
+"The project service took too long to respond. Please try again."
+);
+}
+
 throw new Error(
 "LuxNote AI could not connect to the project service. Check your connection and try again."
 );
+} finally {
+window.clearTimeout(timeoutId);
 }
 
 return readApiResponse(response);
@@ -432,6 +450,11 @@ throw new Error(
 }
 
 let uploadResponse;
+const controller = new AbortController();
+const timeoutId = window.setTimeout(
+() => controller.abort(),
+UPLOAD_TIMEOUT_MS
+);
 
 try {
 uploadResponse = await fetch(uploadUrl, {
@@ -439,12 +462,21 @@ method: "PUT",
 headers: {
 "Content-Type": file.type
 },
+signal: controller.signal,
 body: file
 });
-} catch {
+} catch (error) {
+if (error.name === "AbortError") {
+throw new Error(
+"The cover photo upload took too long. Check your connection and try again."
+);
+}
+
 throw new Error(
 "The cover photo could not be uploaded. Check your connection and try again."
 );
+} finally {
+window.clearTimeout(timeoutId);
 }
 
 if (!uploadResponse.ok) {

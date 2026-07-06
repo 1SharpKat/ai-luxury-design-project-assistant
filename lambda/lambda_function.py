@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Any
+from urllib.parse import urlparse
 
 import boto3
 from boto3.dynamodb.conditions import Attr
@@ -56,14 +57,39 @@ def request_flag(
     return default
 
 
+def validate_text_length(value: str, field_name: str, maximum: int) -> None:
+    """Reject unexpectedly large user-supplied text fields."""
+    if len(value) > maximum:
+        raise ValueError(f"{field_name} must be {maximum} characters or fewer")
+
+
+def validate_https_url(value: str, field_name: str) -> None:
+    """Require externally stored links to use a complete HTTPS URL."""
+    if not value:
+        return
+
+    validate_text_length(value, field_name, MAX_COVER_URL_LENGTH)
+    parsed = urlparse(value)
+
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise ValueError(f"{field_name} must be a valid HTTPS URL")
+
+
 AI_ENABLED = env_flag("AI_ENABLED", True)
 PRIVATE_AI_ENABLED = env_flag("PRIVATE_AI_ENABLED", False)
 REQUIRE_AUTH = env_flag("REQUIRE_AUTH", False)
 PRIVATE_COVER_PHOTOS = env_flag("PRIVATE_COVER_PHOTOS", REQUIRE_AUTH)
 ALLOW_EXTERNAL_COVER_URLS = env_flag("ALLOW_EXTERNAL_COVER_URLS", True)
+ALLOW_PUBLIC_DELETE = env_flag("ALLOW_PUBLIC_DELETE", False)
 PRIVATE_PATH_PREFIX = os.environ.get("PRIVATE_PATH_PREFIX", "/private").rstrip("/")
 
 ALLOWED_COVER_TYPES = {"image/jpeg", "image/png"}
+MAX_CLIENT_NAME_LENGTH = 120
+MAX_PROJECT_NAME_LENGTH = 160
+MAX_NOTE_TYPE_LENGTH = 80
+MAX_SOURCE_LENGTH = 120
+MAX_PROJECT_NOTES_LENGTH = 10_000
+MAX_COVER_URL_LENGTH = 2_048
 
 
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
@@ -694,14 +720,59 @@ def create_project_note(event: dict[str, Any]) -> dict[str, Any]:
     except ValueError as error:
         return create_response(400, {"error": str(error)})
 
-    client_name = str(body.get("clientName", "Private Client")).strip()
-    project_name = str(body.get("projectName", "Unnamed Project")).strip()
-    note_type = str(body.get("noteType", "manual_project_notes")).strip()
-    source = str(body.get("source", "manual entry")).strip()
+    client_name = str(body.get("clientName", "")).strip() or "Private Client"
+    project_name = str(body.get("projectName", "")).strip()
+    note_type = (
+        str(body.get("noteType", "")).strip() or "manual_project_notes"
+    )
+    source = str(body.get("source", "")).strip() or "manual entry"
     project_notes = str(body.get("projectNotes", "")).strip()
+
+    if not project_name:
+        return create_response(400, {"error": "projectName is required"})
 
     if not project_notes:
         return create_response(400, {"error": "projectNotes is required"})
+
+    try:
+        validate_text_length(
+            client_name,
+            "clientName",
+            MAX_CLIENT_NAME_LENGTH,
+        )
+        validate_text_length(
+            project_name,
+            "projectName",
+            MAX_PROJECT_NAME_LENGTH,
+        )
+        validate_text_length(note_type, "noteType", MAX_NOTE_TYPE_LENGTH)
+        validate_text_length(source, "source", MAX_SOURCE_LENGTH)
+        validate_text_length(
+            project_notes,
+            "projectNotes",
+            MAX_PROJECT_NOTES_LENGTH,
+        )
+        validate_https_url(
+            str(body.get("coverPhotoUrl", "")).strip(),
+            "coverPhotoUrl",
+        )
+        validate_text_length(
+            str(body.get("coverPhotoKey", "")),
+            "coverPhotoKey",
+            1_024,
+        )
+        validate_text_length(
+            str(body.get("coverPhotoName", "")),
+            "coverPhotoName",
+            255,
+        )
+        validate_text_length(
+            str(body.get("coverPhotoType", "")),
+            "coverPhotoType",
+            100,
+        )
+    except ValueError as error:
+        return create_response(400, {"error": str(error)})
 
     if (
         private_request
@@ -871,6 +942,13 @@ def delete_project_note_by_id(event: dict[str, Any]) -> dict[str, Any]:
     """Handle DELETE /project-notes/{recordId}."""
     private_request = request_requires_auth(event)
     owner_user_id = get_owner_user_id(event)
+
+    if not private_request and not ALLOW_PUBLIC_DELETE:
+        return create_response(
+            403,
+            {"error": "Deleting public demo records is disabled"},
+        )
+
     path_parameters = event.get("pathParameters") or {}
     record_id = path_parameters.get("recordId")
 

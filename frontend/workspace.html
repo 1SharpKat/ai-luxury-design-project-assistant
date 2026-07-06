@@ -122,7 +122,12 @@
           </p>
         </div>
 
-        <span class="status-badge">Sign-In Required</span>
+        <span
+          class="status-badge"
+          data-auth-status-badge
+        >
+          Sign-In Required
+        </span>
       </div>
 
       <form id="project-note-form" novalidate>
@@ -136,6 +141,7 @@
               type="text"
               placeholder="Client or project alias"
               autocomplete="organization"
+              maxlength="120"
             >
           </div>
 
@@ -151,6 +157,7 @@
               type="text"
               placeholder="Residence project name"
               autocomplete="off"
+              maxlength="160"
               required
             >
 

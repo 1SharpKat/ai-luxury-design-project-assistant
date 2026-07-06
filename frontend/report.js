@@ -11,6 +11,8 @@ const API_PATH_PREFIX =
 window.LUXNOTE_CONFIG?.apiPathPrefix || "";
 const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
 const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
+const REQUEST_TIMEOUT_MS =
+  Number(window.LUXNOTE_CONFIG?.requestTimeoutMs) || 30000;
 
 const elements = {
   status: document.getElementById("report-status"),
@@ -123,18 +125,32 @@ async function getJson(path) {
     window.luxnoteAuth
       ? await window.luxnoteAuth.getAuthHeaders()
       : {};
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(
+    () => controller.abort(),
+    REQUEST_TIMEOUT_MS
+  );
 
   try {
     response = await fetch(`${API_BASE_URL}${API_PATH_PREFIX}${path}`, {
+      signal: controller.signal,
       headers: {
         ...authHeaders,
         Accept: "application/json"
       }
     });
-  } catch {
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        "The project service took too long to respond. Please try again."
+      );
+    }
+
     throw new Error(
       "LuxNote AI could not connect to the project service. Check your connection and try again."
     );
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 
   return readApiResponse(response);

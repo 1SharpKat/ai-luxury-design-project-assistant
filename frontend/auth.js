@@ -12,10 +12,29 @@
   const errorKey = "luxnote.auth.lastError";
 
   function storageCandidates() {
-    return [
-      window.localStorage,
-      window.sessionStorage
-    ].filter(Boolean);
+    try {
+      return window.sessionStorage
+        ? [window.sessionStorage]
+        : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function clearLegacyLocalStorage() {
+    try {
+      [
+        tokenKey,
+        verifierKey,
+        stateKey,
+        returnToKey,
+        errorKey
+      ].forEach((key) => {
+        window.localStorage.removeItem(key);
+      });
+    } catch {
+      // Storage may be blocked by browser privacy settings.
+    }
   }
 
   function getStoredItem(key) {
@@ -554,7 +573,28 @@
     header.appendChild(bar);
   }
 
+  function syncAuthStatusBadges() {
+    const state = getAccessState();
+    let label = "Public Demo";
+
+    if (isAuthRequired()) {
+      label = state.canAccess
+        ? "Signed In"
+        : state.reason === "not_configured"
+          ? "Setup Required"
+          : "Sign-In Required";
+    }
+
+    document
+      .querySelectorAll("[data-auth-status-badge]")
+      .forEach((badge) => {
+        badge.textContent = label;
+      });
+  }
+
   async function initialize() {
+    clearLegacyLocalStorage();
+
     try {
       await handleRedirect();
     } catch (error) {
@@ -566,6 +606,7 @@
     createAuthErrorNotice();
     createAccessGate();
     disablePrivateControls();
+    syncAuthStatusBadges();
   }
 
   window.luxnoteAuth = {
