@@ -3,6 +3,30 @@
    Project board tracking fields
    ========================================================= */
 
+.project-attention {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.project-attention-stale {
+  border-color: rgba(178, 138, 71, 0.28);
+  color: #7a5a22;
+  background: rgba(178, 138, 71, 0.1);
+}
+
+.project-attention-overdue {
+  border-color: rgba(138, 61, 68, 0.3);
+  color: #7f3038;
+  background: rgba(138, 61, 68, 0.1);
+}
+
 .project-tracking-summary {
   display: grid;
   gap: 5px;
