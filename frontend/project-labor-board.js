@@ -69,7 +69,10 @@ buildProject = function buildProjectWithLabor(projectName, records) {
     });
 
   project.unbilledLaborHours = laborEntries
-    .filter((entry) => entry.billingStatus !== "invoiced")
+    .filter((entry) => (
+      entry.billingStatus !== "invoiced" &&
+      entry.laborType !== "Nonbillable"
+    ))
     .reduce((total, entry) => total + (Number(entry.hours) || 0), 0);
 
   return project;
