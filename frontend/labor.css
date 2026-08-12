@@ -1,0 +1,223 @@
+/* =========================================================
+   LuxNote Labor
+   ========================================================= */
+
+.labor-page-shell {
+  max-width: 1540px;
+}
+
+.labor-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 14px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(82, 66, 61, 0.12);
+}
+
+.labor-tab {
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid rgba(82, 66, 61, 0.16);
+  border-radius: 999px;
+  color: var(--warm-brown, #6a4943);
+  background: rgba(255, 253, 250, 0.88);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.labor-tab.is-active {
+  border-color: rgba(167, 124, 120, 0.44);
+  color: var(--text, #391214);
+  background: rgba(167, 124, 120, 0.12);
+}
+
+.labor-panel,
+.labor-review-section {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid rgba(82, 66, 61, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 253, 250, 0.72);
+}
+
+.labor-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+
+.labor-panel-heading h2 {
+  margin: 0;
+  color: var(--text, #391214);
+  font-size: 0.92rem;
+}
+
+.labor-panel-heading p {
+  max-width: 850px;
+  margin: 4px 0 0;
+  color: var(--muted-text, #887d77);
+  font-size: 0.67rem;
+  line-height: 1.45;
+}
+
+.labor-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.labor-field {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.labor-field input,
+.labor-field select,
+.labor-field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid rgba(82, 66, 61, 0.2);
+  border-radius: 9px;
+  color: var(--body-text, #52423d);
+  background: #fffdf9;
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+.labor-field textarea {
+  resize: vertical;
+}
+
+.labor-field input:focus,
+.labor-field select:focus,
+.labor-field textarea:focus {
+  outline: 3px solid rgba(167, 124, 120, 0.14);
+  border-color: rgba(167, 124, 120, 0.48);
+}
+
+.labor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.labor-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(82, 66, 61, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 253, 250, 0.9);
+}
+
+.labor-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  font-size: 0.64rem;
+}
+
+.labor-table th,
+.labor-table td {
+  padding: 7px;
+  border-bottom: 1px solid rgba(82, 66, 61, 0.09);
+  text-align: left;
+  vertical-align: top;
+}
+
+.labor-table th {
+  color: var(--muted-text, #887d77);
+  background: rgba(248, 242, 237, 0.76);
+  font-size: 0.54rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.labor-table input[type="text"],
+.labor-table input[type="date"],
+.labor-table input[type="number"],
+.labor-table select {
+  min-width: 92px;
+  max-width: 230px;
+  padding: 5px 6px;
+  border: 1px solid rgba(82, 66, 61, 0.18);
+  border-radius: 7px;
+  background: #fffdf9;
+  font: inherit;
+}
+
+.labor-table .labor-project-select {
+  min-width: 180px;
+}
+
+.labor-row-warning {
+  display: block;
+  margin-top: 3px;
+  color: #7a5a22;
+  font-size: 0.54rem;
+  font-weight: 700;
+}
+
+.labor-row-duplicate {
+  color: #7f3038;
+}
+
+.labor-review-summary {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  min-width: 100px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.58rem;
+}
+
+.labor-review-summary strong {
+  color: var(--text, #391214);
+  font-size: 0.84rem;
+}
+
+.labor-invoice-controls {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto;
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 10px;
+}
+
+.labor-invoice-controls .labor-field {
+  margin-bottom: 0;
+}
+
+.labor-empty {
+  padding: 18px;
+  color: var(--muted-text, #887d77);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .labor-form-grid,
+  .labor-invoice-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .labor-panel-heading {
+    display: grid;
+  }
+
+  .labor-review-summary {
+    justify-items: start;
+  }
+}
