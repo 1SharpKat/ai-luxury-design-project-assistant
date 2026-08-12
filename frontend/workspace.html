@@ -4,13 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
-  <title>LuxNote | Project Board</title>
-  <script>
-    window.location.replace("workspace-projects.html");
-  </script>
+  <meta name="theme-color" content="#f7f1eb">
+  <title>Signing In | LuxNote</title>
+
+  <link rel="stylesheet" href="styles.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
 </head>
 <body>
-  <p>Opening the LuxNote project board...</p>
-  <p><a href="workspace-projects.html">Open Project Board</a></p>
+  <header class="site-header">
+    <nav class="glass-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="index.html">LuxNote</a>
+    </nav>
+  </header>
+
+  <main class="subpage-shell">
+    <section class="glass-panel subpage-panel" aria-labelledby="auth-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Private Workspace</p>
+          <h1 id="auth-heading">Completing sign-in</h1>
+          <p class="section-description">
+            LuxNote is finishing your secure sign-in and will open the project board automatically.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="config-private.js?v=20260811-core-project-mode"></script>
+  <script src="auth.js?v=20260706-production"></script>
+  <script>
+    (async function completeLuxNoteSignIn() {
+      if (!window.luxnoteAuth) {
+        return;
+      }
+
+      await window.luxnoteAuth.initialize();
+
+      if (window.luxnoteAuth.getAccessState().canAccess) {
+        window.location.replace("workspace-projects.html");
+      }
+    })();
+  </script>
 </body>
 </html>
