@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Add a project note to the LuxNote project tracker.">
+  <meta name="theme-color" content="#f7f1eb">
+  <title>New Project Note | LuxNote</title>
+
+  <link rel="stylesheet" href="styles.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="glass-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="projects.html">LuxNote</a>
+      <div class="nav-links">
+        <a href="projects.html">Project Board</a>
+        <a href="new-note.html" aria-current="page">New Note</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="subpage-shell">
+    <section class="glass-panel subpage-panel" aria-labelledby="new-note-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Project Activity</p>
+          <h1 id="new-note-heading">Add project note</h1>
+          <p class="section-description">
+            Save a walkthrough, meeting update, vendor note, or general project update.
+            This form does not run AI analysis.
+          </p>
+        </div>
+        <a class="secondary-link" href="projects.html">Back to Board</a>
+      </div>
+
+      <form id="project-note-form" novalidate>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="client-name">Client name</label>
+            <input
+              id="client-name"
+              name="clientName"
+              type="text"
+              maxlength="120"
+              placeholder="Client or project alias"
+              autocomplete="organization"
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="project-name">Project name <span aria-hidden="true">*</span></label>
+            <input
+              id="project-name"
+              name="projectName"
+              type="text"
+              maxlength="160"
+              placeholder="Alder Ridge Residence"
+              autocomplete="off"
+              required
+            >
+          </div>
+
+          <div class="form-field">
+            <label for="note-type">Note type</label>
+            <select id="note-type" name="noteType">
+              <option value="manual_project_notes">General project note</option>
+              <option value="design_review">Design review</option>
+              <option value="site_walkthrough_transcript">Site walkthrough</option>
+              <option value="client_meeting_notes">Client meeting</option>
+              <option value="builder_coordination">Builder coordination</option>
+              <option value="electrical_rough_in_notes">Prewire / rough-in</option>
+              <option value="vendor_update">Vendor update</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="source">Source</label>
+            <select id="source" name="source">
+              <option value="manual entry">Manual entry</option>
+              <option value="job walkthrough notes">Job walkthrough notes</option>
+              <option value="Plaud transcript">Plaud transcript</option>
+              <option value="email notes">Email notes</option>
+              <option value="client meeting">Client meeting</option>
+              <option value="builder communication">Builder communication</option>
+              <option value="electrician field notes">Electrician field notes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field full-width">
+          <div class="label-row">
+            <label for="project-notes">Project notes <span aria-hidden="true">*</span></label>
+            <span id="character-count">0 characters</span>
+          </div>
+          <textarea
+            id="project-notes"
+            name="projectNotes"
+            rows="12"
+            maxlength="10000"
+            placeholder="What happened, what changed, decisions made, or anything the project needs to remember."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button id="submit-button" class="primary-button" type="submit">
+            Save Project Note
+          </button>
+          <a class="secondary-link" href="projects.html">Cancel</a>
+        </div>
+
+        <div
+          id="form-message"
+          class="form-message"
+          role="status"
+          aria-live="polite"
+        ></div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <strong>LuxNote</strong>
+      <span>Project Tracker</span>
+    </div>
+    <p>Signed-in project tracking workspace.</p>
+  </footer>
+
+  <script src="config.js?v=20260811-core-project-mode"></script>
+  <script src="auth.js?v=20260706-production"></script>
+  <script src="new-note.js?v=20260811-project-tracker"></script>
+</body>
+</html>

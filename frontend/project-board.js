@@ -1,37 +1,51 @@
 /* =========================================================
    LuxNote AI
-   Project Board
+   Project Lifecycle Board
    ========================================================= */
 
 const API_BASE_URL =
   window.LUXNOTE_CONFIG?.apiBaseUrl ||
   "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
-const API_PATH_PREFIX =
-  window.LUXNOTE_CONFIG?.apiPathPrefix || "";
+const API_PATH_PREFIX = window.LUXNOTE_CONFIG?.apiPathPrefix || "";
 const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
 const NEW_NOTE_PAGE = APP_ROUTES.newNote || "index.html#new-note";
 const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
 const REPORT_PAGE = APP_ROUTES.report || "report.html";
-const ALLOW_DELETE = window.LUXNOTE_CONFIG?.allowDelete === true;
 const REQUEST_TIMEOUT_MS =
   Number(window.LUXNOTE_CONFIG?.requestTimeoutMs) || 30000;
 
 const STAGE_NOTE_PREFIX = "project_stage_";
-const DEFAULT_STAGE_ID = "planning";
+const DEFAULT_STAGE_ID = "design";
 
 const PROJECT_STAGES = [
-  { id: "planning", label: "Planning" },
   { id: "design", label: "Design" },
-  { id: "proposal", label: "Proposal" },
+  { id: "proposed", label: "Proposed" },
   { id: "approved", label: "Approved" },
-  { id: "ordered", label: "Ordered" },
-  { id: "prewire", label: "Prewire" },
-  { id: "trim", label: "Trim" },
-  { id: "final_install", label: "Final Install" },
-  { id: "programming", label: "Programming" },
-  { id: "punch_list", label: "Punch List" },
+  { id: "purchasing", label: "Purchasing" },
+  { id: "prewire_rough_in", label: "Prewire / Rough-In" },
+  { id: "install", label: "Install" },
+  { id: "trim_finish", label: "Trim / Finish" },
   { id: "complete", label: "Complete" }
 ];
+
+const LEGACY_STAGE_MAP = {
+  planning: "design",
+  design: "design",
+  proposal: "proposed",
+  proposed: "proposed",
+  approved: "approved",
+  ordered: "purchasing",
+  purchasing: "purchasing",
+  prewire: "prewire_rough_in",
+  prewire_rough_in: "prewire_rough_in",
+  final_install: "install",
+  install: "install",
+  trim: "trim_finish",
+  trim_finish: "trim_finish",
+  programming: "trim_finish",
+  punch_list: "trim_finish",
+  complete: "complete"
+};
 
 const stageById = new Map(
   PROJECT_STAGES.map((stage) => [stage.id, stage])
@@ -51,13 +65,16 @@ let projectState = new Map();
 let draggedProjectName = "";
 const movingProjects = new Set();
 
+function clearElement(element) {
+  element.replaceChildren();
+}
+
 function formatDate(value) {
   if (!value) {
     return "Date unavailable";
   }
 
   const date = new Date(value);
-
   return Number.isNaN(date.getTime())
     ? "Date unavailable"
     : dateFormatter.format(date);
@@ -78,10 +95,6 @@ function getTimestamp(value) {
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
-function clearElement(element) {
-  element.replaceChildren();
-}
-
 function setRefreshState(isLoading) {
   elements.refreshButton.disabled = isLoading;
   elements.refreshButton.textContent = isLoading
@@ -91,11 +104,9 @@ function setRefreshState(isLoading) {
 
 function showStatus(message, type = "") {
   clearElement(elements.status);
-
   elements.status.className = type
     ? `records-message ${type}`
     : "records-message";
-
   elements.status.textContent = message;
   elements.status.hidden = false;
 }
@@ -112,16 +123,13 @@ function getStageIdFromNote(record) {
     return "";
   }
 
-  const stageId = record.noteType.slice(STAGE_NOTE_PREFIX.length);
-  return stageById.has(stageId) ? stageId : "";
+  const storedStageId = record.noteType.slice(STAGE_NOTE_PREFIX.length);
+  return LEGACY_STAGE_MAP[storedStageId] || "";
 }
 
 function sortNotesByNewest(notes) {
   return [...notes].sort((first, second) => {
-    return (
-      getTimestamp(second.createdAt) -
-      getTimestamp(first.createdAt)
-    );
+    return getTimestamp(second.createdAt) - getTimestamp(first.createdAt);
   });
 }
 
@@ -170,7 +178,6 @@ async function readApiResponse(response) {
 }
 
 async function apiFetch(path, options = {}) {
-  let response;
   const authHeaders = window.luxnoteAuth
     ? await window.luxnoteAuth.getAuthHeaders()
     : {};
@@ -185,14 +192,16 @@ async function apiFetch(path, options = {}) {
   );
 
   try {
-    response = await fetch(
+    const response = await fetch(
       `${API_BASE_URL}${API_PATH_PREFIX}${path}`,
       {
         ...options,
-        signal: controller.signal,
-        headers
+        headers,
+        signal: controller.signal
       }
     );
+
+    return await readApiResponse(response);
   } catch (error) {
     if (error.name === "AbortError") {
       throw new Error(
@@ -200,21 +209,21 @@ async function apiFetch(path, options = {}) {
       );
     }
 
+    if (error.message) {
+      throw error;
+    }
+
     throw new Error(
-      "LuxNote AI could not connect to the project service. Check your connection and try again."
+      "LuxNote AI could not connect to the project service."
     );
   } finally {
     window.clearTimeout(timeoutId);
   }
-
-  return readApiResponse(response);
 }
 
 function getJson(path) {
   return apiFetch(path, {
-    headers: {
-      Accept: "application/json"
-    }
+    headers: { Accept: "application/json" }
   });
 }
 
@@ -275,139 +284,12 @@ function rebuildProjectState(records) {
   const groupedProjects = groupByProject(records);
   projectState = new Map();
 
-  groupedProjects.forEach((projectNotes, projectName) => {
+  groupedProjects.forEach((recordsForProject, projectName) => {
     projectState.set(
       projectName,
-      buildProject(projectName, projectNotes)
+      buildProject(projectName, recordsForProject)
     );
   });
-}
-
-async function deleteProjectNote(record, button) {
-  if (!record.recordId) {
-    return;
-  }
-
-  const noteName = formatNoteType(record.noteType);
-  const confirmed = window.confirm(
-    `Delete this ${noteName} note? This cannot be undone.`
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  button.disabled = true;
-  button.setAttribute("aria-busy", "true");
-
-  try {
-    await apiFetch(
-      `/project-notes/${encodeURIComponent(record.recordId)}`,
-      {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json"
-        }
-      }
-    );
-
-    showStatus("Project note deleted.", "success-state");
-    loadProjects();
-  } catch (error) {
-    console.error("Project note could not be deleted:", error);
-    showStatus(
-      error.message || "Project note could not be deleted.",
-      "error-state"
-    );
-    button.disabled = false;
-    button.removeAttribute("aria-busy");
-  }
-}
-
-function createTrashIcon() {
-  const icon = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "svg"
-  );
-  icon.setAttribute("class", "trash-icon");
-  icon.setAttribute("viewBox", "0 0 24 24");
-  icon.setAttribute("aria-hidden", "true");
-  icon.setAttribute("focusable", "false");
-
-  const path = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "path"
-  );
-  path.setAttribute(
-    "d",
-    "M3 6h18M9 6V4h6v2m-8 0 1 14h8l1-14"
-  );
-  path.setAttribute("fill", "none");
-  path.setAttribute("stroke", "currentColor");
-  path.setAttribute("stroke-linecap", "round");
-  path.setAttribute("stroke-linejoin", "round");
-  path.setAttribute("stroke-width", "1.8");
-  icon.appendChild(path);
-
-  return icon;
-}
-
-function createNoteRow(record) {
-  const row = document.createElement("div");
-  row.className = "project-note-row";
-
-  const reportLink = document.createElement("a");
-  reportLink.className = "project-note-link";
-
-  if (record.recordId) {
-    reportLink.href =
-      `${REPORT_PAGE}?id=${encodeURIComponent(record.recordId)}`;
-  } else {
-    reportLink.href = PROJECTS_PAGE;
-    reportLink.setAttribute("aria-disabled", "true");
-  }
-
-  const noteDetails = document.createElement("span");
-
-  const noteTitle = document.createElement("strong");
-  noteTitle.textContent = formatNoteType(record.noteType);
-
-  const noteMeta = document.createElement("small");
-  noteMeta.textContent =
-    `${record.category || "General"} | ${formatDate(record.createdAt)}`;
-
-  noteDetails.append(noteTitle, noteMeta);
-
-  const priority = document.createElement("span");
-  priority.className = "note-priority";
-  priority.textContent = record.priority || "Not assigned";
-
-  if (record.priority) {
-    priority.dataset.priority = String(record.priority).toLowerCase();
-  }
-
-  reportLink.append(noteDetails, priority);
-  row.appendChild(reportLink);
-
-  if (ALLOW_DELETE) {
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "project-note-delete";
-    deleteButton.type = "button";
-    deleteButton.title = "Delete project note";
-    deleteButton.setAttribute(
-      "aria-label",
-      `Delete ${formatNoteType(record.noteType)} note`
-    );
-    deleteButton.appendChild(createTrashIcon());
-    deleteButton.addEventListener("click", () => {
-      deleteProjectNote(record, deleteButton);
-    });
-    row.appendChild(deleteButton);
-  } else {
-    row.classList.add("is-read-only");
-  }
-
-  return row;
 }
 
 function createProjectCover(project) {
@@ -438,13 +320,43 @@ function createProjectCover(project) {
   return cover;
 }
 
+function createNoteRow(record) {
+  const row = document.createElement("div");
+  row.className = "project-note-row is-read-only";
+
+  const link = document.createElement("a");
+  link.className = "project-note-link";
+  link.href = record.recordId
+    ? `${REPORT_PAGE}?id=${encodeURIComponent(record.recordId)}`
+    : PROJECTS_PAGE;
+
+  const copy = document.createElement("span");
+  const title = document.createElement("strong");
+  title.textContent = formatNoteType(record.noteType);
+
+  const meta = document.createElement("small");
+  meta.textContent =
+    `${record.category || "General"} | ${formatDate(record.createdAt)}`;
+
+  copy.append(title, meta);
+
+  const priority = document.createElement("span");
+  priority.className = "note-priority";
+  priority.textContent = record.priority || "Not assigned";
+
+  if (record.priority) {
+    priority.dataset.priority = String(record.priority).toLowerCase();
+  }
+
+  link.append(copy, priority);
+  row.appendChild(link);
+  return row;
+}
+
 function createStageSelect(project) {
   const select = document.createElement("select");
   select.className = "project-stage-select";
-  select.setAttribute(
-    "aria-label",
-    `Stage for ${project.projectName}`
-  );
+  select.setAttribute("aria-label", `Stage for ${project.projectName}`);
 
   PROJECT_STAGES.forEach((stage) => {
     const option = document.createElement("option");
@@ -493,8 +405,6 @@ function createProjectCard(project) {
   const top = document.createElement("div");
   top.className = "project-card-top";
 
-  const cover = createProjectCover(project);
-
   const heading = document.createElement("div");
   heading.className = "project-card-heading";
 
@@ -507,17 +417,18 @@ function createProjectCard(project) {
   client.textContent = project.clientName;
 
   heading.append(title, client);
-  top.append(cover, heading);
+  top.append(createProjectCover(project), heading);
 
   const meta = document.createElement("div");
   meta.className = "project-card-meta";
 
   const noteCount = document.createElement("span");
-  const countLabel = project.contentNotes.length === 1 ? "note" : "notes";
-  noteCount.textContent = `${project.contentNotes.length} ${countLabel}`;
+  const noteLabel = project.contentNotes.length === 1 ? "note" : "notes";
+  noteCount.textContent = `${project.contentNotes.length} ${noteLabel}`;
 
   const updated = document.createElement("span");
-  updated.textContent = `Updated ${formatDate(project.latestActivity?.createdAt)}`;
+  updated.textContent =
+    `Updated ${formatDate(project.latestActivity?.createdAt)}`;
 
   meta.append(noteCount, updated);
 
@@ -529,8 +440,6 @@ function createProjectCard(project) {
     meta.appendChild(priority);
   }
 
-  const stageSelect = createStageSelect(project);
-
   const details = document.createElement("details");
   details.className = "board-card-notes";
 
@@ -538,7 +447,6 @@ function createProjectCard(project) {
   summary.textContent = project.contentNotes.length
     ? `Open project notes (${project.contentNotes.length})`
     : "No project notes yet";
-
   details.appendChild(summary);
 
   if (project.contentNotes.length) {
@@ -552,7 +460,7 @@ function createProjectCard(project) {
     details.appendChild(noteList);
   }
 
-  card.append(top, meta, stageSelect, details);
+  card.append(top, meta, createStageSelect(project), details);
 
   card.addEventListener("dragstart", (event) => {
     draggedProjectName = project.projectName;
@@ -634,7 +542,7 @@ function createBoardColumn(stage, projects) {
     try {
       await moveProjectToStage(projectName, stage.id);
     } catch {
-      // The status message is handled by moveProjectToStage.
+      // moveProjectToStage displays the error state.
     }
   });
 
@@ -703,7 +611,7 @@ function renderEmptyState() {
 
   const description = document.createElement("p");
   description.textContent =
-    "Create a project note and LuxNote will add that project to the board.";
+    "Create a project note and LuxNote will add that project to Design.";
 
   const link = document.createElement("a");
   link.className = "primary-link";
@@ -756,9 +664,7 @@ function renderBoard() {
         );
       });
 
-    elements.board.appendChild(
-      createBoardColumn(stage, stageProjects)
-    );
+    elements.board.appendChild(createBoardColumn(stage, stageProjects));
   });
 
   const completeCount = projects.filter(

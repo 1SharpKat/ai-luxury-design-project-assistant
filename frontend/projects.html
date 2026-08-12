@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta
     name="description"
-    content="Browse signed-in LuxNote AI projects, project notes, priorities, and generated reports."
+    content="Track LuxNote projects from design through completion on a visual project board."
   >
   <meta name="theme-color" content="#f7f1eb">
-
-  <title>Projects | LuxNote AI</title>
+  <title>Project Board | LuxNote</title>
 
   <link
     rel="icon"
@@ -24,95 +19,79 @@
   <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="board.css?v=20260811-project-board">
+  <link rel="stylesheet" href="board-tracking.css?v=20260811-project-tracking">
 </head>
-
 <body>
   <header class="site-header">
     <nav class="glass-nav" aria-label="Primary navigation">
-      <a class="nav-wordmark" href="index.html">
-        LuxNote AI
-      </a>
+      <a class="nav-wordmark" href="projects.html">LuxNote</a>
 
-  <div class="nav-links">
-    <a href="index.html#new-note">
-      New Note
-    </a>
-
-    <a
-      href="projects.html"
-      aria-current="page"
-    >
-      Projects
-    </a>
-
-  </div>
-</nav>
-
+      <div class="nav-links">
+        <a href="projects.html" aria-current="page">Project Board</a>
+        <a href="new-note.html">New Note</a>
+      </div>
+    </nav>
   </header>
 
-  <main class="subpage-shell">
+  <main class="subpage-shell board-page-shell">
     <section
-      class="glass-panel subpage-panel"
+      class="glass-panel subpage-panel board-panel"
       aria-labelledby="projects-heading"
     >
-      <div class="section-heading">
+      <div class="section-heading board-heading">
         <div>
-          <p class="eyebrow">Project Library</p>
+          <p class="eyebrow">Project Board</p>
+          <h1 id="projects-heading">Active projects</h1>
+          <p class="section-description">
+            Track projects from design through completion. Drag a project to a
+            new stage, use the stage menu, and keep the next action, due date,
+            and waiting item current.
+          </p>
+        </div>
 
-      <h1 id="projects-heading">
-        Saved projects
-      </h1>
+        <div class="board-actions">
+          <a class="secondary-link" href="new-note.html">
+            New Project Note
+          </a>
+          <button
+            id="refresh-projects"
+            class="secondary-button"
+            type="button"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
 
-      <p class="section-description">
-        Open a project folder to review saved notes, priorities,
-        project details, and complete reports.
-      </p>
-    </div>
+      <div
+        id="projects-status"
+        class="records-message loading-state"
+        role="status"
+        aria-live="polite"
+      >
+        Loading project board...
+      </div>
 
-    <button
-      id="refresh-projects"
-      class="secondary-button"
-      type="button"
-    >
-      Refresh
-    </button>
-  </div>
-
-  <div
-    id="projects-status"
-    class="records-message loading-state"
-    role="status"
-    aria-live="polite"
-  >
-    Loading saved projects...
-  </div>
-
-  <div
-    id="project-folders"
-    class="project-folder-grid"
-    aria-label="Saved projects"
-  ></div>
-</section>
-
+      <div
+        id="project-board"
+        class="project-board"
+        aria-label="Project workflow board"
+      ></div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-brand">
-      <strong>LuxNote AI</strong>
-      <span>Luxury Design Project Assistant</span>
+      <strong>LuxNote</strong>
+      <span>Project Tracker</span>
     </div>
-
-<p>
-  Signed-in production workspace. AI-generated content requires human
-  review before it is used for client, builder, vendor, electrical,
-  construction, or design decisions.
-</p>
-
+    <p>Signed-in project tracking workspace.</p>
   </footer>
 
-  <script src="config.js?v=20260706-production"></script>
+  <script src="config.js?v=20260811-core-project-mode"></script>
   <script src="auth.js?v=20260706-production"></script>
-  <script src="projects.js?v=20260706-production"></script>
-
+  <script src="project-board.js?v=20260811-lifecycle-board"></script>
+  <script src="project-tracking.js?v=20260811-project-tracking"></script>
 </body>
 </html>

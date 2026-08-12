@@ -1,0 +1,280 @@
+/* =========================================================
+   LuxNote AI Project Board
+   ========================================================= */
+
+.board-page-shell {
+  max-width: 1680px;
+}
+
+.board-panel {
+  overflow: hidden;
+}
+
+.board-heading {
+  align-items: flex-start;
+}
+
+.board-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.board-actions .secondary-link,
+.board-actions .secondary-button {
+  min-height: 34px;
+}
+
+.project-board {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 12px;
+  padding: 2px 2px 14px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity;
+}
+
+.board-column {
+  flex: 0 0 270px;
+  width: 270px;
+  min-height: 210px;
+  padding: 8px;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 12px;
+  background: rgba(248, 242, 237, 0.72);
+  scroll-snap-align: start;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.board-column.is-drop-target {
+  border-color: rgba(167, 124, 120, 0.56);
+  background: rgba(255, 253, 249, 0.96);
+  box-shadow: 0 0 0 3px rgba(167, 124, 120, 0.1);
+}
+
+.board-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 4px 9px;
+}
+
+.board-column-header h2 {
+  margin: 0;
+  color: var(--text, #391214);
+  font-size: 0.78rem;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.board-column-count {
+  display: inline-grid;
+  min-width: 23px;
+  height: 23px;
+  padding-inline: 5px;
+  place-items: center;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 999px;
+  color: var(--warm-brown, #6a4943);
+  background: rgba(255, 253, 250, 0.9);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.board-card-list {
+  display: grid;
+  gap: 8px;
+  min-height: 150px;
+}
+
+.project-board-card {
+  display: grid;
+  gap: 8px;
+  padding: 9px;
+  border: 1px solid rgba(82, 66, 61, 0.16);
+  border-radius: 11px;
+  color: var(--body-text, #52423d);
+  background: rgba(255, 253, 250, 0.96);
+  box-shadow: 0 6px 14px rgba(82, 66, 61, 0.06);
+  cursor: grab;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.project-board-card:hover {
+  border-color: rgba(167, 124, 120, 0.32);
+  box-shadow: 0 8px 18px rgba(82, 66, 61, 0.08);
+  transform: translateY(-1px);
+}
+
+.project-board-card:active {
+  cursor: grabbing;
+}
+
+.project-board-card.is-dragging {
+  opacity: 0.52;
+  transform: rotate(1deg);
+}
+
+.project-card-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.board-project-cover {
+  display: grid;
+  width: 54px;
+  height: 42px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid rgba(82, 66, 61, 0.16);
+  border-radius: 9px;
+  color: var(--warm-brown, #6a4943);
+  background: var(--surface-soft, #f8f2ed);
+  font-size: 0.58rem;
+}
+
+.board-project-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-card-heading {
+  min-width: 0;
+}
+
+.project-card-title,
+.project-card-client {
+  display: block;
+}
+
+.project-card-title {
+  color: var(--text, #391214);
+  font-size: 0.78rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.project-card-client {
+  margin-top: 2px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.6rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.project-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 7px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.56rem;
+}
+
+.board-priority {
+  margin-left: auto;
+  padding: 2px 5px;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 999px;
+  color: var(--warm-brown, #6a4943);
+  background: var(--surface-soft, #f8f2ed);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.board-priority[data-priority="high"] {
+  border-color: rgba(133, 65, 65, 0.28);
+}
+
+.project-stage-select {
+  width: 100%;
+  min-height: 32px;
+  padding: 5px 28px 5px 8px;
+  border: 1px solid rgba(82, 66, 61, 0.18);
+  border-radius: 8px;
+  color: var(--body-text, #52423d);
+  background-color: rgba(248, 242, 237, 0.8);
+  font: inherit;
+  font-size: 0.64rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.project-stage-select:focus-visible {
+  outline: 3px solid rgba(167, 124, 120, 0.18);
+  outline-offset: 1px;
+}
+
+.board-card-notes {
+  border-top: 1px solid rgba(82, 66, 61, 0.1);
+  padding-top: 6px;
+}
+
+.board-card-notes > summary {
+  color: var(--warm-brown, #6a4943);
+  font-size: 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.board-note-list {
+  gap: 4px;
+  padding: 7px 0 0;
+}
+
+.board-note-list .project-note-row {
+  background: rgba(248, 242, 237, 0.5);
+}
+
+.board-note-list .project-note-link {
+  width: 100%;
+  padding: 5px 6px;
+}
+
+.board-note-list .project-note-row strong {
+  font-size: 0.66rem;
+}
+
+.board-note-list .project-note-row small {
+  font-size: 0.54rem;
+}
+
+.board-note-list .note-priority {
+  font-size: 0.48rem;
+}
+
+@media (max-width: 760px) {
+  .board-heading {
+    display: grid;
+    gap: 12px;
+  }
+
+  .board-actions {
+    justify-content: flex-start;
+  }
+
+  .board-column {
+    flex-basis: min(82vw, 290px);
+    width: min(82vw, 290px);
+  }
+}

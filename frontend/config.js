@@ -12,12 +12,13 @@ window.LUXNOTE_CONFIG = {
   allowExternalCoverUrls: false,
   allowDelete: true,
   aiDefaultEnabled: false,
-  aiToggleEnabled: true,
+  aiToggleEnabled: false,
+  coreProjectMode: true,
   requestTimeoutMs: 30000,
   uploadTimeoutMs: 60000,
   demoNotice: false,
   routes: {
-    newNote: "index.html#new-note",
+    newNote: "new-note.html",
     projects: "projects.html",
     report: "report.html"
   }

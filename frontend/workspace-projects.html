@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta
     name="description"
-    content="Browse private LuxNote AI job projects, project notes, priorities, and generated reports behind sign-in."
+    content="Track private LuxNote projects from design through completion on a visual project board."
   >
   <meta name="theme-color" content="#f7f1eb">
-
-  <title>Private Library | LuxNote AI</title>
+  <title>Project Board | LuxNote</title>
 
   <link
     rel="icon"
@@ -24,97 +19,79 @@
   <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="board.css?v=20260811-project-board">
+  <link rel="stylesheet" href="board-tracking.css?v=20260811-project-tracking">
 </head>
-
 <body>
   <header class="site-header">
     <nav class="glass-nav" aria-label="Primary navigation">
-      <a class="nav-wordmark" href="workspace.html">
-        LuxNote AI
-      </a>
+      <a class="nav-wordmark" href="workspace-projects.html">LuxNote</a>
 
-  <div class="nav-links">
-    <a href="workspace.html#new-note">
-      New Note
-    </a>
-
-    <a
-      href="workspace-projects.html"
-      aria-current="page"
-    >
-      Private Library
-    </a>
-
-    <a href="index.html">
-      Dashboard
-    </a>
-  </div>
-</nav>
-
+      <div class="nav-links">
+        <a href="workspace-projects.html" aria-current="page">Project Board</a>
+        <a href="new-note.html">New Note</a>
+      </div>
+    </nav>
   </header>
 
-  <main class="subpage-shell">
+  <main class="subpage-shell board-page-shell">
     <section
-      class="glass-panel subpage-panel"
+      class="glass-panel subpage-panel board-panel"
       aria-labelledby="projects-heading"
     >
-      <div class="section-heading">
+      <div class="section-heading board-heading">
         <div>
-          <p class="eyebrow">Private Library</p>
+          <p class="eyebrow">Project Board</p>
+          <h1 id="projects-heading">Active projects</h1>
+          <p class="section-description">
+            Track projects from design through completion. Drag a project to a
+            new stage, use the stage menu, and keep the next action, due date,
+            and waiting item current.
+          </p>
+        </div>
 
-      <h1 id="projects-heading">
-        Private projects
-      </h1>
+        <div class="board-actions">
+          <a class="secondary-link" href="new-note.html">
+            New Project Note
+          </a>
+          <button
+            id="refresh-projects"
+            class="secondary-button"
+            type="button"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
 
-      <p class="section-description">
-        Open a signed-in project folder to review saved notes,
-        priorities, project details, and complete reports.
-      </p>
-    </div>
+      <div
+        id="projects-status"
+        class="records-message loading-state"
+        role="status"
+        aria-live="polite"
+      >
+        Loading project board...
+      </div>
 
-    <button
-      id="refresh-projects"
-      class="secondary-button"
-      type="button"
-    >
-      Refresh
-    </button>
-  </div>
-
-  <div
-    id="projects-status"
-    class="records-message loading-state"
-    role="status"
-    aria-live="polite"
-  >
-    Loading private projects...
-  </div>
-
-  <div
-    id="project-folders"
-    class="project-folder-grid"
-    aria-label="Saved projects"
-  ></div>
-</section>
-
+      <div
+        id="project-board"
+        class="project-board"
+        aria-label="Project workflow board"
+      ></div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-brand">
-      <strong>LuxNote AI</strong>
-      <span>Private Project Workspace</span>
+      <strong>LuxNote</strong>
+      <span>Project Tracker</span>
     </div>
-
-<p>
-  Signed-in production workspace. AI-generated content requires
-  human review before use.
-</p>
-
+    <p>Signed-in project tracking workspace.</p>
   </footer>
 
-  <script src="config-private.js?v=20260706-production"></script>
+  <script src="config-private.js?v=20260811-core-project-mode"></script>
   <script src="auth.js?v=20260706-production"></script>
-  <script src="projects.js?v=20260706-production"></script>
-
+  <script src="project-board.js?v=20260811-lifecycle-board"></script>
+  <script src="project-tracking.js?v=20260811-project-tracking"></script>
 </body>
 </html>
