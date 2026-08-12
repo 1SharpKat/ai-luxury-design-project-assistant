@@ -4,6 +4,8 @@
    ========================================================= */
 
 const TRACKING_NOTE_TYPE = "project_tracking";
+const STALE_PROJECT_DAYS = 7;
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
 const WAITING_ON_OPTIONS = [
   "",
   "Client",
@@ -52,6 +54,79 @@ function formatTrackingDate(value) {
 
   const date = new Date(`${value}T00:00:00`);
   return Number.isNaN(date.getTime()) ? value : formatDate(date);
+}
+
+function getDaysPastDue(value) {
+  if (!value) {
+    return 0;
+  }
+
+  const dueDate = new Date(`${value}T00:00:00`);
+
+  if (Number.isNaN(dueDate.getTime())) {
+    return 0;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return Math.max(
+    0,
+    Math.round((today.getTime() - dueDate.getTime()) / DAY_IN_MS)
+  );
+}
+
+function getDaysSinceActivity(value) {
+  const timestamp = getTimestamp(value);
+
+  if (!timestamp) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor((Date.now() - timestamp) / DAY_IN_MS));
+}
+
+function getProjectAttention(project) {
+  if (project.stageId === "complete") {
+    return null;
+  }
+
+  const overdueDays = getDaysPastDue(project.tracking?.dueDate);
+
+  if (overdueDays > 0) {
+    return {
+      type: "overdue",
+      label: overdueDays === 1
+        ? "Overdue by 1 day"
+        : `Overdue by ${overdueDays} days`
+    };
+  }
+
+  const staleDays = getDaysSinceActivity(project.latestActivity?.createdAt);
+
+  if (staleDays >= STALE_PROJECT_DAYS) {
+    return {
+      type: "stale",
+      label: `Needs attention · ${staleDays} days since activity`
+    };
+  }
+
+  return null;
+}
+
+function createProjectAttention(project) {
+  const attention = getProjectAttention(project);
+
+  if (!attention) {
+    return null;
+  }
+
+  const notice = document.createElement("div");
+  notice.className = `project-attention project-attention-${attention.type}`;
+  notice.setAttribute("role", "status");
+  notice.textContent = `⚠ ${attention.label}`;
+
+  return notice;
 }
 
 const buildProjectWithoutTracking = buildProject;
@@ -223,10 +298,16 @@ const createProjectCardWithoutTracking = createProjectCard;
 
 createProjectCard = function createProjectCardWithTracking(project) {
   const card = createProjectCardWithoutTracking(project);
+  const meta = card.querySelector(".project-card-meta");
   const stageSelect = card.querySelector(".project-stage-select");
   const notes = card.querySelector(".board-card-notes");
+  const attention = createProjectAttention(project);
   const trackingSummary = createTrackingSummary(project);
   const trackingEditor = createTrackingEditor(project);
+
+  if (attention && meta) {
+    meta.insertAdjacentElement("afterend", attention);
+  }
 
   if (stageSelect) {
     stageSelect.insertAdjacentElement("afterend", trackingSummary);
