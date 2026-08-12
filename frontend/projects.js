@@ -1,25 +1,44 @@
-
 /* =========================================================
    LuxNote AI
-   Projects Library
+   Project Board
    ========================================================= */
 
 const API_BASE_URL =
-window.LUXNOTE_CONFIG?.apiBaseUrl ||
+  window.LUXNOTE_CONFIG?.apiBaseUrl ||
   "https://mqg99s0svc.execute-api.us-west-2.amazonaws.com";
 const API_PATH_PREFIX =
-window.LUXNOTE_CONFIG?.apiPathPrefix || "";
+  window.LUXNOTE_CONFIG?.apiPathPrefix || "";
 const APP_ROUTES = window.LUXNOTE_CONFIG?.routes || {};
 const NEW_NOTE_PAGE = APP_ROUTES.newNote || "index.html#new-note";
 const PROJECTS_PAGE = APP_ROUTES.projects || "projects.html";
 const REPORT_PAGE = APP_ROUTES.report || "report.html";
-const ALLOW_DELETE =
-  window.LUXNOTE_CONFIG?.allowDelete === true;
+const ALLOW_DELETE = window.LUXNOTE_CONFIG?.allowDelete === true;
 const REQUEST_TIMEOUT_MS =
   Number(window.LUXNOTE_CONFIG?.requestTimeoutMs) || 30000;
 
+const STAGE_NOTE_PREFIX = "project_stage_";
+const DEFAULT_STAGE_ID = "planning";
+
+const PROJECT_STAGES = [
+  { id: "planning", label: "Planning" },
+  { id: "design", label: "Design" },
+  { id: "proposal", label: "Proposal" },
+  { id: "approved", label: "Approved" },
+  { id: "ordered", label: "Ordered" },
+  { id: "prewire", label: "Prewire" },
+  { id: "trim", label: "Trim" },
+  { id: "final_install", label: "Final Install" },
+  { id: "programming", label: "Programming" },
+  { id: "punch_list", label: "Punch List" },
+  { id: "complete", label: "Complete" }
+];
+
+const stageById = new Map(
+  PROJECT_STAGES.map((stage) => [stage.id, stage])
+);
+
 const elements = {
-  folders: document.getElementById("project-folders"),
+  board: document.getElementById("project-board"),
   status: document.getElementById("projects-status"),
   refreshButton: document.getElementById("refresh-projects")
 };
@@ -28,9 +47,9 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium"
 });
 
-/* =========================================================
-   GENERAL HELPERS
-   ========================================================= */
+let projectState = new Map();
+let draggedProjectName = "";
+const movingProjects = new Set();
 
 function formatDate(value) {
   if (!value) {
@@ -81,10 +100,41 @@ function showStatus(message, type = "") {
   elements.status.hidden = false;
 }
 
+function isStageNote(record) {
+  return (
+    typeof record?.noteType === "string" &&
+    record.noteType.startsWith(STAGE_NOTE_PREFIX)
+  );
+}
 
-/* =========================================================
-   API
-   ========================================================= */
+function getStageIdFromNote(record) {
+  if (!isStageNote(record)) {
+    return "";
+  }
+
+  const stageId = record.noteType.slice(STAGE_NOTE_PREFIX.length);
+  return stageById.has(stageId) ? stageId : "";
+}
+
+function sortNotesByNewest(notes) {
+  return [...notes].sort((first, second) => {
+    return (
+      getTimestamp(second.createdAt) -
+      getTimestamp(first.createdAt)
+    );
+  });
+}
+
+function getProjectCoverUrl(notes) {
+  const noteWithCover = notes.find((note) => {
+    return (
+      typeof note.coverPhotoUrl === "string" &&
+      note.coverPhotoUrl.trim()
+    );
+  });
+
+  return noteWithCover?.coverPhotoUrl.trim() || "";
+}
 
 async function readApiResponse(response) {
   const responseText = await response.text();
@@ -121,10 +171,9 @@ async function readApiResponse(response) {
 
 async function apiFetch(path, options = {}) {
   let response;
-  const authHeaders =
-    window.luxnoteAuth
-      ? await window.luxnoteAuth.getAuthHeaders()
-      : {};
+  const authHeaders = window.luxnoteAuth
+    ? await window.luxnoteAuth.getAuthHeaders()
+    : {};
   const headers = {
     ...authHeaders,
     ...(options.headers || {})
@@ -169,15 +218,21 @@ function getJson(path) {
   });
 }
 
-/* =========================================================
-   PROJECT DATA
-   ========================================================= */
+function postJson(path, body) {
+  return apiFetch(path, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+}
 
 function groupByProject(records) {
   return records.reduce((groups, record) => {
     const projectName =
-      typeof record.projectName === "string" &&
-      record.projectName.trim()
+      typeof record.projectName === "string" && record.projectName.trim()
         ? record.projectName.trim()
         : "Unnamed Project";
 
@@ -186,34 +241,47 @@ function groupByProject(records) {
     }
 
     groups.get(projectName).push(record);
-
     return groups;
   }, new Map());
 }
 
-function getProjectCoverUrl(notes) {
-  const noteWithCover = notes.find((note) => {
-    return (
-      typeof note.coverPhotoUrl === "string" &&
-      note.coverPhotoUrl.trim()
-    );
-  });
+function buildProject(projectName, records) {
+  const notes = sortNotesByNewest(records);
+  const contentNotes = notes.filter((note) => !isStageNote(note));
+  const latestStageNote = notes.find((note) => getStageIdFromNote(note));
+  const stageId =
+    getStageIdFromNote(latestStageNote) || DEFAULT_STAGE_ID;
+  const latestContentNote = contentNotes[0] || null;
+  const latestActivity = notes[0] || latestContentNote;
+  const clientName =
+    latestContentNote?.clientName ||
+    latestActivity?.clientName ||
+    "Private Client";
 
-  return noteWithCover?.coverPhotoUrl.trim() || "";
+  return {
+    projectName,
+    clientName,
+    notes,
+    contentNotes,
+    stageId,
+    latestContentNote,
+    latestActivity,
+    coverUrl: getProjectCoverUrl(notes),
+    priority: latestContentNote?.priority || ""
+  };
 }
 
-function sortNotesByNewest(notes) {
-  return [...notes].sort((first, second) => {
-    return (
-      getTimestamp(second.createdAt) -
-      getTimestamp(first.createdAt)
+function rebuildProjectState(records) {
+  const groupedProjects = groupByProject(records);
+  projectState = new Map();
+
+  groupedProjects.forEach((projectNotes, projectName) => {
+    projectState.set(
+      projectName,
+      buildProject(projectName, projectNotes)
     );
   });
 }
-
-/* =========================================================
-   PROJECT NOTE ROW
-   ========================================================= */
 
 async function deleteProjectNote(record, button) {
   if (!record.recordId) {
@@ -315,12 +383,10 @@ function createNoteRow(record) {
   priority.textContent = record.priority || "Not assigned";
 
   if (record.priority) {
-    priority.dataset.priority =
-      String(record.priority).toLowerCase();
+    priority.dataset.priority = String(record.priority).toLowerCase();
   }
 
   reportLink.append(noteDetails, priority);
-
   row.appendChild(reportLink);
 
   if (ALLOW_DELETE) {
@@ -344,27 +410,21 @@ function createNoteRow(record) {
   return row;
 }
 
-/* =========================================================
-   PROJECT FOLDER
-   ========================================================= */
-
-function createProjectCover(projectName, notes) {
+function createProjectCover(project) {
   const cover = document.createElement("span");
-  const coverUrl = getProjectCoverUrl(notes);
+  cover.className = project.coverUrl
+    ? "board-project-cover"
+    : "board-project-cover no-cover";
 
-  cover.className = coverUrl
-    ? "project-cover-thumb"
-    : "project-cover-thumb no-cover";
-
-  if (!coverUrl) {
+  if (!project.coverUrl) {
     cover.textContent = "Photo";
     cover.setAttribute("aria-hidden", "true");
     return cover;
   }
 
   const image = document.createElement("img");
-  image.src = coverUrl;
-  image.alt = `${projectName} cover photo`;
+  image.src = project.coverUrl;
+  image.alt = `${project.projectName} cover photo`;
   image.loading = "lazy";
 
   image.addEventListener("error", () => {
@@ -375,62 +435,264 @@ function createProjectCover(projectName, notes) {
   });
 
   cover.appendChild(image);
-
   return cover;
 }
 
-function createProjectFolder(projectName, projectNotes) {
-  const notes = sortNotesByNewest(projectNotes);
-  const latestNote = notes[0];
+function createStageSelect(project) {
+  const select = document.createElement("select");
+  select.className = "project-stage-select";
+  select.setAttribute(
+    "aria-label",
+    `Stage for ${project.projectName}`
+  );
 
-  const folder = document.createElement("details");
-  folder.className = "project-folder-card";
-
-  const summary = document.createElement("summary");
-
-  const cover = createProjectCover(projectName, notes);
-
-  const folderCopy = document.createElement("span");
-  folderCopy.className = "folder-copy";
-
-  const projectTitle = document.createElement("strong");
-  projectTitle.textContent = projectName;
-
-  const projectMeta = document.createElement("small");
-  const noteLabel = notes.length === 1 ? "note" : "notes";
-
-  projectMeta.textContent =
-    `${latestNote.clientName || "Private Client"} - ` +
-    `${notes.length} saved ${noteLabel} - ` +
-    `Updated ${formatDate(latestNote.createdAt)}`;
-
-  folderCopy.append(projectTitle, projectMeta);
-
-  const arrow = document.createElement("span");
-  arrow.className = "folder-arrow";
-  arrow.textContent = ">";
-  arrow.setAttribute("aria-hidden", "true");
-
-  summary.append(cover, folderCopy, arrow);
-
-  const noteList = document.createElement("div");
-  noteList.className = "project-note-list";
-
-  notes.forEach((note) => {
-    noteList.appendChild(createNoteRow(note));
+  PROJECT_STAGES.forEach((stage) => {
+    const option = document.createElement("option");
+    option.value = stage.id;
+    option.textContent = stage.label;
+    option.selected = stage.id === project.stageId;
+    select.appendChild(option);
   });
 
-  folder.append(summary, noteList);
+  select.addEventListener("pointerdown", (event) => {
+    event.stopPropagation();
+  });
 
-  return folder;
+  select.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  select.addEventListener("change", async () => {
+    const previousStageId = project.stageId;
+    const nextStageId = select.value;
+
+    if (previousStageId === nextStageId) {
+      return;
+    }
+
+    select.disabled = true;
+
+    try {
+      await moveProjectToStage(project.projectName, nextStageId);
+    } catch {
+      select.value = previousStageId;
+    } finally {
+      select.disabled = false;
+    }
+  });
+
+  return select;
 }
 
-/* =========================================================
-   PAGE STATES
-   ========================================================= */
+function createProjectCard(project) {
+  const card = document.createElement("article");
+  card.className = "project-board-card";
+  card.draggable = true;
+  card.dataset.projectName = project.projectName;
+
+  const top = document.createElement("div");
+  top.className = "project-card-top";
+
+  const cover = createProjectCover(project);
+
+  const heading = document.createElement("div");
+  heading.className = "project-card-heading";
+
+  const title = document.createElement("strong");
+  title.className = "project-card-title";
+  title.textContent = project.projectName;
+
+  const client = document.createElement("small");
+  client.className = "project-card-client";
+  client.textContent = project.clientName;
+
+  heading.append(title, client);
+  top.append(cover, heading);
+
+  const meta = document.createElement("div");
+  meta.className = "project-card-meta";
+
+  const noteCount = document.createElement("span");
+  const countLabel = project.contentNotes.length === 1 ? "note" : "notes";
+  noteCount.textContent = `${project.contentNotes.length} ${countLabel}`;
+
+  const updated = document.createElement("span");
+  updated.textContent = `Updated ${formatDate(project.latestActivity?.createdAt)}`;
+
+  meta.append(noteCount, updated);
+
+  if (project.priority) {
+    const priority = document.createElement("span");
+    priority.className = "board-priority";
+    priority.dataset.priority = String(project.priority).toLowerCase();
+    priority.textContent = project.priority;
+    meta.appendChild(priority);
+  }
+
+  const stageSelect = createStageSelect(project);
+
+  const details = document.createElement("details");
+  details.className = "board-card-notes";
+
+  const summary = document.createElement("summary");
+  summary.textContent = project.contentNotes.length
+    ? `Open project notes (${project.contentNotes.length})`
+    : "No project notes yet";
+
+  details.appendChild(summary);
+
+  if (project.contentNotes.length) {
+    const noteList = document.createElement("div");
+    noteList.className = "project-note-list board-note-list";
+
+    project.contentNotes.forEach((note) => {
+      noteList.appendChild(createNoteRow(note));
+    });
+
+    details.appendChild(noteList);
+  }
+
+  card.append(top, meta, stageSelect, details);
+
+  card.addEventListener("dragstart", (event) => {
+    draggedProjectName = project.projectName;
+    card.classList.add("is-dragging");
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", project.projectName);
+  });
+
+  card.addEventListener("dragend", () => {
+    draggedProjectName = "";
+    card.classList.remove("is-dragging");
+    document
+      .querySelectorAll(".board-column.is-drop-target")
+      .forEach((column) => column.classList.remove("is-drop-target"));
+  });
+
+  return card;
+}
+
+function createBoardColumn(stage, projects) {
+  const column = document.createElement("section");
+  column.className = "board-column";
+  column.dataset.stageId = stage.id;
+  column.setAttribute("aria-label", `${stage.label} projects`);
+
+  const header = document.createElement("div");
+  header.className = "board-column-header";
+
+  const title = document.createElement("h2");
+  title.textContent = stage.label;
+
+  const count = document.createElement("span");
+  count.className = "board-column-count";
+  count.textContent = String(projects.length);
+  count.setAttribute(
+    "aria-label",
+    `${projects.length} projects in ${stage.label}`
+  );
+
+  header.append(title, count);
+
+  const cardList = document.createElement("div");
+  cardList.className = "board-card-list";
+
+  projects.forEach((project) => {
+    cardList.appendChild(createProjectCard(project));
+  });
+
+  column.append(header, cardList);
+
+  column.addEventListener("dragover", (event) => {
+    if (!draggedProjectName) {
+      return;
+    }
+
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    column.classList.add("is-drop-target");
+  });
+
+  column.addEventListener("dragleave", (event) => {
+    if (!column.contains(event.relatedTarget)) {
+      column.classList.remove("is-drop-target");
+    }
+  });
+
+  column.addEventListener("drop", async (event) => {
+    event.preventDefault();
+    column.classList.remove("is-drop-target");
+
+    const projectName =
+      event.dataTransfer.getData("text/plain") || draggedProjectName;
+    const project = projectState.get(projectName);
+
+    if (!project || project.stageId === stage.id) {
+      return;
+    }
+
+    try {
+      await moveProjectToStage(projectName, stage.id);
+    } catch {
+      // The status message is handled by moveProjectToStage.
+    }
+  });
+
+  return column;
+}
+
+async function moveProjectToStage(projectName, nextStageId) {
+  const project = projectState.get(projectName);
+  const nextStage = stageById.get(nextStageId);
+
+  if (
+    !project ||
+    !nextStage ||
+    project.stageId === nextStageId ||
+    movingProjects.has(projectName)
+  ) {
+    return;
+  }
+
+  movingProjects.add(projectName);
+  showStatus(
+    `Moving ${projectName} to ${nextStage.label}...`,
+    "loading-state"
+  );
+
+  try {
+    const savedRecord = await postJson("/project-notes", {
+      clientName: project.clientName,
+      projectName: project.projectName,
+      noteType: `${STAGE_NOTE_PREFIX}${nextStageId}`,
+      source: "project board",
+      projectNotes: `Project moved to ${nextStage.label}.`,
+      aiProcessingEnabled: false
+    });
+
+    project.notes.unshift(savedRecord);
+    project.stageId = nextStageId;
+    project.latestActivity = savedRecord;
+
+    renderBoard();
+    showStatus(
+      `${projectName} moved to ${nextStage.label}.`,
+      "success-state"
+    );
+  } catch (error) {
+    console.error("Project stage could not be updated:", error);
+    showStatus(
+      error.message || "Project stage could not be updated.",
+      "error-state"
+    );
+    throw error;
+  } finally {
+    movingProjects.delete(projectName);
+  }
+}
 
 function renderEmptyState() {
-  clearElement(elements.folders);
+  clearElement(elements.board);
   clearElement(elements.status);
 
   elements.status.className = "records-message empty-state";
@@ -441,7 +703,7 @@ function renderEmptyState() {
 
   const description = document.createElement("p");
   description.textContent =
-    "Create your first project note to begin building the project library.";
+    "Create a project note and LuxNote will add that project to the board.";
 
   const link = document.createElement("a");
   link.className = "primary-link";
@@ -452,19 +714,18 @@ function renderEmptyState() {
 }
 
 function renderErrorState(error) {
-  clearElement(elements.folders);
+  clearElement(elements.board);
   clearElement(elements.status);
 
   elements.status.className = "records-message error-state";
   elements.status.hidden = false;
 
   const heading = document.createElement("strong");
-  heading.textContent = "Projects could not be loaded.";
+  heading.textContent = "Project board could not be loaded.";
 
   const description = document.createElement("p");
   description.textContent =
-    error.message ||
-    "The project service is temporarily unavailable.";
+    error.message || "The project service is temporarily unavailable.";
 
   const retryButton = document.createElement("button");
   retryButton.className = "secondary-button";
@@ -472,75 +733,57 @@ function renderErrorState(error) {
   retryButton.textContent = "Try Again";
   retryButton.addEventListener("click", loadProjects);
 
-  elements.status.append(
-    heading,
-    description,
-    retryButton
-  );
+  elements.status.append(heading, description, retryButton);
 }
 
-/* =========================================================
-   RENDERING
-   ========================================================= */
+function renderBoard() {
+  clearElement(elements.board);
 
-function renderProjects(records) {
-  clearElement(elements.folders);
+  const projects = [...projectState.values()];
 
-  if (!records.length) {
+  if (!projects.length) {
     renderEmptyState();
     return;
   }
 
-  const groupedProjects = groupByProject(records);
+  PROJECT_STAGES.forEach((stage) => {
+    const stageProjects = projects
+      .filter((project) => project.stageId === stage.id)
+      .sort((first, second) => {
+        return (
+          getTimestamp(second.latestActivity?.createdAt) -
+          getTimestamp(first.latestActivity?.createdAt)
+        );
+      });
 
-  const sortedProjects = [...groupedProjects.entries()]
-    .map(([projectName, notes]) => {
-      const sortedNotes = sortNotesByNewest(notes);
-
-      return {
-        projectName,
-        notes: sortedNotes,
-        latestTimestamp: getTimestamp(
-          sortedNotes[0]?.createdAt
-        )
-      };
-    })
-    .sort((first, second) => {
-      return second.latestTimestamp - first.latestTimestamp;
-    });
-
-  const projectCount = sortedProjects.length;
-  const projectLabel =
-    projectCount === 1 ? "project" : "projects";
-
-  showStatus(
-    `${projectCount} saved ${projectLabel}`,
-    "success-state"
-  );
-
-  sortedProjects.forEach(({ projectName, notes }) => {
-    elements.folders.appendChild(
-      createProjectFolder(projectName, notes)
+    elements.board.appendChild(
+      createBoardColumn(stage, stageProjects)
     );
   });
-}
 
-/* =========================================================
-   LOADING
-   ========================================================= */
+  const completeCount = projects.filter(
+    (project) => project.stageId === "complete"
+  ).length;
+  const activeCount = projects.length - completeCount;
+
+  showStatus(
+    `${activeCount} active project${activeCount === 1 ? "" : "s"}` +
+      (completeCount ? ` | ${completeCount} complete` : ""),
+    "success-state"
+  );
+}
 
 async function loadProjects() {
   setRefreshState(true);
-  clearElement(elements.folders);
-  showStatus("Loading saved projects...", "loading-state");
+  clearElement(elements.board);
+  showStatus("Loading project board...", "loading-state");
 
   try {
     const data = await getJson("/project-notes");
-    const records = Array.isArray(data.items)
-      ? data.items
-      : [];
+    const records = Array.isArray(data.items) ? data.items : [];
 
-    renderProjects(records);
+    rebuildProjectState(records);
+    renderBoard();
   } catch (error) {
     console.error("Projects could not be loaded:", error);
     renderErrorState(error);
@@ -549,17 +792,10 @@ async function loadProjects() {
   }
 }
 
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
-
 async function initializeProjectsPage() {
   await window.luxnoteAuth?.initialize();
 
-  elements.refreshButton.addEventListener(
-    "click",
-    loadProjects
-  );
+  elements.refreshButton.addEventListener("click", loadProjects);
 
   if (
     window.luxnoteAuth?.getAccessState &&
