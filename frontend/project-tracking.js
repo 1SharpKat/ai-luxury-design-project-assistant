@@ -72,7 +72,7 @@ function getDaysPastDue(value) {
 
   return Math.max(
     0,
-    Math.floor((today.getTime() - dueDate.getTime()) / DAY_IN_MS)
+    Math.round((today.getTime() - dueDate.getTime()) / DAY_IN_MS)
   );
 }
 
