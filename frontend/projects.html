@@ -9,11 +9,11 @@
   >
   <meta
     name="description"
-    content="Browse signed-in LuxNote AI projects, project notes, priorities, and generated reports."
+    content="Track signed-in LuxNote AI projects from planning through completion on a visual project board."
   >
   <meta name="theme-color" content="#f7f1eb">
 
-  <title>Projects | LuxNote AI</title>
+  <title>Project Board | LuxNote AI</title>
 
   <link
     rel="icon"
@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="board.css?v=20260811-project-board">
 </head>
 
 <body>
@@ -33,67 +34,73 @@
         LuxNote AI
       </a>
 
-  <div class="nav-links">
-    <a href="index.html#new-note">
-      New Note
-    </a>
+      <div class="nav-links">
+        <a href="index.html#new-note">
+          New Note
+        </a>
 
-    <a
-      href="projects.html"
-      aria-current="page"
-    >
-      Projects
-    </a>
-
-  </div>
-</nav>
-
+        <a
+          href="projects.html"
+          aria-current="page"
+        >
+          Projects
+        </a>
+      </div>
+    </nav>
   </header>
 
-  <main class="subpage-shell">
+  <main class="subpage-shell board-page-shell">
     <section
-      class="glass-panel subpage-panel"
+      class="glass-panel subpage-panel board-panel"
       aria-labelledby="projects-heading"
     >
-      <div class="section-heading">
+      <div class="section-heading board-heading">
         <div>
-          <p class="eyebrow">Project Library</p>
+          <p class="eyebrow">Project Board</p>
 
-      <h1 id="projects-heading">
-        Saved projects
-      </h1>
+          <h1 id="projects-heading">
+            Active projects
+          </h1>
 
-      <p class="section-description">
-        Open a project folder to review saved notes, priorities,
-        project details, and complete reports.
-      </p>
-    </div>
+          <p class="section-description">
+            Track each project from planning through completion. Drag a project
+            to a new stage, or use the stage menu on the card.
+          </p>
+        </div>
 
-    <button
-      id="refresh-projects"
-      class="secondary-button"
-      type="button"
-    >
-      Refresh
-    </button>
-  </div>
+        <div class="board-actions">
+          <a
+            class="secondary-link"
+            href="index.html#new-note"
+          >
+            New Project Note
+          </a>
 
-  <div
-    id="projects-status"
-    class="records-message loading-state"
-    role="status"
-    aria-live="polite"
-  >
-    Loading saved projects...
-  </div>
+          <button
+            id="refresh-projects"
+            class="secondary-button"
+            type="button"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
 
-  <div
-    id="project-folders"
-    class="project-folder-grid"
-    aria-label="Saved projects"
-  ></div>
-</section>
+      <div
+        id="projects-status"
+        class="records-message loading-state"
+        role="status"
+        aria-live="polite"
+      >
+        Loading project board...
+      </div>
 
+      <div
+        id="project-board"
+        class="project-board"
+        aria-label="Project workflow board"
+      ></div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -102,17 +109,15 @@
       <span>Luxury Design Project Assistant</span>
     </div>
 
-<p>
-  Signed-in production workspace. AI-generated content requires human
-  review before it is used for client, builder, vendor, electrical,
-  construction, or design decisions.
-</p>
-
+    <p>
+      Signed-in production workspace. AI-generated content requires human
+      review before it is used for client, builder, vendor, electrical,
+      construction, or design decisions.
+    </p>
   </footer>
 
   <script src="config.js?v=20260706-production"></script>
   <script src="auth.js?v=20260706-production"></script>
-  <script src="projects.js?v=20260706-production"></script>
-
+  <script src="projects.js?v=20260811-project-board"></script>
 </body>
 </html>
