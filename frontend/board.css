@@ -171,6 +171,32 @@
   overflow-wrap: anywhere;
 }
 
+.project-board-card:has(.board-priority) .project-card-title::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 999px;
+  vertical-align: 1px;
+  background: #887d77;
+}
+
+.project-board-card:has(.board-priority[data-priority="high"]) .project-card-title::before {
+  background: #8a3d44;
+  box-shadow: 0 0 0 2px rgba(138, 61, 68, 0.12);
+}
+
+.project-board-card:has(.board-priority[data-priority="medium"]) .project-card-title::before {
+  background: #b28a47;
+  box-shadow: 0 0 0 2px rgba(178, 138, 71, 0.12);
+}
+
+.project-board-card:has(.board-priority[data-priority="low"]) .project-card-title::before {
+  background: #71816f;
+  box-shadow: 0 0 0 2px rgba(113, 129, 111, 0.12);
+}
+
 .project-card-client {
   margin-top: 2px;
   color: var(--muted-text, #887d77);
