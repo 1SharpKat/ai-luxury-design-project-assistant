@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Import, assign, review, and invoice project labor in LuxNote.">
+  <meta name="theme-color" content="#f7f1eb">
+  <title>Labor | LuxNote</title>
+
+  <link rel="stylesheet" href="styles.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="labor.css?v=20260812-labor-mvp">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="glass-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="workspace-projects.html">LuxNote</a>
+      <div class="nav-links">
+        <a href="workspace-projects.html">Project Board</a>
+        <a href="new-note.html">New Note</a>
+        <a href="labor.html" aria-current="page">Labor</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="subpage-shell labor-page-shell">
+    <section class="glass-panel subpage-panel" aria-labelledby="labor-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Labor</p>
+          <h1 id="labor-heading">Capture labor before it gets missed</h1>
+          <p class="section-description">
+            Import a geofencing report, paste a technician time message, or add labor manually.
+            LuxNote sorts labor to projects, keeps unmatched rows visible for review, and tracks what is still unbilled.
+          </p>
+        </div>
+        <a class="secondary-link" href="workspace-projects.html">Back to Board</a>
+      </div>
+
+      <div id="labor-status" class="records-message loading-state" role="status" aria-live="polite">
+        Loading labor...
+      </div>
+
+      <div class="labor-tabs" role="tablist" aria-label="Labor tools">
+        <button class="labor-tab is-active" type="button" data-panel="import-panel">Import Report</button>
+        <button class="labor-tab" type="button" data-panel="message-panel">Paste Time Message</button>
+        <button class="labor-tab" type="button" data-panel="manual-panel">Manual Entry</button>
+        <button class="labor-tab" type="button" data-panel="unbilled-panel">Unbilled Labor</button>
+      </div>
+
+      <section id="import-panel" class="labor-panel is-active" aria-labelledby="import-heading">
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="import-heading">Import geofencing or time report</h2>
+            <p>Paste rows from Excel, CSV, or a geofencing report. Headers such as Employee, Date, Clock In, Clock Out, Hours, Location, and Notes are recognized.</p>
+          </div>
+        </div>
+        <label class="labor-field">
+          <span>Report</span>
+          <textarea id="labor-import-text" rows="11" placeholder="Employee&#9;Date&#9;Clock In&#9;Clock Out&#9;Location&#10;Jose&#9;8/10/2026&#9;8:04 AM&#9;3:57 PM&#9;Smith Home"></textarea>
+        </label>
+        <div class="labor-actions">
+          <button id="parse-import" class="primary-button" type="button">Sort Report</button>
+          <button id="clear-import" class="secondary-button" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section id="message-panel" class="labor-panel" aria-labelledby="message-heading" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="message-heading">Paste technician time message</h2>
+            <p>Use this for texts or emails. LuxNote extracts obvious dates and time ranges, then makes you review the row before saving.</p>
+          </div>
+        </div>
+        <div class="labor-form-grid">
+          <label class="labor-field">
+            <span>Technician</span>
+            <input id="message-technician" type="text" maxlength="120" placeholder="Jose">
+          </label>
+          <label class="labor-field">
+            <span>Default project</span>
+            <select id="message-project"></select>
+          </label>
+        </div>
+        <label class="labor-field">
+          <span>Message</span>
+          <textarea id="labor-message-text" rows="9" placeholder="8/11 at Smith. 8:15-12, back after lunch 12:45-4:30. Finished speakers and cleaned up rack."></textarea>
+        </label>
+        <div class="labor-actions">
+          <button id="extract-message" class="primary-button" type="button">Extract Time</button>
+        </div>
+      </section>
+
+      <section id="manual-panel" class="labor-panel" aria-labelledby="manual-heading" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="manual-heading">Manual labor entry</h2>
+            <p>Add a single labor line when there is nothing to import.</p>
+          </div>
+        </div>
+        <form id="manual-labor-form">
+          <div class="labor-form-grid">
+            <label class="labor-field">
+              <span>Project</span>
+              <select id="manual-project" required></select>
+            </label>
+            <label class="labor-field">
+              <span>Technician</span>
+              <input id="manual-technician" type="text" maxlength="120" required>
+            </label>
+            <label class="labor-field">
+              <span>Work date</span>
+              <input id="manual-date" type="date" required>
+            </label>
+            <label class="labor-field">
+              <span>Hours</span>
+              <input id="manual-hours" type="number" min="0.01" max="24" step="0.01" required>
+            </label>
+            <label class="labor-field">
+              <span>Labor type</span>
+              <select id="manual-type">
+                <option>Project</option>
+                <option>Service Call</option>
+                <option>Travel</option>
+                <option>Nonbillable</option>
+              </select>
+            </label>
+            <label class="labor-field">
+              <span>Location / geofence label</span>
+              <input id="manual-location" type="text" maxlength="240" placeholder="Smith Home">
+            </label>
+          </div>
+          <label class="labor-field">
+            <span>Description</span>
+            <input id="manual-description" type="text" maxlength="500" placeholder="Trim, programming, service work, travel, etc.">
+          </label>
+          <div class="labor-actions">
+            <button class="primary-button" type="submit">Add to Review</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="review-section" class="labor-review-section" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2>Review labor before saving</h2>
+            <p>Unmatched rows stay here until you assign a project. Rows that look like duplicates are unchecked automatically.</p>
+          </div>
+          <div class="labor-review-summary">
+            <strong id="review-hours">0.00 hrs</strong>
+            <span id="review-count">0 rows</span>
+          </div>
+        </div>
+        <div class="labor-table-wrap">
+          <table class="labor-table">
+            <thead>
+              <tr>
+                <th>Use</th>
+                <th>Technician</th>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Location</th>
+                <th>Project</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Remember</th>
+              </tr>
+            </thead>
+            <tbody id="labor-review-body"></tbody>
+          </table>
+        </div>
+        <div class="labor-actions">
+          <button id="save-reviewed-labor" class="primary-button" type="button">Save Reviewed Labor</button>
+          <button id="discard-review" class="secondary-button" type="button">Discard Review</button>
+        </div>
+      </section>
+
+      <section id="unbilled-panel" class="labor-panel" aria-labelledby="unbilled-heading" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="unbilled-heading">Unbilled labor</h2>
+            <p>Select labor after you put it on a QuickBooks or spreadsheet invoice. LuxNote only tracks billing status. It does not create or collect payment.</p>
+          </div>
+          <div class="labor-review-summary">
+            <strong id="unbilled-hours">0.00 hrs</strong>
+            <span id="unbilled-count">0 entries</span>
+          </div>
+        </div>
+
+        <div class="labor-invoice-controls">
+          <label class="labor-field">
+            <span>Invoice / reference</span>
+            <input id="invoice-reference" type="text" maxlength="120" placeholder="QB 1045 or Aug-2026 Service">
+          </label>
+          <button id="mark-invoiced" class="primary-button" type="button">Mark Selected Invoiced</button>
+          <button id="export-labor" class="secondary-button" type="button">Export Selected CSV</button>
+        </div>
+
+        <div class="labor-table-wrap">
+          <table class="labor-table">
+            <thead>
+              <tr>
+                <th><input id="select-all-unbilled" type="checkbox" aria-label="Select all unbilled labor"></th>
+                <th>Project</th>
+                <th>Technician</th>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody id="unbilled-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <strong>LuxNote</strong>
+      <span>Project Tracker</span>
+    </div>
+    <p>Signed-in project tracking workspace.</p>
+  </footer>
+
+  <script src="config-private.js?v=20260811-core-project-mode"></script>
+  <script src="auth.js?v=20260706-production"></script>
+  <script src="labor.js?v=20260812-labor-mvp"></script>
+  <script src="labor-billing-rules.js?v=20260812-labor-mvp"></script>
+</body>
+</html>

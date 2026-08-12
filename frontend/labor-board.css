@@ -1,0 +1,13 @@
+/* Labor status on project cards */
+
+.labor-unbilled-badge {
+  margin-left: auto;
+  padding: 2px 5px;
+  border: 1px solid rgba(178, 138, 71, 0.3);
+  border-radius: 999px;
+  color: #7a5a22;
+  background: rgba(178, 138, 71, 0.1);
+  font-size: 0.52rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
