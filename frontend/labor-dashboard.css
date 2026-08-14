@@ -1,0 +1,59 @@
+/* Labor and billing dashboard summary */
+
+.labor-dashboard-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.labor-dashboard-stat {
+  display: grid;
+  gap: 5px;
+  min-height: 82px;
+  padding: 12px 14px;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 11px;
+  background: rgba(255, 253, 250, 0.86);
+}
+
+.labor-dashboard-stat span {
+  color: var(--muted-text, #887d77);
+  font-size: 0.57rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.labor-dashboard-stat strong {
+  color: var(--text, #391214);
+  font-size: 1.15rem;
+}
+
+.labor-dashboard-stat.is-alert {
+  border-color: rgba(138, 61, 68, 0.34);
+  background: rgba(138, 61, 68, 0.07);
+}
+
+.labor-dashboard-stat.is-alert strong {
+  color: #7f3038;
+}
+
+.labor-billing-intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 800px) {
+  .labor-dashboard-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .labor-dashboard-summary {
+    grid-template-columns: 1fr;
+  }
+}
