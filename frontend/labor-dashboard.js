@@ -171,6 +171,15 @@
     refreshInFlight = true;
 
     try {
+      await window.luxnoteAuth?.initialize();
+
+      if (
+        window.luxnoteAuth?.getAccessState &&
+        !window.luxnoteAuth.getAccessState().canAccess
+      ) {
+        return;
+      }
+
       const records = await getRecords();
       const entries = buildLabor(records);
       const billable = entries.filter(
