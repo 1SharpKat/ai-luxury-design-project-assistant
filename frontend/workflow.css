@@ -1,0 +1,42 @@
+/* LuxNote primary workflow navigation and card hierarchy */
+
+.workflow-main-nav .nav-links {
+  align-items: center;
+}
+
+.workflow-main-nav .workflow-primary-link {
+  font-weight: 800;
+}
+
+.workflow-main-nav .workflow-utility-link {
+  opacity: 0.72;
+  font-size: 0.88em;
+}
+
+.project-card-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-card-title-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.project-card-view-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1px;
+}
+
+.project-card-view-link {
+  color: var(--warm-brown, #6a4943);
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.project-card-view-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

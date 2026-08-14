@@ -5,51 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Import, assign, review, and invoice project labor in LuxNote.">
   <meta name="theme-color" content="#f7f1eb">
-  <title>Labor | LuxNote</title>
+  <title>Labor & Billing | LuxNote</title>
 
   <link rel="stylesheet" href="styles.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="workflow.css?v=20260814-two-workflows">
   <link rel="stylesheet" href="labor.css?v=20260812-labor-mvp">
+  <link rel="stylesheet" href="labor-dashboard.css?v=20260814-labor-dashboard">
 </head>
 <body>
   <header class="site-header">
-    <nav class="glass-nav" aria-label="Primary navigation">
+    <nav class="glass-nav workflow-main-nav" aria-label="Primary navigation">
       <a class="nav-wordmark" href="workspace-projects.html">LuxNote</a>
       <div class="nav-links">
-        <a href="workspace-projects.html">Project Board</a>
-        <a href="new-note.html">New Note</a>
-        <a href="labor.html" aria-current="page">Labor</a>
+        <a class="workflow-primary-link" href="workspace-projects.html">Project Board</a>
+        <a class="workflow-primary-link" href="labor.html" aria-current="page">Labor &amp; Billing</a>
+        <a class="workflow-utility-link" href="new-note.html">New Note</a>
       </div>
     </nav>
   </header>
 
   <main class="subpage-shell labor-page-shell">
     <section class="glass-panel subpage-panel" aria-labelledby="labor-heading">
-      <div class="section-heading">
+      <div class="section-heading labor-billing-intro">
         <div>
-          <p class="eyebrow">Labor</p>
-          <h1 id="labor-heading">Capture labor before it gets missed</h1>
+          <p class="eyebrow">Labor &amp; Billing</p>
+          <h1 id="labor-heading">Track the hours. Capture the invoice.</h1>
           <p class="section-description">
-            Import a geofencing report, paste a technician time message, or add labor manually.
-            LuxNote sorts labor to projects, keeps unmatched rows visible for review, and tracks what is still unbilled.
+            See what labor has been tracked, what is still unbilled, what has already been invoiced,
+            and which projects still have money sitting on the table.
           </p>
         </div>
-        <a class="secondary-link" href="workspace-projects.html">Back to Board</a>
+        <a class="secondary-link" href="workspace-projects.html">Project Board</a>
       </div>
 
       <div id="labor-status" class="records-message loading-state" role="status" aria-live="polite">
         Loading labor...
       </div>
 
-      <div class="labor-tabs" role="tablist" aria-label="Labor tools">
-        <button class="labor-tab is-active" type="button" data-panel="import-panel">Import Report</button>
-        <button class="labor-tab" type="button" data-panel="message-panel">Paste Time Message</button>
-        <button class="labor-tab" type="button" data-panel="manual-panel">Manual Entry</button>
-        <button class="labor-tab" type="button" data-panel="unbilled-panel">Unbilled Labor</button>
+      <div class="labor-dashboard-summary" aria-label="Labor and billing summary">
+        <div class="labor-dashboard-stat">
+          <span>Total tracked</span>
+          <strong id="labor-stat-tracked">0.00 hrs</strong>
+        </div>
+        <div class="labor-dashboard-stat is-alert">
+          <span>Still unbilled</span>
+          <strong id="labor-stat-unbilled">0.00 hrs</strong>
+        </div>
+        <div class="labor-dashboard-stat">
+          <span>Already invoiced</span>
+          <strong id="labor-stat-invoiced">0.00 hrs</strong>
+        </div>
+        <div class="labor-dashboard-stat">
+          <span>Projects with unbilled labor</span>
+          <strong id="labor-stat-projects">0</strong>
+        </div>
       </div>
 
-      <section id="import-panel" class="labor-panel is-active" aria-labelledby="import-heading">
+      <div class="labor-tabs" role="tablist" aria-label="Labor tools">
+        <button class="labor-tab is-active" type="button" data-panel="unbilled-panel">Unbilled Labor</button>
+        <button class="labor-tab" type="button" data-panel="import-panel">Import Report</button>
+        <button class="labor-tab" type="button" data-panel="message-panel">Paste Time Message</button>
+        <button class="labor-tab" type="button" data-panel="manual-panel">Manual Entry</button>
+        <button class="labor-tab" type="button" data-panel="billing-history-panel">Billing History</button>
+      </div>
+
+      <section id="unbilled-panel" class="labor-panel is-active" aria-labelledby="unbilled-heading">
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="unbilled-heading">Unbilled labor</h2>
+            <p>Select labor after you put it on a QuickBooks or spreadsheet invoice. LuxNote tracks what still needs billing and the invoice/reference after billing.</p>
+          </div>
+          <div class="labor-review-summary">
+            <strong id="unbilled-hours">0.00 hrs</strong>
+            <span id="unbilled-count">0 entries</span>
+          </div>
+        </div>
+
+        <div class="labor-invoice-controls">
+          <label class="labor-field">
+            <span>Invoice / reference</span>
+            <input id="invoice-reference" type="text" maxlength="120" placeholder="QB 1045 or Aug-2026 Service">
+          </label>
+          <button id="mark-invoiced" class="primary-button" type="button">Mark Selected Invoiced</button>
+          <button id="export-labor" class="secondary-button" type="button">Export Selected CSV</button>
+        </div>
+
+        <div class="labor-table-wrap">
+          <table class="labor-table">
+            <thead>
+              <tr>
+                <th><input id="select-all-unbilled" type="checkbox" aria-label="Select all unbilled labor"></th>
+                <th>Project</th>
+                <th>Technician</th>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody id="unbilled-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="import-panel" class="labor-panel" aria-labelledby="import-heading" hidden>
         <div class="labor-panel-heading">
           <div>
             <h2 id="import-heading">Import geofencing or time report</h2>
@@ -141,6 +202,36 @@
         </form>
       </section>
 
+      <section id="billing-history-panel" class="labor-panel" aria-labelledby="billing-history-heading" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="billing-history-heading">Billing history</h2>
+            <p>Labor that has already been marked invoiced, including the QuickBooks or spreadsheet reference you entered.</p>
+          </div>
+          <div class="labor-review-summary">
+            <strong id="billed-hours">0.00 hrs</strong>
+            <span id="billed-count">0 entries</span>
+          </div>
+        </div>
+
+        <div class="labor-table-wrap">
+          <table class="labor-table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Technician</th>
+                <th>Date</th>
+                <th>Hours</th>
+                <th>Type</th>
+                <th>Invoice / Reference</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody id="billed-labor-body"></tbody>
+          </table>
+        </div>
+      </section>
+
       <section id="review-section" class="labor-review-section" hidden>
         <div class="labor-panel-heading">
           <div>
@@ -175,45 +266,6 @@
           <button id="discard-review" class="secondary-button" type="button">Discard Review</button>
         </div>
       </section>
-
-      <section id="unbilled-panel" class="labor-panel" aria-labelledby="unbilled-heading" hidden>
-        <div class="labor-panel-heading">
-          <div>
-            <h2 id="unbilled-heading">Unbilled labor</h2>
-            <p>Select labor after you put it on a QuickBooks or spreadsheet invoice. LuxNote only tracks billing status. It does not create or collect payment.</p>
-          </div>
-          <div class="labor-review-summary">
-            <strong id="unbilled-hours">0.00 hrs</strong>
-            <span id="unbilled-count">0 entries</span>
-          </div>
-        </div>
-
-        <div class="labor-invoice-controls">
-          <label class="labor-field">
-            <span>Invoice / reference</span>
-            <input id="invoice-reference" type="text" maxlength="120" placeholder="QB 1045 or Aug-2026 Service">
-          </label>
-          <button id="mark-invoiced" class="primary-button" type="button">Mark Selected Invoiced</button>
-          <button id="export-labor" class="secondary-button" type="button">Export Selected CSV</button>
-        </div>
-
-        <div class="labor-table-wrap">
-          <table class="labor-table">
-            <thead>
-              <tr>
-                <th><input id="select-all-unbilled" type="checkbox" aria-label="Select all unbilled labor"></th>
-                <th>Project</th>
-                <th>Technician</th>
-                <th>Date</th>
-                <th>Hours</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody id="unbilled-body"></tbody>
-          </table>
-        </div>
-      </section>
     </section>
   </main>
 
@@ -222,12 +274,13 @@
       <strong>LuxNote</strong>
       <span>Project Tracker</span>
     </div>
-    <p>Signed-in project tracking workspace.</p>
+    <p>Project execution and labor visibility in one workspace.</p>
   </footer>
 
   <script src="config-private.js?v=20260811-core-project-mode"></script>
   <script src="auth.js?v=20260706-production"></script>
   <script src="labor.js?v=20260812-labor-mvp"></script>
   <script src="labor-billing-rules.js?v=20260812-labor-mvp"></script>
+  <script src="labor-dashboard.js?v=20260814-labor-dashboard"></script>
 </body>
 </html>

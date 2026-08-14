@@ -1,13 +1,58 @@
-/* Labor status on project cards */
+/* Labor and billing status on project cards */
+
+.project-card-labor-summary {
+  display: grid;
+  gap: 6px;
+  padding: 8px 9px;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 9px;
+  background: rgba(255, 253, 250, 0.9);
+}
+
+.project-card-labor-heading,
+.project-card-labor-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.project-card-labor-heading strong {
+  color: var(--text, #391214);
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+}
+
+.project-card-labor-heading span {
+  color: var(--muted-text, #887d77);
+  font-size: 0.53rem;
+}
+
+.labor-card-value {
+  color: var(--muted-text, #887d77);
+  font-size: 0.56rem;
+  font-weight: 700;
+}
+
+.labor-card-value.is-unbilled {
+  color: #7f3038;
+  font-size: 0.62rem;
+}
+
+.labor-card-age {
+  color: #7a5a22;
+  font-size: 0.53rem;
+  font-weight: 700;
+}
+
+.labor-card-age.is-aged {
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: #7f3038;
+  background: rgba(138, 61, 68, 0.08);
+}
 
 .labor-unbilled-badge {
-  margin-left: auto;
-  padding: 2px 5px;
-  border: 1px solid rgba(178, 138, 71, 0.3);
-  border-radius: 999px;
-  color: #7a5a22;
-  background: rgba(178, 138, 71, 0.1);
-  font-size: 0.52rem;
-  font-weight: 700;
-  white-space: nowrap;
+  color: #7f3038;
+  font-weight: 800;
 }

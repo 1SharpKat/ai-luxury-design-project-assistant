@@ -19,19 +19,20 @@
   <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="cover-photo.css">
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
-  <link rel="stylesheet" href="board.css?v=20260811-project-board">
-  <link rel="stylesheet" href="board-tracking.css?v=20260811-project-tracking">
-  <link rel="stylesheet" href="labor-board.css?v=20260812-labor-mvp">
+  <link rel="stylesheet" href="workflow.css?v=20260814-two-workflows">
+  <link rel="stylesheet" href="board.css?v=20260814-project-board">
+  <link rel="stylesheet" href="board-tracking.css?v=20260814-project-tracking">
+  <link rel="stylesheet" href="labor-board.css?v=20260814-labor-board">
 </head>
 <body>
   <header class="site-header">
-    <nav class="glass-nav" aria-label="Primary navigation">
+    <nav class="glass-nav workflow-main-nav" aria-label="Primary navigation">
       <a class="nav-wordmark" href="workspace-projects.html">LuxNote</a>
 
       <div class="nav-links">
-        <a href="workspace-projects.html" aria-current="page">Project Board</a>
-        <a href="new-note.html">New Note</a>
-        <a href="labor.html">Labor</a>
+        <a class="workflow-primary-link" href="workspace-projects.html" aria-current="page">Project Board</a>
+        <a class="workflow-primary-link" href="labor.html">Labor &amp; Billing</a>
+        <a class="workflow-utility-link" href="new-note.html">New Note</a>
       </div>
     </nav>
   </header>
@@ -43,21 +44,20 @@
     >
       <div class="section-heading board-heading">
         <div>
-          <p class="eyebrow">Project Board</p>
+          <p class="eyebrow">Project Execution</p>
           <h1 id="projects-heading">Active projects</h1>
           <p class="section-description">
-            Track projects from design through completion. Drag a project to a
-            new stage, use the stage menu, and keep the next action, due date,
-            and waiting item current.
+            See where each project is, what happens next, what is waiting, and which jobs need attention.
+            Open a project when you need detailed steps, notes, labor, or billing history.
           </p>
         </div>
 
         <div class="board-actions">
+          <a class="primary-link" href="labor.html">
+            Labor &amp; Billing
+          </a>
           <a class="secondary-link" href="new-note.html">
             New Project Note
-          </a>
-          <a class="secondary-link" href="labor.html">
-            Labor
           </a>
           <button
             id="refresh-projects"
@@ -91,13 +91,13 @@
       <strong>LuxNote</strong>
       <span>Project Tracker</span>
     </div>
-    <p>Signed-in project tracking workspace.</p>
+    <p>Project execution and labor visibility in one workspace.</p>
   </footer>
 
   <script src="config-private.js?v=20260811-core-project-mode"></script>
   <script src="auth.js?v=20260706-production"></script>
   <script src="project-board.js?v=20260811-lifecycle-board"></script>
   <script src="project-tracking.js?v=20260811-project-tracking"></script>
-  <script src="project-labor-board.js?v=20260812-labor-mvp"></script>
+  <script src="project-labor-board.js?v=20260814-labor-board"></script>
 </body>
 </html>
