@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View project progress, labor, billing, steps, and notes in LuxNote.">
+  <meta name="theme-color" content="#f7f1eb">
+  <title>Project Detail | LuxNote</title>
+
+  <link rel="stylesheet" href="styles.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="pages.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
+  <link rel="stylesheet" href="workflow.css?v=20260814-two-workflows">
+  <link rel="stylesheet" href="project-detail.css?v=20260814-project-detail">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="glass-nav workflow-main-nav" aria-label="Primary navigation">
+      <a class="nav-wordmark" href="workspace-projects.html">LuxNote</a>
+      <div class="nav-links">
+        <a class="workflow-primary-link" href="workspace-projects.html">Project Board</a>
+        <a class="workflow-primary-link" href="labor.html">Labor &amp; Billing</a>
+        <a class="workflow-utility-link" href="new-note.html">New Note</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="subpage-shell detail-page-shell">
+    <section class="glass-panel subpage-panel detail-hero">
+      <div class="section-heading detail-heading">
+        <div>
+          <p class="eyebrow">Project Workspace</p>
+          <h1 id="project-detail-title">Loading project...</h1>
+          <p id="project-detail-client" class="section-description">Project workspace</p>
+        </div>
+        <div class="detail-heading-actions">
+          <a class="secondary-link" href="workspace-projects.html">Back to Board</a>
+          <a id="detail-add-note" class="primary-link" href="new-note.html">Add Project Note</a>
+        </div>
+      </div>
+
+      <div id="detail-status" class="records-message loading-state" role="status" aria-live="polite">
+        Loading project...
+      </div>
+
+      <div class="detail-top-grid">
+        <div class="detail-status-card">
+          <span>Priority</span>
+          <strong id="detail-priority">Not assigned</strong>
+        </div>
+        <div class="detail-status-card">
+          <span>Last activity</span>
+          <strong id="detail-last-activity">Loading...</strong>
+        </div>
+        <label class="detail-status-card detail-stage-control">
+          <span>Current stage</span>
+          <select id="detail-stage-select" aria-label="Current project stage"></select>
+        </label>
+      </div>
+
+      <div id="detail-stage-progress" class="detail-stage-progress" aria-label="Project stage progress"></div>
+    </section>
+
+    <div class="detail-workspace-grid">
+      <section class="glass-panel subpage-panel detail-section" aria-labelledby="tracking-heading">
+        <div class="detail-section-heading">
+          <div>
+            <p class="eyebrow">Execution</p>
+            <h2 id="tracking-heading">What happens next</h2>
+          </div>
+        </div>
+
+        <form id="detail-tracking-form" class="detail-tracking-form">
+          <label>
+            <span>Next action</span>
+            <input id="detail-next-action" type="text" maxlength="240" placeholder="What needs to happen next?">
+          </label>
+          <label>
+            <span>Due date</span>
+            <input id="detail-due-date" type="date">
+          </label>
+          <label>
+            <span>Waiting on</span>
+            <select id="detail-waiting-on"></select>
+          </label>
+          <button id="detail-tracking-save" class="primary-button" type="submit">Save Tracking</button>
+        </form>
+      </section>
+
+      <section class="glass-panel subpage-panel detail-section" aria-labelledby="steps-heading">
+        <div class="detail-section-heading">
+          <div>
+            <p class="eyebrow">Progress</p>
+            <h2 id="steps-heading">Project steps</h2>
+          </div>
+        </div>
+
+        <form id="project-step-form" class="detail-step-form">
+          <input id="project-step-input" type="text" maxlength="240" placeholder="Add a specific step or milestone" aria-label="New project step">
+          <button class="secondary-button" type="submit">Add Step</button>
+        </form>
+
+        <div id="project-steps-list" class="detail-steps-list"></div>
+      </section>
+    </div>
+
+    <section class="glass-panel subpage-panel detail-section detail-labor-section" aria-labelledby="labor-heading">
+      <div class="detail-section-heading">
+        <div>
+          <p class="eyebrow">Labor &amp; Billing</p>
+          <h2 id="labor-heading">Where the time went</h2>
+          <p>Tracked hours stay visible here while the Labor &amp; Billing workspace handles imports, assignment, and invoicing.</p>
+        </div>
+        <a id="detail-labor-link" class="primary-link" href="labor.html">Open Labor &amp; Billing</a>
+      </div>
+
+      <div class="detail-metric-grid">
+        <div class="detail-metric">
+          <span>Total tracked</span>
+          <strong id="detail-labor-total">0.00 hrs</strong>
+        </div>
+        <div class="detail-metric is-alert">
+          <span>Unbilled</span>
+          <strong id="detail-labor-unbilled">0.00 hrs</strong>
+        </div>
+        <div class="detail-metric">
+          <span>Invoiced</span>
+          <strong id="detail-labor-invoiced">0.00 hrs</strong>
+        </div>
+        <div class="detail-metric">
+          <span>Nonbillable</span>
+          <strong id="detail-labor-nonbillable">0.00 hrs</strong>
+        </div>
+      </div>
+
+      <div class="detail-table-wrap">
+        <table class="detail-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Technician</th>
+              <th>Hours</th>
+              <th>Type</th>
+              <th>Billing</th>
+              <th>Reference / Detail</th>
+            </tr>
+          </thead>
+          <tbody id="detail-labor-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="glass-panel subpage-panel detail-section" aria-labelledby="notes-heading">
+      <div class="detail-section-heading">
+        <div>
+          <p class="eyebrow">Activity</p>
+          <h2 id="notes-heading">Project notes</h2>
+          <p>Walkthroughs, decisions, builder notes, emails, and other project history live here instead of crowding the board card.</p>
+        </div>
+      </div>
+
+      <div id="project-notes-list" class="detail-notes-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <strong>LuxNote</strong>
+      <span>Project Tracker</span>
+    </div>
+    <p>Project execution and labor visibility in one workspace.</p>
+  </footer>
+
+  <script src="config-private.js?v=20260811-core-project-mode"></script>
+  <script src="auth.js?v=20260706-production"></script>
+  <script src="project-detail.js?v=20260814-project-detail"></script>
+</body>
+</html>
