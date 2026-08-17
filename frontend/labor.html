@@ -37,7 +37,10 @@
             and which projects still have money sitting on the table.
           </p>
         </div>
-        <a class="secondary-link" href="workspace-projects.html">Project Board</a>
+        <div class="board-actions">
+          <a class="primary-link" href="labor.html?action=paste">Paste Labor Note</a>
+          <a class="secondary-link" href="workspace-projects.html">Project Board</a>
+        </div>
       </div>
 
       <div id="labor-status" class="records-message loading-state" role="status" aria-live="polite">
@@ -65,8 +68,8 @@
 
       <div class="labor-tabs" role="tablist" aria-label="Labor tools">
         <button class="labor-tab is-active" type="button" data-panel="unbilled-panel">Unbilled Labor</button>
+        <button class="labor-tab" type="button" data-panel="message-panel">Paste Labor Note</button>
         <button class="labor-tab" type="button" data-panel="import-panel">Import Report</button>
-        <button class="labor-tab" type="button" data-panel="message-panel">Paste Time Message</button>
         <button class="labor-tab" type="button" data-panel="manual-panel">Manual Entry</button>
         <button class="labor-tab" type="button" data-panel="billing-history-panel">Billing History</button>
       </div>
@@ -110,6 +113,32 @@
         </div>
       </section>
 
+      <section id="message-panel" class="labor-panel" aria-labelledby="message-heading" hidden>
+        <div class="labor-panel-heading">
+          <div>
+            <h2 id="message-heading">Paste a labor note into a project</h2>
+            <p>Select the project first, then paste the technician's text or email. LuxNote extracts obvious dates and time ranges and makes you review the labor before saving it.</p>
+          </div>
+        </div>
+        <div class="labor-form-grid">
+          <label class="labor-field">
+            <span>Project <span aria-hidden="true">*</span></span>
+            <select id="message-project" required></select>
+          </label>
+          <label class="labor-field">
+            <span>Technician</span>
+            <input id="message-technician" type="text" maxlength="120" placeholder="Jose">
+          </label>
+        </div>
+        <label class="labor-field">
+          <span>Labor note</span>
+          <textarea id="labor-message-text" rows="9" placeholder="8/11 at Smith. 8:15-12, back after lunch 12:45-4:30. Finished speakers and cleaned up rack."></textarea>
+        </label>
+        <div class="labor-actions">
+          <button id="extract-message" class="primary-button" type="button">Extract Labor</button>
+        </div>
+      </section>
+
       <section id="import-panel" class="labor-panel" aria-labelledby="import-heading" hidden>
         <div class="labor-panel-heading">
           <div>
@@ -124,32 +153,6 @@
         <div class="labor-actions">
           <button id="parse-import" class="primary-button" type="button">Sort Report</button>
           <button id="clear-import" class="secondary-button" type="button">Clear</button>
-        </div>
-      </section>
-
-      <section id="message-panel" class="labor-panel" aria-labelledby="message-heading" hidden>
-        <div class="labor-panel-heading">
-          <div>
-            <h2 id="message-heading">Paste technician time message</h2>
-            <p>Use this for texts or emails. LuxNote extracts obvious dates and time ranges, then makes you review the row before saving.</p>
-          </div>
-        </div>
-        <div class="labor-form-grid">
-          <label class="labor-field">
-            <span>Technician</span>
-            <input id="message-technician" type="text" maxlength="120" placeholder="Jose">
-          </label>
-          <label class="labor-field">
-            <span>Default project</span>
-            <select id="message-project"></select>
-          </label>
-        </div>
-        <label class="labor-field">
-          <span>Message</span>
-          <textarea id="labor-message-text" rows="9" placeholder="8/11 at Smith. 8:15-12, back after lunch 12:45-4:30. Finished speakers and cleaned up rack."></textarea>
-        </label>
-        <div class="labor-actions">
-          <button id="extract-message" class="primary-button" type="button">Extract Time</button>
         </div>
       </section>
 
@@ -281,6 +284,7 @@
   <script src="auth.js?v=20260706-production"></script>
   <script src="labor.js?v=20260812-labor-mvp"></script>
   <script src="labor-billing-rules.js?v=20260812-labor-mvp"></script>
+  <script src="labor-project-paste.js?v=20260817-project-labor-note"></script>
   <script src="labor-dashboard.js?v=20260814-labor-dashboard"></script>
 </body>
 </html>
