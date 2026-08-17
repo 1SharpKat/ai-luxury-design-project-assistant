@@ -57,30 +57,30 @@
     return true;
   }
 
-  function waitForProjects(attempt = 0) {
+  function waitForRequestedProject(attempt = 0) {
     if (selectRequestedProject()) {
-      if (requestedAction === "paste" || requestedProject) {
-        openPastePanel();
-        window.setTimeout(() => messageText?.focus(), 0);
-      }
+      window.setTimeout(() => messageText?.focus(), 0);
       return;
     }
 
     if (attempt < 40) {
-      window.setTimeout(() => waitForProjects(attempt + 1), 100);
+      window.setTimeout(() => waitForRequestedProject(attempt + 1), 100);
       return;
     }
 
-    if (requestedProject) {
-      setLocalStatus(
-        `The project “${requestedProject}” is not available in this workspace. Select a project before extracting labor.`
-      );
-    }
+    setLocalStatus(
+      `The project “${requestedProject}” is not available in this workspace. Select a project before extracting labor.`
+    );
   }
 
   if (requestedAction === "paste" || requestedProject) {
     openPastePanel();
-    waitForProjects();
+
+    if (requestedProject) {
+      waitForRequestedProject();
+    } else {
+      window.setTimeout(() => projectSelect.focus(), 0);
+    }
   }
 
   extractButton.addEventListener(
