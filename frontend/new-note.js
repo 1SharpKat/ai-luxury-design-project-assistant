@@ -24,6 +24,8 @@ const elements = {
   formMessage: document.getElementById("form-message")
 };
 
+let existingProjectKey = "";
+
 function setMessage(message = "", type = "") {
   elements.formMessage.textContent = message;
   elements.formMessage.className = type
@@ -105,13 +107,22 @@ async function apiFetch(path, options = {}) {
 function prefillFromQuery() {
   const params = new URLSearchParams(window.location.search);
   const projectName = params.get("project");
+  const projectKey = params.get("projectKey");
   const clientName = params.get("client");
+
+  existingProjectKey = String(projectKey || "").trim();
 
   if (projectName) {
     elements.projectName.value = projectName;
   }
   if (clientName) {
-    elements.clientName.value = clientName;
+    elements.clientName.value = clientName === "Private Client" ? "" : clientName;
+  }
+
+  if (existingProjectKey) {
+    elements.projectName.readOnly = true;
+    elements.projectName.title =
+      "Rename this project from its Project Detail page so existing history stays together.";
   }
 }
 
@@ -119,10 +130,11 @@ async function submitProjectNote(event) {
   event.preventDefault();
   setMessage();
 
-  const projectName = elements.projectName.value.trim();
+  const visibleProjectName = elements.projectName.value.trim();
+  const projectName = existingProjectKey || visibleProjectName;
   const projectNotes = elements.projectNotes.value.trim();
 
-  if (!projectName) {
+  if (!visibleProjectName) {
     elements.projectName.focus();
     setMessage("Add a project name before saving the note.", "error");
     return;
