@@ -1,0 +1,226 @@
+/* =========================================================
+   LuxNote
+   Five-second project status view
+   ========================================================= */
+
+.project-glance {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(82, 66, 61, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 253, 250, 0.92);
+}
+
+.project-glance-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.project-glance-heading h2 {
+  margin: 0;
+  color: var(--text, #391214);
+  font-size: 1rem;
+}
+
+.project-glance-heading span {
+  color: var(--muted-text, #887d77);
+  font-size: 0.58rem;
+}
+
+.project-glance-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.project-glance-item {
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid rgba(82, 66, 61, 0.1);
+  border-radius: 10px;
+  background: rgba(248, 242, 237, 0.5);
+}
+
+.project-glance-item > span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.53rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.project-glance-item > strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--body-text, #52423d);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.project-glance-item.is-primary {
+  border-color: rgba(138, 61, 68, 0.22);
+  background: rgba(138, 61, 68, 0.055);
+}
+
+.project-glance-item.is-primary > strong {
+  color: #7f3038;
+}
+
+.project-glance-item.is-alert {
+  border-color: rgba(178, 138, 71, 0.32);
+  background: rgba(178, 138, 71, 0.08);
+}
+
+.project-glance-item.is-overdue {
+  border-color: rgba(138, 61, 68, 0.32);
+  background: rgba(138, 61, 68, 0.08);
+}
+
+.project-glance-latest {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 9px;
+  padding: 12px 13px;
+  border-left: 4px solid #8a3d44;
+  border-radius: 10px;
+  background: rgba(138, 61, 68, 0.045);
+}
+
+.project-glance-latest-label span {
+  display: block;
+  color: var(--muted-text, #887d77);
+  font-size: 0.53rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.project-glance-latest-label strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text, #391214);
+  font-size: 0.66rem;
+}
+
+.project-glance-latest p {
+  margin: 0;
+  color: var(--body-text, #52423d);
+  font-size: 0.7rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.detail-edit-tools {
+  margin-top: 14px;
+  border: 1px solid rgba(82, 66, 61, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 253, 250, 0.72);
+}
+
+.detail-edit-tools > summary {
+  padding: 11px 13px;
+  color: var(--warm-brown, #6a4943);
+  font-size: 0.66rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+.detail-edit-tools[open] > summary {
+  border-bottom: 1px solid rgba(82, 66, 61, 0.1);
+}
+
+.detail-edit-tools .detail-edit-tools-body {
+  padding: 12px;
+}
+
+.detail-edit-tools .detail-top-grid {
+  margin-top: 0;
+}
+
+.detail-edit-tools .detail-workspace-grid {
+  margin-top: 10px;
+  grid-template-columns: 1fr;
+}
+
+/* Make project history read like a timeline instead of a pile of equal cards. */
+.detail-notes-list {
+  position: relative;
+  gap: 0;
+  padding-left: 17px;
+}
+
+.detail-notes-list::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 5px;
+  width: 1px;
+  background: rgba(82, 66, 61, 0.16);
+}
+
+.detail-note {
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.detail-note::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: -17px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #fffdf9;
+  border-radius: 999px;
+  background: #a2958f;
+  box-shadow: 0 0 0 1px rgba(82, 66, 61, 0.14);
+}
+
+.detail-note:first-child {
+  border-color: rgba(138, 61, 68, 0.24);
+  background: rgba(138, 61, 68, 0.045);
+}
+
+.detail-note:first-child::before {
+  background: #8a3d44;
+}
+
+.detail-note:first-child .detail-note-header strong::after {
+  content: "  Latest update";
+  margin-left: 7px;
+  color: #8a3d44;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1100px) {
+  .project-glance-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .project-glance-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .project-glance-latest {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .project-glance-grid {
+    grid-template-columns: 1fr;
+  }
+}
