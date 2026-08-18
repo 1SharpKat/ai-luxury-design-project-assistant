@@ -148,6 +148,71 @@
     });
   }
 
+  function csvValue(value) {
+    const text = String(value ?? "");
+    return /[,"\n]/.test(text)
+      ? `"${text.replaceAll('"', '""')}"`
+      : text;
+  }
+
+  function exportSelectedWithDisplayNames(event) {
+    const selected = typeof getSelectedUnbilledEntries === "function"
+      ? getSelectedUnbilledEntries()
+      : [];
+
+    if (!selected.length) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const rows = [
+      [
+        "Project",
+        "Technician",
+        "Work Date",
+        "Hours",
+        "Labor Type",
+        "Description",
+        "Location",
+        "Billing Status"
+      ],
+      ...selected.map((entry) => [
+        window.luxnoteProjectDisplayName(entry.projectName),
+        entry.technician,
+        entry.workDate,
+        Number(entry.hours || 0).toFixed(2),
+        entry.laborType || "Project",
+        entry.description || "",
+        entry.locationLabel || "",
+        "Unbilled"
+      ])
+    ];
+
+    const csv = rows.map((row) => row.map(csvValue).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `luxnote-unbilled-labor-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    if (typeof setStatus === "function") {
+      setStatus(
+        `${selected.length} labor ${selected.length === 1 ? "entry" : "entries"} exported.`,
+        "success-state"
+      );
+    }
+  }
+
+  document
+    .getElementById("export-labor")
+    ?.addEventListener("click", exportSelectedWithDisplayNames, true);
+
   rebuildCatalog();
   fillProjectSelect(elements.messageProject, elements.messageProject.value, true);
   fillProjectSelect(elements.manualProject, elements.manualProject.value, true);
