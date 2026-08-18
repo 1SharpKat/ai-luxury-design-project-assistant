@@ -105,7 +105,12 @@
   stylesheet.href = "labor-corrections.css?v=20260817-labor-corrections";
   document.head.appendChild(stylesheet);
 
-  const script = document.createElement("script");
-  script.src = "labor-corrections.js?v=20260817-labor-corrections";
-  document.body.appendChild(script);
+  const correctionScript = document.createElement("script");
+  correctionScript.src = "labor-corrections.js?v=20260817-labor-corrections";
+  correctionScript.onload = () => {
+    const identityScript = document.createElement("script");
+    identityScript.src = "labor-project-identity.js?v=20260817-project-identity";
+    document.body.appendChild(identityScript);
+  };
+  document.body.appendChild(correctionScript);
 })();

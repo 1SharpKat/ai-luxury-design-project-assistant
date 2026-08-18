@@ -39,6 +39,19 @@ function parseLaborJson(record) {
   }
 }
 
+function getProjectIdentity(project) {
+  const trackingData = parseLaborJson(project?.trackingRecord);
+  return {
+    displayProjectName:
+      String(trackingData.displayProjectName || "").trim() ||
+      project.projectName,
+    clientName:
+      String(trackingData.clientName || "").trim() ||
+      project.clientName ||
+      "Private Client"
+  };
+}
+
 function buildLaborStatusMap(notes) {
   const statusByLaborId = new Map();
 
@@ -77,6 +90,10 @@ const buildProjectWithoutLabor = buildProject;
 
 buildProject = function buildProjectWithLabor(projectName, records) {
   const project = buildProjectWithoutLabor(projectName, records);
+  const identity = getProjectIdentity(project);
+
+  project.displayProjectName = identity.displayProjectName;
+  project.clientName = identity.clientName;
 
   const operationalNotes = project.notes.filter(
     (note) => !isLaborAdministrativeNote(note)
@@ -144,6 +161,36 @@ buildProject = function buildProjectWithLabor(projectName, records) {
   return project;
 };
 
+const postJsonWithoutProjectIdentity = postJson;
+
+postJson = function postJsonWithProjectIdentity(path, body) {
+  if (body?.noteType !== "project_tracking") {
+    return postJsonWithoutProjectIdentity(path, body);
+  }
+
+  const project = projectState?.get?.(body.projectName);
+  if (!project) {
+    return postJsonWithoutProjectIdentity(path, body);
+  }
+
+  let tracking = {};
+  try {
+    tracking = JSON.parse(body.projectNotes || "{}");
+  } catch {
+    tracking = {};
+  }
+
+  return postJsonWithoutProjectIdentity(path, {
+    ...body,
+    clientName: project.clientName || body.clientName || "Private Client",
+    projectNotes: JSON.stringify({
+      ...tracking,
+      displayProjectName: project.displayProjectName || project.projectName,
+      clientName: project.clientName || body.clientName || "Private Client"
+    })
+  });
+};
+
 function replaceProjectTitleWithLink(card, project) {
   const existingTitle = card.querySelector(".project-card-title");
   if (!existingTitle) {
@@ -153,7 +200,7 @@ function replaceProjectTitleWithLink(card, project) {
   const link = document.createElement("a");
   link.className = `${existingTitle.className} project-card-title-link`;
   link.href = `project-detail.html?project=${encodeURIComponent(project.projectName)}`;
-  link.textContent = project.projectName;
+  link.textContent = project.displayProjectName || project.projectName;
   link.addEventListener("pointerdown", (event) => event.stopPropagation());
   link.addEventListener("click", (event) => event.stopPropagation());
   existingTitle.replaceWith(link);
@@ -210,6 +257,11 @@ createProjectCard = function createProjectCardWithLabor(project) {
   const card = createProjectCardWithoutLabor(project);
 
   replaceProjectTitleWithLink(card, project);
+
+  const client = card.querySelector(".project-card-client");
+  if (client) {
+    client.textContent = project.clientName || "Private Client";
+  }
 
   const notes = card.querySelector(".board-card-notes");
   if (notes) {
