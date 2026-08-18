@@ -12,6 +12,7 @@
   const billedHours = document.getElementById("billed-hours");
   const billedCount = document.getElementById("billed-count");
   const statusElement = document.getElementById("labor-status");
+  const inactiveStatuses = new Set(["voided", "superseded"]);
 
   if (
     !statTracked ||
@@ -33,6 +34,11 @@
     } catch {
       return {};
     }
+  }
+
+  function timestamp(value) {
+    const time = new Date(value || 0).getTime();
+    return Number.isNaN(time) ? 0 : time;
   }
 
   async function readResponse(response) {
@@ -71,6 +77,7 @@
 
     records
       .filter((record) => record.noteType === "project_labor_status")
+      .sort((a, b) => timestamp(b.createdAt) - timestamp(a.createdAt))
       .forEach((record) => {
         const data = parseJson(record);
         const id = String(data.laborRecordId || "").trim();
@@ -94,7 +101,8 @@
             status?.invoiceReference || data.invoiceReference || "",
           invoicedAt: status?.invoicedAt || ""
         };
-      });
+      })
+      .filter((entry) => !inactiveStatuses.has(entry.billingStatus));
   }
 
   function hours(entries) {
@@ -186,7 +194,7 @@
         (entry) => entry.laborType !== "Nonbillable"
       );
       const unbilled = billable.filter(
-        (entry) => entry.billingStatus !== "invoiced"
+        (entry) => entry.billingStatus === "unbilled"
       );
       const invoiced = billable.filter(
         (entry) => entry.billingStatus === "invoiced"
@@ -216,7 +224,7 @@
     const observer = new MutationObserver(() => {
       const text = statusElement.textContent || "";
       if (
-        /saved as unbilled|marked invoiced|labor entries saved|project.*available/i.test(text)
+        /saved as unbilled|marked invoiced|labor entries saved|project.*available|labor entry corrected|labor backed out/i.test(text)
       ) {
         refreshDashboard();
       }
