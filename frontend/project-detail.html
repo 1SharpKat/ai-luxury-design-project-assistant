@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="light-luxury-theme.css?v=20260615-compact-ui">
   <link rel="stylesheet" href="workflow.css?v=20260814-two-workflows">
   <link rel="stylesheet" href="project-detail.css?v=20260814-project-detail">
+  <link rel="stylesheet" href="project-glance.css?v=20260817-project-glance">
 </head>
 <body>
   <header class="site-header">
@@ -43,66 +44,112 @@
         Loading project...
       </div>
 
-      <div class="detail-top-grid">
-        <div class="detail-status-card">
-          <span>Priority</span>
-          <strong id="detail-priority">Not assigned</strong>
+      <section class="project-glance" aria-labelledby="project-glance-heading">
+        <div class="project-glance-heading">
+          <h2 id="project-glance-heading">At a Glance</h2>
+          <span>The five-second project check</span>
         </div>
-        <div class="detail-status-card">
-          <span>Last activity</span>
-          <strong id="detail-last-activity">Loading...</strong>
+
+        <div class="project-glance-grid">
+          <div class="project-glance-item is-primary">
+            <span>Current stage</span>
+            <strong id="glance-stage">Loading...</strong>
+          </div>
+          <div class="project-glance-item">
+            <span>Current open step</span>
+            <strong id="glance-step">Loading...</strong>
+          </div>
+          <div class="project-glance-item is-primary">
+            <span>Next action</span>
+            <strong id="glance-next-action">Loading...</strong>
+          </div>
+          <div id="glance-waiting-card" class="project-glance-item">
+            <span>Waiting on</span>
+            <strong id="glance-waiting">Loading...</strong>
+          </div>
+          <div id="glance-due-card" class="project-glance-item">
+            <span>Due</span>
+            <strong id="glance-due">Loading...</strong>
+          </div>
+          <div id="glance-unbilled-card" class="project-glance-item">
+            <span>Unbilled labor</span>
+            <strong id="glance-unbilled">0.00 hrs</strong>
+          </div>
         </div>
-        <label class="detail-status-card detail-stage-control">
-          <span>Current stage</span>
-          <select id="detail-stage-select" aria-label="Current project stage"></select>
-        </label>
-      </div>
+
+        <div class="project-glance-latest">
+          <div class="project-glance-latest-label">
+            <span>Latest project update</span>
+            <strong id="glance-latest-date">Loading...</strong>
+          </div>
+          <p id="glance-latest-update">Loading latest update...</p>
+        </div>
+      </section>
 
       <div id="detail-stage-progress" class="detail-stage-progress" aria-label="Project stage progress"></div>
     </section>
 
-    <div class="detail-workspace-grid">
-      <section class="glass-panel subpage-panel detail-section" aria-labelledby="tracking-heading">
-        <div class="detail-section-heading">
-          <div>
-            <p class="eyebrow">Execution</p>
-            <h2 id="tracking-heading">What happens next</h2>
+    <section class="glass-panel subpage-panel detail-section" aria-labelledby="steps-heading">
+      <div class="detail-section-heading">
+        <div>
+          <p class="eyebrow">Progress</p>
+          <h2 id="steps-heading">Project steps</h2>
+          <p>Keep the few concrete steps that still need to happen visible here. Completed steps stay below the open work.</p>
+        </div>
+      </div>
+
+      <form id="project-step-form" class="detail-step-form">
+        <input id="project-step-input" type="text" maxlength="240" placeholder="Add a specific step or milestone" aria-label="New project step">
+        <button class="secondary-button" type="submit">Add Step</button>
+      </form>
+
+      <div id="project-steps-list" class="detail-steps-list"></div>
+    </section>
+
+    <details class="detail-edit-tools">
+      <summary>Update project status</summary>
+      <div class="detail-edit-tools-body">
+        <div class="detail-top-grid">
+          <div class="detail-status-card">
+            <span>Priority</span>
+            <strong id="detail-priority">Not assigned</strong>
           </div>
+          <div class="detail-status-card">
+            <span>Last activity</span>
+            <strong id="detail-last-activity">Loading...</strong>
+          </div>
+          <label class="detail-status-card detail-stage-control">
+            <span>Current stage</span>
+            <select id="detail-stage-select" aria-label="Current project stage"></select>
+          </label>
         </div>
 
-        <form id="detail-tracking-form" class="detail-tracking-form">
-          <label>
-            <span>Next action</span>
-            <input id="detail-next-action" type="text" maxlength="240" placeholder="What needs to happen next?">
-          </label>
-          <label>
-            <span>Due date</span>
-            <input id="detail-due-date" type="date">
-          </label>
-          <label>
-            <span>Waiting on</span>
-            <select id="detail-waiting-on"></select>
-          </label>
-          <button id="detail-tracking-save" class="primary-button" type="submit">Save Tracking</button>
-        </form>
-      </section>
-
-      <section class="glass-panel subpage-panel detail-section" aria-labelledby="steps-heading">
-        <div class="detail-section-heading">
-          <div>
-            <p class="eyebrow">Progress</p>
-            <h2 id="steps-heading">Project steps</h2>
+        <section class="detail-section" aria-labelledby="tracking-heading">
+          <div class="detail-section-heading">
+            <div>
+              <p class="eyebrow">Execution</p>
+              <h2 id="tracking-heading">Update what happens next</h2>
+            </div>
           </div>
-        </div>
 
-        <form id="project-step-form" class="detail-step-form">
-          <input id="project-step-input" type="text" maxlength="240" placeholder="Add a specific step or milestone" aria-label="New project step">
-          <button class="secondary-button" type="submit">Add Step</button>
-        </form>
-
-        <div id="project-steps-list" class="detail-steps-list"></div>
-      </section>
-    </div>
+          <form id="detail-tracking-form" class="detail-tracking-form">
+            <label>
+              <span>Next action</span>
+              <input id="detail-next-action" type="text" maxlength="240" placeholder="What needs to happen next?">
+            </label>
+            <label>
+              <span>Due date</span>
+              <input id="detail-due-date" type="date">
+            </label>
+            <label>
+              <span>Waiting on</span>
+              <select id="detail-waiting-on"></select>
+            </label>
+            <button id="detail-tracking-save" class="primary-button" type="submit">Save Tracking</button>
+          </form>
+        </section>
+      </div>
+    </details>
 
     <section class="glass-panel subpage-panel detail-section detail-labor-section" aria-labelledby="labor-heading">
       <div class="detail-section-heading">
@@ -153,9 +200,9 @@
     <section class="glass-panel subpage-panel detail-section" aria-labelledby="notes-heading">
       <div class="detail-section-heading">
         <div>
-          <p class="eyebrow">Activity</p>
-          <h2 id="notes-heading">Project notes</h2>
-          <p>Walkthroughs, decisions, builder notes, emails, and other project history live here instead of crowding the board card.</p>
+          <p class="eyebrow">History</p>
+          <h2 id="notes-heading">Project timeline</h2>
+          <p>The newest update is highlighted. Older notes remain here as project history without competing with the current project status.</p>
         </div>
       </div>
 
@@ -176,5 +223,6 @@
   <script src="project-detail.js?v=20260814-project-detail"></script>
   <script src="service-call-stage.js?v=20260817-service-call"></script>
   <script src="project-detail-notes.js?v=20260814-project-detail"></script>
+  <script src="project-glance.js?v=20260817-project-glance"></script>
 </body>
 </html>
