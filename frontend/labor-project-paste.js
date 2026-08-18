@@ -98,3 +98,14 @@
     true
   );
 })();
+
+(function loadLaborCorrectionControls() {
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "labor-corrections.css?v=20260817-labor-corrections";
+  document.head.appendChild(stylesheet);
+
+  const script = document.createElement("script");
+  script.src = "labor-corrections.js?v=20260817-labor-corrections";
+  document.body.appendChild(script);
+})();

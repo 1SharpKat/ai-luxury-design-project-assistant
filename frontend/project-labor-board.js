@@ -8,12 +8,15 @@ const LABOR_STATUS_NOTE_TYPE = "project_labor_status";
 const LABOR_MAPPING_NOTE_TYPE = "project_labor_mapping";
 const PROJECT_STEP_NOTE_TYPE = "project_step";
 const PROJECT_STEP_STATUS_NOTE_TYPE = "project_step_status";
+const PROJECT_NOTE_REVISION_TYPE = "project_note_revision";
+const INACTIVE_LABOR_STATUSES = new Set(["voided", "superseded"]);
 
 function isLaborAdministrativeNote(record) {
   return [
     LABOR_ENTRY_NOTE_TYPE,
     LABOR_STATUS_NOTE_TYPE,
-    LABOR_MAPPING_NOTE_TYPE
+    LABOR_MAPPING_NOTE_TYPE,
+    PROJECT_NOTE_REVISION_TYPE
   ].includes(record?.noteType);
 }
 
@@ -100,13 +103,14 @@ buildProject = function buildProjectWithLabor(projectName, records) {
         invoiceReference:
           status?.invoiceReference || data.invoiceReference || ""
       };
-    });
+    })
+    .filter((entry) => !INACTIVE_LABOR_STATUSES.has(entry.billingStatus));
 
   const billableEntries = laborEntries.filter(
     (entry) => entry.laborType !== "Nonbillable"
   );
   const unbilledEntries = billableEntries.filter(
-    (entry) => entry.billingStatus !== "invoiced"
+    (entry) => entry.billingStatus === "unbilled"
   );
   const invoicedEntries = billableEntries.filter(
     (entry) => entry.billingStatus === "invoiced"

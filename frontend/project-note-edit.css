@@ -1,0 +1,18 @@
+.detail-note-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.detail-note-edit-textarea {
+  width: 100%;
+  min-height: 120px;
+  margin-top: 10px;
+  resize: vertical;
+}
+
+.detail-note-edited {
+  font-size: 0.72rem;
+  opacity: 0.72;
+}
