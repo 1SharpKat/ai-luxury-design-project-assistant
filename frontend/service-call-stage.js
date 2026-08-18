@@ -88,3 +88,9 @@
     };
   }
 })();
+
+(function loadProjectIdentityEditor() {
+  const script = document.createElement("script");
+  script.src = "project-identity-detail.js?v=20260817-project-identity";
+  document.body.appendChild(script);
+})();
