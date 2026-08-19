@@ -23,3 +23,56 @@ window.LUXNOTE_CONFIG = {
     report: "report.html"
   }
 };
+
+(function lockPrivateWorkspaceUntilAuthenticated() {
+  if (!window.LUXNOTE_CONFIG?.authRequired) {
+    return;
+  }
+
+  const root = document.documentElement;
+  root.classList.add("luxnote-private-locked");
+
+  if (!document.getElementById("luxnote-private-lock-style")) {
+    const style = document.createElement("style");
+    style.id = "luxnote-private-lock-style";
+    style.textContent = `
+      html.luxnote-private-locked main,
+      html.luxnote-private-locked footer {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const noIndex = document.querySelector('meta[name="robots"]') || document.createElement("meta");
+  noIndex.name = "robots";
+  noIndex.content = "noindex,nofollow,noarchive";
+  if (!noIndex.parentNode) {
+    document.head.appendChild(noIndex);
+  }
+
+  let attempts = 0;
+  const waitForAuth = () => {
+    attempts += 1;
+
+    if (!window.luxnoteAuth) {
+      if (attempts < 200) {
+        window.setTimeout(waitForAuth, 10);
+      }
+      return;
+    }
+
+    Promise.resolve(window.luxnoteAuth.initialize())
+      .then(() => {
+        const state = window.luxnoteAuth.getAccessState?.();
+        if (state?.canAccess) {
+          root.classList.remove("luxnote-private-locked");
+        }
+      })
+      .catch((error) => {
+        console.error("LuxNote private workspace authentication failed:", error);
+      });
+  };
+
+  waitForAuth();
+})();
