@@ -3,7 +3,7 @@
 (function loadProjectCorrectionAssets() {
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "project-note-edit.css?v=20260817-note-edit";
+  stylesheet.href = "project-note-edit.css?v=20260819-note-delete";
   document.head.appendChild(stylesheet);
 
   const script = document.createElement("script");
@@ -17,6 +17,7 @@
     return;
   }
 
+  const pageStatus = document.getElementById("detail-status");
   const projectName = String(
     new URLSearchParams(window.location.search).get("project") || ""
   ).trim();
@@ -48,6 +49,17 @@
   function timestamp(value) {
     const time = new Date(value || 0).getTime();
     return Number.isNaN(time) ? 0 : time;
+  }
+
+  function setPageStatus(message, type = "") {
+    if (!pageStatus) {
+      return;
+    }
+    pageStatus.textContent = message;
+    pageStatus.className = type
+      ? `records-message ${type}`
+      : "records-message";
+    pageStatus.hidden = false;
   }
 
   async function getAuthHeaders() {
@@ -123,6 +135,79 @@
     }
   }
 
+  async function deleteRecord(recordId) {
+    const headers = await getAuthHeaders();
+    if (!headers) {
+      throw new Error("Sign in is required to delete project notes.");
+    }
+
+    const response = await fetch(
+      `${window.LUXNOTE_CONFIG?.apiBaseUrl || ""}${window.LUXNOTE_CONFIG?.apiPathPrefix || ""}/project-notes/${encodeURIComponent(recordId)}`,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          ...headers
+        }
+      }
+    );
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || "The note could not be deleted.");
+    }
+  }
+
+  function getRevisionRecordIds(records, targetRecordId) {
+    return records
+      .filter((record) => record.noteType === revisionType && record.recordId)
+      .filter((record) => {
+        try {
+          const data = JSON.parse(record.projectNotes || "{}");
+          return String(data.targetRecordId || "").trim() === targetRecordId;
+        } catch {
+          return false;
+        }
+      })
+      .map((record) => record.recordId);
+  }
+
+  async function deleteNote(record, allRecords, button) {
+    if (!record.recordId) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete this ${formatType(record.noteType).toLowerCase()} from ${formatDate(record.createdAt)}? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const originalLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = "Deleting...";
+
+    try {
+      const revisionRecordIds = getRevisionRecordIds(allRecords, record.recordId);
+      for (const revisionRecordId of revisionRecordIds) {
+        await deleteRecord(revisionRecordId);
+      }
+      await deleteRecord(record.recordId);
+      setPageStatus("Project note deleted.", "success-state");
+      await load();
+    } catch (error) {
+      console.error("Project note delete failed:", error);
+      setPageStatus(
+        error.message || "The project note could not be deleted.",
+        "error-state"
+      );
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
+  }
+
   function buildRevisionMap(records) {
     const map = new Map();
 
@@ -153,8 +238,8 @@
     }
 
     const copy = item.querySelector(".detail-note-copy");
-    const editButton = item.querySelector(".detail-note-edit-button");
-    if (!copy || !editButton) {
+    const rowActions = item.querySelector(".detail-note-row-actions");
+    if (!copy || !rowActions) {
       return;
     }
 
@@ -197,11 +282,11 @@
       textarea.remove();
       actions.remove();
       copy.hidden = false;
-      editButton.hidden = false;
+      rowActions.hidden = false;
     });
 
     copy.hidden = true;
-    editButton.hidden = true;
+    rowActions.hidden = true;
     actions.append(save, cancel);
     copy.insertAdjacentElement("afterend", textarea);
     textarea.insertAdjacentElement("afterend", actions);
@@ -260,7 +345,7 @@
       copy.textContent = currentText;
 
       const actions = document.createElement("div");
-      actions.className = "detail-note-edit-actions";
+      actions.className = "detail-note-edit-actions detail-note-row-actions";
 
       const edit = document.createElement("button");
       edit.type = "button";
@@ -268,7 +353,13 @@
       edit.textContent = "Edit Note";
       edit.addEventListener("click", () => beginEdit(item, record, currentText));
 
-      actions.appendChild(edit);
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "secondary-button detail-note-delete-button";
+      remove.textContent = "Delete Note";
+      remove.addEventListener("click", () => deleteNote(record, allRecords, remove));
+
+      actions.append(edit, remove);
       header.append(title, date);
       item.append(header, copy, actions);
       list.appendChild(item);
