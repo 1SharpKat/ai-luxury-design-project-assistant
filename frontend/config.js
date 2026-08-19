@@ -23,3 +23,50 @@ window.LUXNOTE_CONFIG = {
     report: "report.html"
   }
 };
+
+(function lockPrivateWorkspaceUntilAuthenticated() {
+  if (!window.LUXNOTE_CONFIG?.authRequired) {
+    return;
+  }
+
+  const root = document.documentElement;
+  root.classList.add("luxnote-private-locked");
+
+  if (!document.getElementById("luxnote-private-lock-style")) {
+    const style = document.createElement("style");
+    style.id = "luxnote-private-lock-style";
+    style.textContent = `
+      html.luxnote-private-locked main,
+      html.luxnote-private-locked footer {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const noIndex = document.querySelector('meta[name="robots"]') || document.createElement("meta");
+  noIndex.name = "robots";
+  noIndex.content = "noindex,nofollow,noarchive";
+  if (!noIndex.parentNode) {
+    document.head.appendChild(noIndex);
+  }
+
+  const watchAuthState = () => {
+    if (!window.luxnoteAuth?.getAccessState) {
+      window.setTimeout(watchAuthState, 50);
+      return;
+    }
+
+    const state = window.luxnoteAuth.getAccessState();
+    if (state?.canAccess) {
+      root.classList.remove("luxnote-private-locked");
+      return;
+    }
+
+    if (state?.reason !== "not_configured") {
+      window.setTimeout(watchAuthState, 100);
+    }
+  };
+
+  watchAuthState();
+})();
