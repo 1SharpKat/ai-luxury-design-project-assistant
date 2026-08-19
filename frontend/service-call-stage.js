@@ -94,3 +94,9 @@
   script.src = "project-identity-detail.js?v=20260817-project-identity";
   document.body.appendChild(script);
 })();
+
+(function loadProjectCoverEditor() {
+  const script = document.createElement("script");
+  script.src = "project-cover-detail.js?v=20260819-project-cover";
+  document.body.appendChild(script);
+})();

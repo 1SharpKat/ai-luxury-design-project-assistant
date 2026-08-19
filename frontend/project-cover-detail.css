@@ -1,0 +1,106 @@
+/* Project-level cover photo controls on Project Detail. */
+
+.detail-cover-photo {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(260px, 1.2fr);
+  gap: 18px;
+  align-items: center;
+  margin: 18px 0 22px;
+  padding: 16px;
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
+  border-radius: 14px;
+  background: var(--surface-soft, #f8f2ed);
+}
+
+.detail-cover-preview {
+  min-height: 150px;
+  overflow: hidden;
+  border: 1px solid var(--border, rgba(82, 66, 61, 0.18));
+  border-radius: 12px;
+  background: var(--surface, #fffdfc);
+}
+
+.detail-cover-preview.is-empty {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--muted-text, #887d77);
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.detail-cover-preview img {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.detail-cover-copy h2 {
+  margin: 3px 0 5px;
+  font-size: 1.05rem;
+}
+
+.detail-cover-copy p {
+  margin: 0 0 13px;
+  color: var(--muted-text, #887d77);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.detail-cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-items: center;
+}
+
+.detail-cover-picker {
+  position: relative;
+  display: inline-grid;
+  min-height: 36px;
+  padding: 7px 14px;
+  place-items: center;
+  border: 1px solid var(--border-strong, rgba(82, 66, 61, 0.28));
+  border-radius: 8px;
+  background: var(--surface, #fffdfc);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail-cover-picker:hover,
+.detail-cover-picker:focus-within {
+  border-color: var(--muted-rose, #a77c78);
+  box-shadow: 0 0 0 3px rgba(167, 124, 120, 0.12);
+}
+
+.detail-cover-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.detail-cover-status {
+  min-height: 18px;
+  margin: 9px 0 0;
+  font-size: 0.75rem;
+}
+
+.detail-cover-status.is-error {
+  color: #7f3038;
+}
+
+.detail-cover-status.is-success {
+  color: #45634f;
+}
+
+@media (max-width: 720px) {
+  .detail-cover-photo {
+    grid-template-columns: 1fr;
+  }
+}
