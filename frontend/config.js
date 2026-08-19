@@ -51,28 +51,22 @@ window.LUXNOTE_CONFIG = {
     document.head.appendChild(noIndex);
   }
 
-  let attempts = 0;
-  const waitForAuth = () => {
-    attempts += 1;
-
-    if (!window.luxnoteAuth) {
-      if (attempts < 200) {
-        window.setTimeout(waitForAuth, 10);
-      }
+  const watchAuthState = () => {
+    if (!window.luxnoteAuth?.getAccessState) {
+      window.setTimeout(watchAuthState, 50);
       return;
     }
 
-    Promise.resolve(window.luxnoteAuth.initialize())
-      .then(() => {
-        const state = window.luxnoteAuth.getAccessState?.();
-        if (state?.canAccess) {
-          root.classList.remove("luxnote-private-locked");
-        }
-      })
-      .catch((error) => {
-        console.error("LuxNote private workspace authentication failed:", error);
-      });
+    const state = window.luxnoteAuth.getAccessState();
+    if (state?.canAccess) {
+      root.classList.remove("luxnote-private-locked");
+      return;
+    }
+
+    if (state?.reason !== "not_configured") {
+      window.setTimeout(watchAuthState, 100);
+    }
   };
 
-  waitForAuth();
+  watchAuthState();
 })();
