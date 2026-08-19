@@ -16,3 +16,14 @@
   font-size: 0.72rem;
   opacity: 0.72;
 }
+
+.detail-note-delete-button {
+  border-color: rgba(138, 61, 68, 0.28);
+  color: #7f3038;
+}
+
+.detail-note-delete-button:hover,
+.detail-note-delete-button:focus-visible {
+  background: rgba(138, 61, 68, 0.08);
+  border-color: rgba(138, 61, 68, 0.42);
+}
